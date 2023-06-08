@@ -10,9 +10,8 @@ import UIKit
 final class SearchViewController: UIViewController {
     
     private var candles: Candles?
-
     
-    let network = NetworkService()
+    let networkManager = NetworkService()
     
     private var searchResults = [SearchCellModel]()
     
@@ -27,6 +26,14 @@ final class SearchViewController: UIViewController {
         return searchBar
     }()
     
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView(style: .large)
+        activityIndicator.color = .gray
+        activityIndicator.center = view.center
+        activityIndicator.hidesWhenStopped = true
+        return activityIndicator
+    }()
+    
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -36,6 +43,16 @@ final class SearchViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         return collectionView
+    }()
+    
+    private lazy var cancelButton: UIToolbar = {
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let cancelButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelButtonTapped))
+        toolbar.items = [flexibleSpace, cancelButton]
+        searchBar.inputAccessoryView = toolbar
+        return toolbar
     }()
     
     override func viewDidLoad() {
@@ -58,6 +75,7 @@ final class SearchViewController: UIViewController {
         navigationItem.titleView = searchBar
         
         setupUI()
+        
     }
     
     //    override func loadView() {
@@ -72,33 +90,56 @@ final class SearchViewController: UIViewController {
             make.trailing.equalToSuperview()
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
+        self.view.addSubview(activityIndicator)
+        self.searchBar.inputAccessoryView = cancelButton
+    }
+    
+    private func setUIInteractionEnabled(_ enabled: Bool) {
+        searchBar.isUserInteractionEnabled = enabled
+        collectionView.isUserInteractionEnabled = enabled
+        tabBarController?.tabBar.isUserInteractionEnabled = enabled
+    }
+    
+    
+    @objc private func cancelButtonTapped() {
+        searchBar.text = nil
+        searchBar.resignFirstResponder()
     }
 }
 
 //MARK: - UISearchBarDelegate
 extension SearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder() // Скрыть клавиатуру
-        // Ваш код для выполнения поисковой логики
+        //Убираем пробелы из запроса
+        let trimmedText = self.searchBar.text?.trimmingCharacters(in: .whitespaces)
+        self.searchBar.text = trimmedText
         
+        // Скрыть клавиатуру
+        searchBar.resignFirstResponder()
+        //Запускаем индикатор
+        activityIndicator.startAnimating()
+        // Отключаем пользовательское взаимодействие
+        setUIInteractionEnabled(false)
+        //Очищаем массив прошлого списка
         self.searchResults.removeAll()
         
-        network.fetchSymbolLookup(symbol: searchBar.text ?? "") { result in
+        networkManager.fetchSymbolLookup(symbol: searchBar.text ?? "") { result in
+            //Отключаем индикатор
+            self.activityIndicator.stopAnimating()
+            // Разрешаем пользовательское взаимодействие
+            self.setUIInteractionEnabled(true)
+            
+            // Обработка полученных данных
             switch result {
             case .success(let stocks):
-                // Обработка полученных данных
                 for stock in stocks {
-                    
                     self.searchResults.append(SearchCellModel(fullName: stock.description, symbol: stock.symbol, type: stock.type))
                     self.collectionView.reloadData()
-                    //print(stock.type)
                 }
             case .failure(let error):
-                // Обработка ошибки
                 print("Error: \(error)")
             }
         }
-        
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         // Метод вызывается, когда пользователь нажимает на кнопку "Отмена" в поисковой строке
@@ -115,14 +156,12 @@ extension SearchViewController: UISearchBarDelegate {
 extension SearchViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // Вернуть количество элементов в коллекции
-        return searchResults.count // Замените searchResults на ваш массив данных
+        return searchResults.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        // Создайте и настройте ячейку для данного индекса
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.reuseIdentifier, for: indexPath) as! SearchViewCell
-        // Настройте ячейку с данными из источника данных
-        let searchData = searchResults[indexPath.item] // Замените searchResults на ваш массив данных
+        let searchData = searchResults[indexPath.item]
         cell.setModel(with: searchData)
         return cell
     }
@@ -135,31 +174,16 @@ extension SearchViewController: UICollectionViewDelegate {
         let symbol = searchResults[indexPath.row].symbol
         let companyName = searchResults[indexPath.row].fullName
         
-        let calendar = Calendar.current
-        // Получаем текущую дату и время
-        let currentDate = Date()
-
-        // Получаем дату, ровно год назад от текущего момента
-        let oneYearAgoDate = calendar.date(byAdding: .year, value: -1, to: currentDate)!
-        
-        let secondTime = Int(currentDate.timeIntervalSince1970)
-        let firstTime = Int(oneYearAgoDate.timeIntervalSince1970)
-        
-        network.fetchStockCandles(symbol: symbol, timeFrame: .weekend) { result in
+        networkManager.fetchStockCandles(symbol: symbol, timeFrame: .weekend) { result in
             switch result {
             case .success(let fetchedCandles):
                 self.candles = fetchedCandles
-                // Обработка полученных данных о свечах
-                let destinationController = DetailViewController(stockDetailModel: StockDetailModel(symbol: symbol, companyName: companyName, currentRange: .weekend, candles: fetchedCandles))
-                        destinationController.hidesBottomBarWhenPushed = true
-                        self.navigationController?.pushViewController(destinationController, animated: true)
+                let destinationController = StockDetailViewController(stockDetailModel: StockDetailModel(symbol: symbol, companyName: companyName, currentRange: .weekend, candles: fetchedCandles))
+                destinationController.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(destinationController, animated: true)
             case .failure(let error):
-                // Обработка ошибки запроса свечей
                 print("Error fetching candles: \(error)")
             }
         }
-//        let destinationController = DetailViewController(stockDetailModel: StockDetailModel(symbol: symbol, companyName: companyName, currentRange: .day, candles: candles))
-//        destinationController.hidesBottomBarWhenPushed = true
-//        self.navigationController?.pushViewController(destinationController, animated: true)
     }
 }
