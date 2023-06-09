@@ -10,6 +10,7 @@ import Foundation
 struct StockDetailModel {
     let symbol: String
     let companyName: String
+    let stockProfile: StockProfileModel
     let currentRange: TimeFrameResolution
     var candles: Candles
 }

@@ -43,6 +43,22 @@ struct Candles: Codable {
     }
 }
 
+struct StockProfile: Codable {
+    let country: String
+    let currency: String
+    let estimateCurrency: String
+    let exchange: String
+    let finnhubIndustry: String
+    let ipo: String
+    let logo: String
+    let marketCapitalization: Double
+    let name: String
+    let phone: String
+    let shareOutstanding: Double
+    let ticker: String
+    let weburl: String
+}
+
 enum TimeFrameResolution: String {
     case minute = "1"
     case fiveMinutes = "5"
@@ -190,6 +206,39 @@ final class NetworkService {
                 let candles = try decoder.decode(Candles.self, from: data)
                 DispatchQueue.main.async {
                     completion(.success(candles))
+                }
+            } catch {
+                completion(.failure(error))
+            }
+        }
+        
+        task.resume()
+    }
+    
+    func fetchStockProfile(symbol: String, completion: @escaping (Result<StockProfileModel, Error>) -> Void) {
+        let urlString = "https://finnhub.io/api/v1/stock/profile2?symbol=\(symbol)&token=c8s4fv2ad3idbo5bhsbg"
+        
+        guard let url = URL(string: urlString) else {
+            completion(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            guard let data = data else {
+                completion(.failure(NSError(domain: "No data received", code: 0, userInfo: nil)))
+                return
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                let stockProfile = try decoder.decode(StockProfileModel.self, from: data)
+                DispatchQueue.main.async {
+                    completion(.success(stockProfile))
                 }
             } catch {
                 completion(.failure(error))

@@ -5,12 +5,17 @@
 //  Created by Григорий Ковалев on 30.05.2023.
 //
 
+import SDWebImage
+import SDWebImageSVGCoder
 import UIKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
+    override init() {
+        super.init()
+            setUpDependencies() // Initialize SVGCoder
+        }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         return true
@@ -28,3 +33,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
+// Initialize SVGCoder
+private extension AppDelegate {
+    
+    func setUpDependencies() {
+        SDImageCodersManager.shared.addCoder(SDImageSVGCoder.shared)
+    }
+}

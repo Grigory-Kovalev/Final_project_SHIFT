@@ -25,12 +25,14 @@ struct StockDetailView: View {
     }
     
     var isPriceRise: Bool {
-        return Double(stockDetailModel.candles.o.first ?? 0) > Double(stockDetailModel.candles.c.last ?? 0)
+        return Double(stockDetailModel.candles.o.first ?? 0) < Double(stockDetailModel.candles.c.last ?? 0)
     }
     
-    var priceDifference: String {
+    var priceDifference: (sign: String, price: String){
         let difference = Double(stockDetailModel.candles.c.last ?? 0) - Double(stockDetailModel.candles.o.first ?? 0)
-        return String(format: "%.2f", difference)
+        let price = String(format: "%.2f", abs(difference))
+        let sign = "\(difference > 0 ? "+" : "-")"
+        return (sign, price)
     }
     
     var percentageDifference: String {
@@ -46,6 +48,11 @@ struct StockDetailView: View {
         return stockDetailModel.candles.l.min()?.formatted() ?? ""
     }
     
+    var getCurrencySymbol: String {
+        
+        stockDetailModel.stockProfile.currency.getCurrencySymbol()
+    }
+    
     init(selectedResolution: Int, data: [CandleChartModel], stock: StockDetailModel) {
         self._candles = State(initialValue: data)
         self._selectedResolution = State(initialValue: selectedResolution)
@@ -55,25 +62,32 @@ struct StockDetailView: View {
     var body: some View {
         GeometryReader { geo in
             VStack {
-                HStack {
-                    VStack(alignment: .leading, spacing: 15) {
-                        Text("Название: \(stockDetailModel.companyName)")
-                            .bold()
-                            .font(.headline)
+                VStack(alignment: .leading) {
+                    Text(stockDetailModel.companyName)
+                        .font(.headline)
+                        .fontWeight(.black)
+                    
+                    HStack {
+                        Text("\(getCurrencySymbol)\(latestPrice.formatted())")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .foregroundColor(Color(Resources.Colors.green))
                         
-                        Text("Тикер: \(stockDetailModel.symbol)")
+                        Spacer()
+                        
+                        HStack {
+                            Text("\(priceDifference.sign)\(getCurrencySymbol)\(priceDifference.price)")
+                                .foregroundColor(Color(Resources.Colors.gray))
+                            Text("(\(percentageDifference)%)")
+                                .foregroundColor(isPriceRise ? Color(Resources.Colors.green) : Color.red)
+                        }
+                        .font(.title3)
                     }
-                    .padding(.leading, 16)
-                    Spacer()
-                    VStack(alignment: .center, spacing: 15) {
-                        Text("Текущая цена: $\(latestPrice.formatted())")
-                    }
-                    .padding(.trailing)
                 }
+                .padding(.horizontal, 16)
+                //Divider()
                 
-                Divider()
-                
-                Spacer()
+                //Spacer()
                 
                 Picker("Resolution", selection: $selectedResolution) {
                     Text("\(TimeFrameResolution.fifteenMinutes.rawValue)M").tag(2)
@@ -83,7 +97,7 @@ struct StockDetailView: View {
                     Text(TimeFrameResolution.weekend.rawValue).tag(6)
                 }
                 .pickerStyle(.segmented)
-                .padding()
+                .padding(.horizontal)
                 .onChange(of: selectedResolution) { newValue in
                     isLoading = true
                     
@@ -99,33 +113,29 @@ struct StockDetailView: View {
                     }
                 }
                 
-                ScrollView {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 30)
-                            .fill(.ultraThinMaterial)
-                        
-                        CandlesChartView(candles: $candles)
-                            .padding()
-                            .clipped()
-                            .blur(radius: isLoading ? 10 : 0)
-                        
-                        if isLoading {
-                            ProgressView()
+                ScrollView(showsIndicators: false) {
+                    VStack {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 30)
+                                .fill(.ultraThinMaterial)
+                            
+                            CandlesChartView(candles: $candles)
                                 .padding()
+                                .clipped()
+                                .blur(radius: isLoading ? 10 : 0)
+                            
+                            if isLoading {
+                                ProgressView()
+                                    .padding()
+                            }
                         }
-                    }
-                    .frame(width: geo.size.width * 0.95, height: geo.size.height * 0.5)
-                    .padding(.top, 50)
-                    
-                    VStack(alignment: .leading, spacing: 15) {
-                        Text("Максимальная цена за \(stockDetailModel.currentRange.rawValue): $\(maxPrice)")
-                        Text("Минимальная цена за \(stockDetailModel.currentRange.rawValue): $\(minPrice)")
+                        .padding(.top, 20)
                         
-                        Text("Разница в цене за указанный период: $\(priceDifference) или \(percentageDifference)%")
                     }
-                    .padding(.top, 40)
+                    .padding(.horizontal, 16)
+                        CompanyProfileView(stockProfileModel: stockDetailModel.stockProfile)
+                    
                 }
-                .frame(width: geo.size.width)
                 
                 Spacer()
             }

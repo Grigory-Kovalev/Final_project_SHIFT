@@ -10,6 +10,10 @@
 		3F66DAFE2A31E5D20078ECA0 /* StockDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F66DAFD2A31E5D20078ECA0 /* StockDetailModel.swift */; };
 		3F66DB002A31E6830078ECA0 /* CandlesChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F66DAFF2A31E6830078ECA0 /* CandlesChartView.swift */; };
 		3F66DB022A31E7020078ECA0 /* CandleChartModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F66DB012A31E7020078ECA0 /* CandleChartModel.swift */; };
+		3F66DB262A32E3B60078ECA0 /* CompanyProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F66DB252A32E3B60078ECA0 /* CompanyProfileView.swift */; };
+		3F66DB292A32E4170078ECA0 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 3F66DB282A32E4170078ECA0 /* SDWebImageSwiftUI */; };
+		3F66DB2C2A32E4290078ECA0 /* SDWebImageSVGCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 3F66DB2B2A32E4290078ECA0 /* SDWebImageSVGCoder */; };
+		3F66DB2E2A32E49C0078ECA0 /* StockProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F66DB2D2A32E49C0078ECA0 /* StockProfileModel.swift */; };
 		3F8B693B2A2D9BCB00B125FB /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3F8B693A2A2D9BCB00B125FB /* SnapKit */; };
 		3F8B693D2A2DA23300B125FB /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8B693C2A2DA23300B125FB /* TabBarController.swift */; };
 		3F8B693F2A2DA4AE00B125FB /* WatchlistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8B693E2A2DA4AE00B125FB /* WatchlistViewController.swift */; };
@@ -30,6 +34,8 @@
 		3F66DAFD2A31E5D20078ECA0 /* StockDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockDetailModel.swift; sourceTree = "<group>"; };
 		3F66DAFF2A31E6830078ECA0 /* CandlesChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandlesChartView.swift; sourceTree = "<group>"; };
 		3F66DB012A31E7020078ECA0 /* CandleChartModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleChartModel.swift; sourceTree = "<group>"; };
+		3F66DB252A32E3B60078ECA0 /* CompanyProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyProfileView.swift; sourceTree = "<group>"; };
+		3F66DB2D2A32E49C0078ECA0 /* StockProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockProfileModel.swift; sourceTree = "<group>"; };
 		3F8B693C2A2DA23300B125FB /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		3F8B693E2A2DA4AE00B125FB /* WatchlistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistViewController.swift; sourceTree = "<group>"; };
 		3F8B69402A2DA51400B125FB /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -52,6 +58,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F66DB2C2A32E4290078ECA0 /* SDWebImageSVGCoder in Frameworks */,
+				3F66DB292A32E4170078ECA0 /* SDWebImageSwiftUI in Frameworks */,
 				3F8B693B2A2D9BCB00B125FB /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -81,9 +89,11 @@
 			children = (
 				3F8B69492A2DE0AF00B125FB /* StockDetailViewController.swift */,
 				3F8B694B2A2DE17D00B125FB /* StockDetailView.swift */,
-				3F66DAFF2A31E6830078ECA0 /* CandlesChartView.swift */,
 				3F66DAFD2A31E5D20078ECA0 /* StockDetailModel.swift */,
+				3F66DAFF2A31E6830078ECA0 /* CandlesChartView.swift */,
 				3F66DB012A31E7020078ECA0 /* CandleChartModel.swift */,
+				3F66DB252A32E3B60078ECA0 /* CompanyProfileView.swift */,
+				3F66DB2D2A32E49C0078ECA0 /* StockProfileModel.swift */,
 			);
 			path = Detail;
 			sourceTree = "<group>";
@@ -181,6 +191,8 @@
 			name = Final_project_SHIFT;
 			packageProductDependencies = (
 				3F8B693A2A2D9BCB00B125FB /* SnapKit */,
+				3F66DB282A32E4170078ECA0 /* SDWebImageSwiftUI */,
+				3F66DB2B2A32E4290078ECA0 /* SDWebImageSVGCoder */,
 			);
 			productName = Final_project_SHIFT;
 			productReference = 3F9800A82A2616CA00D99EA3 /* Final_project_SHIFT.app */;
@@ -212,6 +224,8 @@
 			mainGroup = 3F98009F2A2616CA00D99EA3;
 			packageReferences = (
 				3F8B69392A2D9BCB00B125FB /* XCRemoteSwiftPackageReference "SnapKit" */,
+				3F66DB272A32E4170078ECA0 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
+				3F66DB2A2A32E4290078ECA0 /* XCRemoteSwiftPackageReference "SDWebImageSVGCoder" */,
 			);
 			productRefGroup = 3F9800A92A2616CA00D99EA3 /* Products */;
 			projectDirPath = "";
@@ -243,9 +257,11 @@
 				3F8B694A2A2DE0AF00B125FB /* StockDetailViewController.swift in Sources */,
 				3F66DB002A31E6830078ECA0 /* CandlesChartView.swift in Sources */,
 				3F66DB022A31E7020078ECA0 /* CandleChartModel.swift in Sources */,
+				3F66DB262A32E3B60078ECA0 /* CompanyProfileView.swift in Sources */,
 				3F8B69472A2DD0AB00B125FB /* SearchViewCell.swift in Sources */,
 				3F8B694C2A2DE17D00B125FB /* StockDetailView.swift in Sources */,
 				3F8B69412A2DA51400B125FB /* SearchViewController.swift in Sources */,
+				3F66DB2E2A32E49C0078ECA0 /* StockProfileModel.swift in Sources */,
 				3F66DAFE2A31E5D20078ECA0 /* StockDetailModel.swift in Sources */,
 				3F8B693F2A2DA4AE00B125FB /* WatchlistViewController.swift in Sources */,
 				3F8B693D2A2DA23300B125FB /* TabBarController.swift in Sources */,
@@ -468,6 +484,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		3F66DB272A32E4170078ECA0 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+		3F66DB2A2A32E4290078ECA0 /* XCRemoteSwiftPackageReference "SDWebImageSVGCoder" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageSVGCoder.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		3F8B69392A2D9BCB00B125FB /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
@@ -479,6 +511,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		3F66DB282A32E4170078ECA0 /* SDWebImageSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3F66DB272A32E4170078ECA0 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			productName = SDWebImageSwiftUI;
+		};
+		3F66DB2B2A32E4290078ECA0 /* SDWebImageSVGCoder */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3F66DB2A2A32E4290078ECA0 /* XCRemoteSwiftPackageReference "SDWebImageSVGCoder" */;
+			productName = SDWebImageSVGCoder;
+		};
 		3F8B693A2A2D9BCB00B125FB /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 3F8B69392A2D9BCB00B125FB /* XCRemoteSwiftPackageReference "SnapKit" */;

@@ -12,6 +12,7 @@ import UIKit
 class StockDetailViewController: UIViewController {
     
     private let stockDetailModel: StockDetailModel
+    private var backButton: UIBarButtonItem!
     
     init(stockDetailModel: StockDetailModel) {
         self.stockDetailModel = stockDetailModel
@@ -25,11 +26,17 @@ class StockDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationItem.title = stockDetailModel.symbol
+        
+        createBackButton()
+        
         let swiftUIView = StockDetailView(selectedResolution: stockDetailModel.currentRange.getTag(), data: Candles.getCandles(candles: stockDetailModel.candles), stock: stockDetailModel)
+        
         let hostingController = UIHostingController(rootView: swiftUIView)
         
         addChild(hostingController)
         view.addSubview(hostingController.view)
+        
         hostingController.view.translatesAutoresizingMaskIntoConstraints = false
         
         hostingController.view.snp.makeConstraints { make in
@@ -37,4 +44,35 @@ class StockDetailViewController: UIViewController {
         }
         hostingController.didMove(toParent: self)
     }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        updateBackButtonImage()
+    }
+    
+    private func createBackButton() {
+        backButton = UIBarButtonItem(image: backButtonImage(), style: .plain, target: self, action: #selector(backButtonTapped))
+        navigationItem.leftBarButtonItem = backButton
+    }
+    
+    private func updateBackButtonImage() {
+        backButton.image = backButtonImage()
+    }
+    
+    private func backButtonImage() -> UIImage? {
+        return currentThemeIsDark() ? Resources.Images.darkModeImage : Resources.Images.lightModeImage
+    }
+    
+    private func currentThemeIsDark() -> Bool {
+        if #available(iOS 13.0, *) {
+            return traitCollection.userInterfaceStyle == .dark
+        } else {
+            return false
+        }
+    }
+    
+    @objc private func backButtonTapped() {
+        navigationController?.popViewController(animated: true)
+    }
 }
+

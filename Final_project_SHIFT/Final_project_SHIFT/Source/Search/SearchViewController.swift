@@ -174,16 +174,29 @@ extension SearchViewController: UICollectionViewDelegate {
         let symbol = searchResults[indexPath.row].symbol
         let companyName = searchResults[indexPath.row].fullName
         
-        networkManager.fetchStockCandles(symbol: symbol, timeFrame: .weekend) { result in
+        networkManager.fetchStockCandles(symbol: symbol, timeFrame: .weekend) { [weak self] result in
             switch result {
             case .success(let fetchedCandles):
-                self.candles = fetchedCandles
-                let destinationController = StockDetailViewController(stockDetailModel: StockDetailModel(symbol: symbol, companyName: companyName, currentRange: .weekend, candles: fetchedCandles))
-                destinationController.hidesBottomBarWhenPushed = true
-                self.navigationController?.pushViewController(destinationController, animated: true)
+                self?.candles = fetchedCandles
+                
+                self?.networkManager.fetchStockProfile(symbol: symbol) { [weak self] result in
+                    switch result {
+                        case .success(let stockProfile):
+                            
+                        let destinationController = StockDetailViewController(stockDetailModel: StockDetailModel(symbol: symbol, companyName: companyName, stockProfile: stockProfile, currentRange: .weekend, candles: fetchedCandles))
+                        destinationController.hidesBottomBarWhenPushed = true
+                        self?.navigationController?.pushViewController(destinationController, animated: true)
+                        
+                        case .failure(let error):
+                            print("Error: \(error)")
+                        }
+                }
+                
+                
             case .failure(let error):
                 print("Error fetching candles: \(error)")
             }
         }
     }
 }
+//StockDetailModel(symbol: symbol, companyName: companyName, currentRange: .weekend, candles: fetchedCandles)
