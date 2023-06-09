@@ -29,7 +29,7 @@ struct CompanyProfileView: View {
         stockProfileModel.currency.getCurrencySymbol()
     }
     
-    var ipo: Date {
+    var dateIPO: Date {
         let dateString = stockProfileModel.ipo
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -39,6 +39,14 @@ struct CompanyProfileView: View {
         } else {
             return Date()
         }
+    }
+    
+    var amount: String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currencyAccounting
+        formatter.currencySymbol = getCurrencySymbol
+        guard let formattedString = formatter.string(from: NSNumber(value: stockProfileModel.marketCapitalization)) else { print("Ошибка форматирования"); return "" }
+        return formattedString
     }
     
     var body: some View {
@@ -74,7 +82,7 @@ struct CompanyProfileView: View {
                 HStack {
                     Image("ipo")
                     
-                    Text("IPO: \(ipo.formatted(date: .long, time: .omitted))")
+                    Text("IPO: \(dateIPO.formatted(date: .long, time: .omitted))")
                         .font(.title3)
                         .foregroundColor(Color(Resources.Colors.dullDark))
                 }
@@ -108,7 +116,7 @@ struct CompanyProfileView: View {
                 HStack(alignment: .top) {
                     Image("marketCapitalization")
                     
-                    Text("Market capitalization: \(getCurrencySymbol)" + String(format: "%.2f", stockProfileModel.marketCapitalization))
+                    Text("Market capitalization: " + amount)
                         .font(.title3)
                         .foregroundColor(Color(Resources.Colors.dullDark))
                 }

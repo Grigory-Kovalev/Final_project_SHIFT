@@ -14,7 +14,6 @@ final class WatchlistViewController: UIViewController {
         
         self.view.backgroundColor = .systemBackground
         //tabBar
-        tabBarItem = UITabBarItem(title: Resources.Strings.TabBar.home, image: Resources.Images.TabBar.home, selectedImage: nil)
         tabBarController?.tabBar.unselectedItemTintColor = .systemGray
         tabBarController?.tabBar.tintColor = .label
         

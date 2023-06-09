@@ -13,6 +13,7 @@ class StockDetailViewController: UIViewController {
     
     private let stockDetailModel: StockDetailModel
     private var backButton: UIBarButtonItem!
+    var isFavorite = false
     
     init(stockDetailModel: StockDetailModel) {
         self.stockDetailModel = stockDetailModel
@@ -29,6 +30,12 @@ class StockDetailViewController: UIViewController {
         navigationItem.title = stockDetailModel.symbol
         
         createBackButton()
+        
+        updateFavoriteButtonImage()
+        
+        var favoriteButton = isFavorite ? UIImage(systemName: "star.fill")?.withRenderingMode(.alwaysOriginal) : UIImage(systemName: "star")?.withRenderingMode(.alwaysOriginal).withTintColor(tintColorForFavoriteButton())
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: favoriteButton, style: .plain, target: self, action: #selector(favoriteButtonTapped))
         
         let swiftUIView = StockDetailView(selectedResolution: stockDetailModel.currentRange.getTag(), data: Candles.getCandles(candles: stockDetailModel.candles), stock: stockDetailModel)
         
@@ -48,7 +55,10 @@ class StockDetailViewController: UIViewController {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         updateBackButtonImage()
+        updateFavoriteButtonImage()
     }
+    
+    // MARK: - Back Button
     
     private func createBackButton() {
         backButton = UIBarButtonItem(image: backButtonImage(), style: .plain, target: self, action: #selector(backButtonTapped))
@@ -63,6 +73,18 @@ class StockDetailViewController: UIViewController {
         return currentThemeIsDark() ? Resources.Images.darkModeImage : Resources.Images.lightModeImage
     }
     
+    // MARK: - Favorite Button
+    
+    private func tintColorForFavoriteButton() -> UIColor {
+        return currentThemeIsDark() ? .white : .black
+    }
+    
+    private func createFavoriteButton() {
+        
+    }
+    
+    // MARK: - Theme Handling
+    
     private func currentThemeIsDark() -> Bool {
         if #available(iOS 13.0, *) {
             return traitCollection.userInterfaceStyle == .dark
@@ -71,8 +93,22 @@ class StockDetailViewController: UIViewController {
         }
     }
     
+    // MARK: - Button Actions
+    
     @objc private func backButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
+    
+    @objc private func favoriteButtonTapped() {
+        self.isFavorite.toggle()
+        updateFavoriteButtonImage()
+    }
+    
+    private func updateFavoriteButtonImage() {
+        let favoriteButtonImage = isFavorite ? UIImage(systemName: "star.fill")?.withRenderingMode(.alwaysOriginal) : UIImage(systemName: "star")?.withRenderingMode(.alwaysOriginal).withTintColor(tintColorForFavoriteButton())
+        navigationItem.rightBarButtonItem?.image = favoriteButtonImage
+    }
 }
+
+
 

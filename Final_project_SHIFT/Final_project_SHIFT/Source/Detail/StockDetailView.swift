@@ -85,9 +85,6 @@ struct StockDetailView: View {
                     }
                 }
                 .padding(.horizontal, 16)
-                //Divider()
-                
-                //Spacer()
                 
                 Picker("Resolution", selection: $selectedResolution) {
                     Text("\(TimeFrameResolution.fifteenMinutes.rawValue)M").tag(2)
@@ -131,10 +128,10 @@ struct StockDetailView: View {
                         }
                         .padding(.top, 20)
                         
+                        CompanyProfileView(stockProfileModel: stockDetailModel.stockProfile)
+                            .padding(.horizontal, -16)
                     }
                     .padding(.horizontal, 16)
-                        CompanyProfileView(stockProfileModel: stockDetailModel.stockProfile)
-                    
                 }
                 
                 Spacer()

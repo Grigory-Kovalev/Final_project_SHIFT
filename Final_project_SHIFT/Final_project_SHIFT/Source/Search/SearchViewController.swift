@@ -20,7 +20,7 @@ final class SearchViewController: UIViewController {
     private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.delegate = self
-        searchBar.placeholder = "Поиск"
+        searchBar.placeholder = "Enter stock ticker"
         searchBar.showsCancelButton = false
         searchBar.text = "MSFT"
         return searchBar
@@ -60,7 +60,6 @@ final class SearchViewController: UIViewController {
         
         self.view.backgroundColor = .systemBackground
         //tabBar
-        tabBarItem = UITabBarItem(title: Resources.Strings.TabBar.search, image: Resources.Images.TabBar.search, selectedImage: nil)
         tabBarController?.tabBar.unselectedItemTintColor = .systemGray
         tabBarController?.tabBar.tintColor = .label
         
@@ -73,6 +72,8 @@ final class SearchViewController: UIViewController {
         navigationController?.navigationBar.titleTextAttributes = attributes
         //searchBar
         navigationItem.titleView = searchBar
+        //верхний регистр для клавиатуры
+        searchBar.autocapitalizationType = .allCharacters
         
         setupUI()
         
@@ -102,7 +103,6 @@ final class SearchViewController: UIViewController {
     
     
     @objc private func cancelButtonTapped() {
-        searchBar.text = nil
         searchBar.resignFirstResponder()
     }
 }
@@ -133,9 +133,11 @@ extension SearchViewController: UISearchBarDelegate {
             switch result {
             case .success(let stocks):
                 for stock in stocks {
-                    self.searchResults.append(SearchCellModel(fullName: stock.description, symbol: stock.symbol, type: stock.type))
-                    self.collectionView.reloadData()
+                    if stock.type == "Common Stock" && !stock.symbol.contains(".") {
+                        self.searchResults.append(SearchCellModel(fullName: stock.description, symbol: stock.symbol, type: stock.type))
+                    }
                 }
+                self.collectionView.reloadData()
             case .failure(let error):
                 print("Error: \(error)")
             }
@@ -199,4 +201,3 @@ extension SearchViewController: UICollectionViewDelegate {
         }
     }
 }
-//StockDetailModel(symbol: symbol, companyName: companyName, currentRange: .weekend, candles: fetchedCandles)
