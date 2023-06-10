@@ -9,14 +9,54 @@ import SnapKit
 import SwiftUI
 import UIKit
 
+class ActivityIndicatorView: UIView {
+    private var activityIndicator: UIActivityIndicatorView!
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupView()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    private func setupView() {
+//        backgroundColor = UIColor.black.withAlphaComponent(0.5)
+//        alpha = 0.8
+//        layer.cornerRadius = 8.0
+
+        activityIndicator = UIActivityIndicatorView(style: .large)
+        activityIndicator.color = UIColor.gray
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(activityIndicator)
+
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: centerYAnchor)
+        ])
+    }
+
+    func startAnimating() {
+        activityIndicator.startAnimating()
+    }
+
+    func stopAnimating() {
+        activityIndicator.stopAnimating()
+    }
+}
+
 class StockDetailViewController: UIViewController {
     
-    private let stockDetailModel: StockDetailModel
+    private var activityIndicator: UIActivityIndicatorView!
+    let networkManager = NetworkService()
+    var stockDetailModel: StockDetailModel!
+    let stockSymbol: String
     private var backButton: UIBarButtonItem!
     var isFavorite = false
     
-    init(stockDetailModel: StockDetailModel) {
-        self.stockDetailModel = stockDetailModel
+    init(symbol: String) {
+        self.stockSymbol = symbol
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -27,35 +67,76 @@ class StockDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.title = stockDetailModel.symbol
+        navigationItem.title = stockSymbol
         
+        createActivityIndicator()
         createBackButton()
-        
         updateFavoriteButtonImage()
         
-        let favoriteButton = isFavorite ? UIImage(systemName: "star.fill")?.withRenderingMode(.alwaysOriginal) : UIImage(systemName: "star")?.withRenderingMode(.alwaysOriginal).withTintColor(tintColorForFavoriteButton())
+        let activityView = ActivityIndicatorView()
+        activityView.center = view.center
+        view.addSubview(activityView)
+        activityView.startAnimating()
+        //self.activityIndicator.startAnimating()
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: favoriteButton, style: .plain, target: self, action: #selector(favoriteButtonTapped))
-        
-        let swiftUIView = StockDetailView(selectedResolution: stockDetailModel.currentRange.getTag(), data: Candles.getCandles(candles: stockDetailModel.candles), stock: stockDetailModel)
-        
-        let hostingController = UIHostingController(rootView: swiftUIView)
-        
-        addChild(hostingController)
-        view.addSubview(hostingController.view)
-        
-        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
-        
-        hostingController.view.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) {
+            
+            DispatchQueue.main.async {
+                self.networkManager.fetchStockProfile(symbol: self.stockSymbol) { result in
+                    switch result {
+                    case .success(let stockProfile):
+                        self.networkManager.fetchStockCandles(symbol: self.stockSymbol, timeFrame: .weekend) { result in
+                            switch result {
+                            case .success(let fetchedCandles):
+                                self.stockDetailModel = StockDetailModel(symbol: self.stockSymbol, stockProfile: stockProfile, currentRange: .weekend, candles: fetchedCandles)
+                                
+                                let swiftUIView = StockDetailView(selectedResolution: self.stockDetailModel.currentRange.getTag(), data: Candles.getCandles(candles: self.stockDetailModel.candles), stock: self.stockDetailModel)
+                                
+                                let swiftUIController = UIHostingController(rootView: swiftUIView)
+                                self.addChild(swiftUIController)
+                                self.view.addSubview(swiftUIController.view)
+                                swiftUIController.view.translatesAutoresizingMaskIntoConstraints = false
+                                
+                                NSLayoutConstraint.activate([
+                                    swiftUIController.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+                                    swiftUIController.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+                                    swiftUIController.view.topAnchor.constraint(equalTo: self.view.topAnchor),
+                                    swiftUIController.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+                                ])
+                                
+                                //self.activityIndicator.stopAnimating()
+                                activityView.stopAnimating()
+                                swiftUIController.didMove(toParent: self)
+                                
+                            case .failure(let error):
+                                print("Error fetching candles: \(error)")
+                                //self?.createAlertController(title: "Error", message: "Failed to get company candles data")
+                            }
+                        }
+                        
+                    case .failure(let error):
+                        print("Error: \(error)")
+                        //self?.createAlertController(title: "Error", message: "Failed to get company profile data")
+                    }
+                }
+            }
+            
         }
-        hostingController.didMove(toParent: self)
+            
     }
+    
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         updateBackButtonImage()
         updateFavoriteButtonImage()
+    }
+    
+    private func createActivityIndicator() {
+        activityIndicator = UIActivityIndicatorView(style: .large)
+        activityIndicator.color = .gray
+        activityIndicator.center = view.center
+        view.addSubview(activityIndicator)
     }
     
     // MARK: - Back Button
