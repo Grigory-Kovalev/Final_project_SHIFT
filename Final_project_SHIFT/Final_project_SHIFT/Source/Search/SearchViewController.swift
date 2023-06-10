@@ -17,6 +17,8 @@ final class SearchViewController: UIViewController {
     
     private let reuseIdentifier = "CellIdentifier"
     
+    private var blurEffectView: UIVisualEffectView?
+    
     private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.delegate = self
@@ -42,6 +44,7 @@ final class SearchViewController: UIViewController {
         collectionView.register(SearchViewCell.self, forCellWithReuseIdentifier: self.reuseIdentifier)
         collectionView.dataSource = self
         collectionView.delegate = self
+        collectionView.layer.cornerRadius = 15
         return collectionView
     }()
     
@@ -77,11 +80,26 @@ final class SearchViewController: UIViewController {
         
         setupUI()
         
+
+        
     }
     
     //    override func loadView() {
     //
     //    }
+    
+    private func createBlurEffect(isOn: Bool) {
+        if isOn {
+            let blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
+            blurEffectView = UIVisualEffectView(effect: blurEffect)
+            blurEffectView?.frame = collectionView.bounds
+            blurEffectView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            collectionView.addSubview(blurEffectView!)
+        } else {
+            blurEffectView?.removeFromSuperview()
+            blurEffectView = nil
+        }
+    }
     
     private func setupUI() {
         self.view.addSubview(collectionView)
@@ -186,6 +204,7 @@ extension SearchViewController: UICollectionViewDelegate {
         let symbol = searchResults[indexPath.row].symbol
         let companyName = searchResults[indexPath.row].fullName
         
+        createBlurEffect(isOn: true)
         //Запускаем индикатор
         activityIndicator.startAnimating()
         // Отключаем пользовательское взаимодействие
@@ -201,6 +220,8 @@ extension SearchViewController: UICollectionViewDelegate {
                         
                         // Отключаем индикатор
                         self?.activityIndicator.stopAnimating()
+                        // Отключаем блюр
+                        self?.createBlurEffect(isOn: false)
                         // Разрешаем пользовательское взаимодействие
                         self?.setUIInteractionEnabled(true)
                         
