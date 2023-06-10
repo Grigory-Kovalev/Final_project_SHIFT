@@ -124,7 +124,7 @@ struct CompanyProfileView: View {
                 HStack(alignment: .top) {
                     Image("shareOutstanding")
                     
-                    Text("Share Outstanding: " + String(format: "%.2f", stockProfileModel.shareOutstanding))
+                    Text("Share outstanding: " + String(format: "%.2f", stockProfileModel.shareOutstanding))
                         .font(.title3)
                         .foregroundColor(Color(Resources.Colors.dullDark))
                 }

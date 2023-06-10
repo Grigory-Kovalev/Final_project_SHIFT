@@ -11,6 +11,8 @@ import Charts
 //MARK: - DetailView
 
 struct StockDetailView: View {
+    
+    
     @State var stockDetailModel: StockDetailModel
     @State private var candles: [CandleChartModel]
     //Состояние для отслеживания загрузки данных
