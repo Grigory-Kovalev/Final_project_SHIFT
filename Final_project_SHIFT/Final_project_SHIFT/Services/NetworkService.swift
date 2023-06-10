@@ -43,6 +43,18 @@ struct Candles: Codable {
     }
 }
 
+extension Candles {
+    init() {
+        self.c = [Double]()
+        self.h = [Double]()
+        self.l = [Double]()
+        self.o = [Double]()
+        self.s = ""
+        self.t = [Int]()
+        self.v = [Int]()
+    }
+}
+
 struct StockProfile: Codable {
     let country: String
     let currency: String

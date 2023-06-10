@@ -11,8 +11,6 @@ import Charts
 //MARK: - DetailView
 
 struct StockDetailView: View {
-    
-    
     @State var stockDetailModel: StockDetailModel
     @State private var candles: [CandleChartModel]
     //Состояние для отслеживания загрузки данных
@@ -65,7 +63,7 @@ struct StockDetailView: View {
         GeometryReader { geo in
             VStack {
                 VStack(alignment: .leading) {
-                    Text(stockDetailModel.companyName)
+                    Text(stockDetailModel.stockProfile.name)
                         .font(.headline)
                         .fontWeight(.black)
                     

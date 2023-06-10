@@ -11,18 +11,12 @@ import UIKit
 
 class StockDetailViewController: UIViewController {
     
-//    private let stockDetailModel: StockDetailModel
-    let symbol: String
+    private let stockDetailModel: StockDetailModel
     private var backButton: UIBarButtonItem!
     var isFavorite = false
     
-//    init(stockDetailModel: StockDetailModel) {
-//        self.stockDetailModel = stockDetailModel
-//        super.init(nibName: nil, bundle: nil)
-//    }
-    
-    init(symbol: String) {
-        self.symbol = symbol
+    init(stockDetailModel: StockDetailModel) {
+        self.stockDetailModel = stockDetailModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -33,7 +27,7 @@ class StockDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.title = symbol
+        navigationItem.title = stockDetailModel.symbol
         
         createBackButton()
         
@@ -43,9 +37,7 @@ class StockDetailViewController: UIViewController {
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: favoriteButton, style: .plain, target: self, action: #selector(favoriteButtonTapped))
         
-//        let swiftUIView = StockDetailView(selectedResolution: stockDetailModel.currentRange.getTag(), data: Candles.getCandles(candles: stockDetailModel.candles), stock: stockDetailModel)
         let swiftUIView = StockDetailView(selectedResolution: stockDetailModel.currentRange.getTag(), data: Candles.getCandles(candles: stockDetailModel.candles), stock: stockDetailModel)
-
         
         let hostingController = UIHostingController(rootView: swiftUIView)
         

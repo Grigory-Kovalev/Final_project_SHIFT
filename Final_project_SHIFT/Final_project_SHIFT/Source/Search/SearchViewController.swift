@@ -120,10 +120,11 @@ extension SearchViewController: UISearchBarDelegate {
         
         //Очищаем массив прошлого списка
         self.searchResults.removeAll()
-        self.collectionView.reloadData()
+        collectionView.reloadData()
         //Убираем пробелы из запроса
         let trimmedText = self.searchBar.text?.trimmingCharacters(in: .whitespaces)
         self.searchBar.text = trimmedText
+        
         // Скрыть клавиатуру
         searchBar.resignFirstResponder()
         //Запускаем индикатор
@@ -185,43 +186,39 @@ extension SearchViewController: UICollectionViewDelegate {
         let symbol = searchResults[indexPath.row].symbol
         let companyName = searchResults[indexPath.row].fullName
         
-        let destinationController = StockDetailViewController(stockDetailVCModel: StockDetailVCModel(symbol: symbol, companyName: companyName))
-        destinationController.hidesBottomBarWhenPushed = true
-        self.navigationController?.pushViewController(destinationController, animated: true)
+        //Запускаем индикатор
+        activityIndicator.startAnimating()
+        // Отключаем пользовательское взаимодействие
+        setUIInteractionEnabled(false)
         
-//        //Запускаем индикатор
-//        activityIndicator.startAnimating()
-//        // Отключаем пользовательское взаимодействие
-//        setUIInteractionEnabled(false)
-//
-//        networkManager.fetchStockProfile(symbol: symbol) { [weak self] result in
-//            switch result {
-//            case .success(let stockProfile):
-//                self?.networkManager.fetchStockCandles(symbol: symbol, timeFrame: .weekend) { [weak self] result in
-//                    switch result {
-//                    case .success(let fetchedCandles):
-//                        self?.candles = fetchedCandles
-//
-//                        // Отключаем индикатор
-//                        self?.activityIndicator.stopAnimating()
-//                        // Разрешаем пользовательское взаимодействие
-//                        self?.setUIInteractionEnabled(true)
-//
-//                        let destinationController = StockDetailViewController(stockDetailModel: StockDetailModel(symbol: symbol, companyName: companyName, stockProfile: stockProfile, currentRange: .weekend, candles: fetchedCandles))
-//                        destinationController.hidesBottomBarWhenPushed = true
-//                        self?.navigationController?.pushViewController(destinationController, animated: true)
-//
-//                    case .failure(let error):
-//                        print("Error fetching candles: \(error)")
-//                        self?.createAlertController(title: "Error", message: "Failed to get company candles data")
-//                    }
-//                }
-//
-//            case .failure(let error):
-//                print("Error: \(error)")
-//                self?.createAlertController(title: "Error", message: "Failed to get company profile data")
-//            }
-//        }
+        networkManager.fetchStockProfile(symbol: symbol) { [weak self] result in
+            switch result {
+            case .success(let stockProfile):
+                self?.networkManager.fetchStockCandles(symbol: symbol, timeFrame: .weekend) { [weak self] result in
+                    switch result {
+                    case .success(let fetchedCandles):
+                        self?.candles = fetchedCandles
+                        
+                        // Отключаем индикатор
+                        self?.activityIndicator.stopAnimating()
+                        // Разрешаем пользовательское взаимодействие
+                        self?.setUIInteractionEnabled(true)
+                        
+                        let destinationController = StockDetailViewController(stockDetailModel: StockDetailModel(symbol: symbol, companyName: companyName, stockProfile: stockProfile, currentRange: .weekend, candles: fetchedCandles))
+                        destinationController.hidesBottomBarWhenPushed = true
+                        self?.navigationController?.pushViewController(destinationController, animated: true)
+                        
+                    case .failure(let error):
+                        print("Error fetching candles: \(error)")
+                        self?.createAlertController(title: "Error", message: "Failed to get company candles data")
+                    }
+                }
+                
+            case .failure(let error):
+                print("Error: \(error)")
+                self?.createAlertController(title: "Error", message: "Failed to get company profile data")
+            }
+        }
 
     }
 }
