@@ -93,15 +93,35 @@ enum TimeFrameResolution: String {
         }
     }
     
-    func getTimeInterval(timeframe: TimeFrameResolution) -> (from: Int, to: Int) {
-        // Получаем текущую дату и время
-        let calendar = Calendar.current
-        let currentDate = Date()
-
+    private func timeIntervalCondition(timeframe: TimeFrameResolution) -> (Int, Int) {
+        
         let secondsInMinute = 60
         let secondsInHour = secondsInMinute * 60
         let secondsInDay = secondsInHour * 24
         let candlesCount = 50
+        
+        let intervalDifference: Int
+        
+        switch timeframe {
+        case .minute:
+            intervalDifference = 0
+        case .fiveMinutes:
+            intervalDifference = -(secondsInMinute * 5 * candlesCount)
+        case .fifteenMinutes:
+            intervalDifference = -(secondsInMinute * 15 * candlesCount)
+        case .thirtyMinutes:
+            intervalDifference = -(secondsInMinute * 30 * candlesCount)
+        case .hour:
+            intervalDifference = -(secondsInHour  * candlesCount)
+        case .day:
+            intervalDifference = -(secondsInDay * candlesCount)
+        case .weekend:
+            intervalDifference = -(secondsInDay * 7 * candlesCount)
+        }
+        
+        // Получаем текущую дату и время
+        let calendar = Calendar.current
+        let currentDate = Date()
         
         // Получаем компоненты текущей даты и времени
         let components = calendar.dateComponents([.weekday, .hour, .minute], from: currentDate)
@@ -111,157 +131,71 @@ enum TimeFrameResolution: String {
         
         // Проверяем, является ли текущий день недели рабочим днем (понедельник - пятница) и время находится в пределах рабочих часов (9:30 - 16:00)
             let isTradingHours = (weekday >= 2 && weekday <= 6) && (hour > 9 || (hour == 9 && minute >= 30)) && (hour < 16)
+        var startTime = Date()
+        
+//        guard timeframe != .weekend else {
+//            let startTime = calendar.date(byAdding: .second, value: intervalDifference, to: currentDate)!
+//            return (Int(startTime.timeIntervalSince1970), Int(currentDate.timeIntervalSince1970))
+//        }
+        
+        if isTradingHours {
+            startTime = calendar.date(byAdding: .second, value: intervalDifference, to: currentDate)!
+        } else {
+            
+            if weekday >= 3 && weekday <= 6 {
+                let lastTradingDay = calendar.date(byAdding: .day, value: -1, to: currentDate)!
+                let lastTradingHours = calendar.date(bySettingHour: 16, minute: 0, second: 0, of: lastTradingDay)!
+                startTime = calendar.date(byAdding: .second, value: intervalDifference, to: lastTradingHours)!
+            } else if weekday == 2 {
+                let lastTradingDay = calendar.date(byAdding: .day, value: 0, to: currentDate)!
+                let lastTradingHours = calendar.date(bySettingHour: 16, minute: 0, second: 0, of: lastTradingDay)!
+                startTime = calendar.date(byAdding: .second, value: intervalDifference, to: lastTradingHours)!
+            } else if weekday == 7 {
+                let lastTradingDay = calendar.date(byAdding: .day, value: -1, to: currentDate)!
+                let lastTradingHours = calendar.date(bySettingHour: 16, minute: 0, second: 0, of: lastTradingDay)!
+                startTime = calendar.date(byAdding: .second, value: intervalDifference, to: lastTradingHours)!
+            } else if weekday == 1 {
+                let lastTradingDay = calendar.date(byAdding: .day, value: -2, to: currentDate)!
+                let lastTradingHours = calendar.date(bySettingHour: 16, minute: 0, second: 0, of: lastTradingDay)!
+                startTime = calendar.date(byAdding: .second, value: intervalDifference, to: lastTradingHours)!
+            }
+        }
+//        print(startTime.timeIntervalSince1970)
+//        print(currentDate.timeIntervalSince1970)
+//        print("-----------------------------")
+        return (Int(startTime.timeIntervalSince1970), Int(currentDate.timeIntervalSince1970))
+    }
+    
+    func getTimeInterval(timeframe: TimeFrameResolution) -> (from: Int, to: Int) {
         
         switch timeframe {
         case .minute:
             // Возвращаем интервал для минуты
-            let startTime = calendar.date(byAdding: .second, value: -(secondsInMinute * candlesCount), to: currentDate)!
-            return (Int(startTime.timeIntervalSince1970), Int(currentDate.timeIntervalSince1970))
+            return timeIntervalCondition(timeframe: self)
             
         case .fiveMinutes:
             // Возвращаем интервал для пяти минут
-            var startTime = Date()
-            if isTradingHours {
-                startTime = calendar.date(byAdding: .second, value: -(secondsInMinute * 5 * candlesCount), to: currentDate)!
-            } else {
-                
-                if weekday >= 3 && weekday <= 6 {
-                    let lastTradingDay = calendar.date(byAdding: .day, value: -1, to: currentDate)!
-                    let lastTradingHours = calendar.date(bySettingHour: 16, minute: 0, second: 0, of: lastTradingDay)!
-                    startTime = calendar.date(byAdding: .second, value: -(secondsInMinute * 5 * candlesCount), to: lastTradingHours)!
-                } else if weekday == 2 {
-                    let lastTradingDay = calendar.date(byAdding: .day, value: 0, to: currentDate)!
-                    let lastTradingHours = calendar.date(bySettingHour: 16, minute: 0, second: 0, of: lastTradingDay)!
-                    startTime = calendar.date(byAdding: .second, value: -(secondsInMinute * 5 * candlesCount), to: lastTradingHours)!
-                } else if weekday == 7 {
-                    let lastTradingDay = calendar.date(byAdding: .day, value: -1, to: currentDate)!
-                    let lastTradingHours = calendar.date(bySettingHour: 16, minute: 0, second: 0, of: lastTradingDay)!
-                    startTime = calendar.date(byAdding: .second, value: -(secondsInMinute * 5 * candlesCount), to: lastTradingHours)!
-                } else if weekday == 1 {
-                    let lastTradingDay = calendar.date(byAdding: .day, value: -2, to: currentDate)!
-                    let lastTradingHours = calendar.date(bySettingHour: 16, minute: 0, second: 0, of: lastTradingDay)!
-                    startTime = calendar.date(byAdding: .second, value: -(secondsInMinute * 5 * candlesCount), to: lastTradingHours)!
-                }
-            }
-            return (Int(startTime.timeIntervalSince1970), Int(currentDate.timeIntervalSince1970))
+            return timeIntervalCondition(timeframe: self)
             
         case .fifteenMinutes:
+            return timeIntervalCondition(timeframe: self)
             // Возвращаем интервал для пятнадцати минут
-            var startTime = Date()
-            
-            if isTradingHours {
-                startTime = calendar.date(byAdding: .second, value: -(secondsInMinute * 15 * candlesCount), to: currentDate)!
-            } else {
-                
-                if weekday >= 3 && weekday <= 6 {
-                    let lastTradingDay = calendar.date(byAdding: .day, value: -1, to: currentDate)!
-                    let lastTradingHours = calendar.date(bySettingHour: 16, minute: 0, second: 0, of: lastTradingDay)!
-                    startTime = calendar.date(byAdding: .second, value: -(secondsInMinute * 15 * candlesCount / 5), to: lastTradingHours)!
-                } else if weekday == 2 {
-                    let lastTradingDay = calendar.date(byAdding: .day, value: 0, to: currentDate)!
-                    let lastTradingHours = calendar.date(bySettingHour: 16, minute: 0, second: 0, of: lastTradingDay)!
-                    startTime = calendar.date(byAdding: .second, value: -(secondsInMinute * 15 * candlesCount / 5), to: lastTradingHours)!
-                } else if weekday == 7 {
-                    let lastTradingDay = calendar.date(byAdding: .day, value: -1, to: currentDate)!
-                    let lastTradingHours = calendar.date(bySettingHour: 16, minute: 0, second: 0, of: lastTradingDay)!
-                    startTime = calendar.date(byAdding: .second, value: -(secondsInMinute * 15 * candlesCount / 5 ), to: lastTradingHours)!
-                } else if weekday == 1 {
-                    let lastTradingDay = calendar.date(byAdding: .day, value: -2, to: currentDate)!
-                    let lastTradingHours = calendar.date(bySettingHour: 16, minute: 0, second: 0, of: lastTradingDay)!
-                    startTime = calendar.date(byAdding: .second, value: -(secondsInMinute * 15 * candlesCount / 5), to: lastTradingHours)!
-                }
-            }
-            print(startTime.timeIntervalSince1970)
-            print(currentDate.timeIntervalSince1970)
-            print("-----------------------------")
-            return (Int(startTime.timeIntervalSince1970), Int(currentDate.timeIntervalSince1970))
-
             
         case .thirtyMinutes:
             // Возвращаем интервал для тридцати минут
-            var startTime = Date()
-            if isTradingHours {
-                startTime = calendar.date(byAdding: .second, value: -(secondsInMinute * 30 * candlesCount), to: currentDate)!
-            } else {
-                
-                if weekday >= 3 && weekday <= 6 {
-                    let lastTradingDay = calendar.date(byAdding: .day, value: -1, to: currentDate)!
-                    let lastTradingHours = calendar.date(bySettingHour: 16, minute: 0, second: 0, of: lastTradingDay)!
-                    startTime = calendar.date(byAdding: .second, value: -(secondsInMinute * 30 * candlesCount), to: lastTradingHours)!
-                } else if weekday == 2 {
-                    let lastTradingDay = calendar.date(byAdding: .day, value: 0, to: currentDate)!
-                    let lastTradingHours = calendar.date(bySettingHour: 16, minute: 0, second: 0, of: lastTradingDay)!
-                    startTime = calendar.date(byAdding: .second, value: -(secondsInMinute * 30 * candlesCount), to: lastTradingHours)!
-                } else if weekday == 7 {
-                    let lastTradingDay = calendar.date(byAdding: .day, value: -1, to: currentDate)!
-                    let lastTradingHours = calendar.date(bySettingHour: 16, minute: 0, second: 0, of: lastTradingDay)!
-                    startTime = calendar.date(byAdding: .second, value: -(secondsInMinute * 30 * candlesCount), to: lastTradingHours)!
-                } else if weekday == 1 {
-                    let lastTradingDay = calendar.date(byAdding: .day, value: -2, to: currentDate)!
-                    let lastTradingHours = calendar.date(bySettingHour: 16, minute: 0, second: 0, of: lastTradingDay)!
-                    startTime = calendar.date(byAdding: .second, value: -(secondsInMinute * 30 * candlesCount), to: lastTradingHours)!
-                }
-            }
-            return (Int(startTime.timeIntervalSince1970), Int(currentDate.timeIntervalSince1970))
+            return timeIntervalCondition(timeframe: self)
+            
         case .hour:
             // Возвращаем интервал для часа
-            var startTime = Date()
-            if isTradingHours {
-                startTime = calendar.date(byAdding: .second, value: -(secondsInHour  * candlesCount), to: currentDate)!
-            } else {
-                
-                if weekday >= 3 && weekday <= 6 {
-                    let lastTradingDay = calendar.date(byAdding: .day, value: -1, to: currentDate)!
-                    let lastTradingHours = calendar.date(bySettingHour: 16, minute: 0, second: 0, of: lastTradingDay)!
-                    startTime = calendar.date(byAdding: .second, value: -(secondsInHour  * candlesCount), to: lastTradingHours)!
-                } else if weekday == 2 {
-                    let lastTradingDay = calendar.date(byAdding: .day, value: 0, to: currentDate)!
-                    let lastTradingHours = calendar.date(bySettingHour: 16, minute: 0, second: 0, of: lastTradingDay)!
-                    startTime = calendar.date(byAdding: .second, value: -(secondsInHour  * candlesCount), to: lastTradingHours)!
-                } else if weekday == 7 {
-                    let lastTradingDay = calendar.date(byAdding: .day, value: -1, to: currentDate)!
-                    let lastTradingHours = calendar.date(bySettingHour: 16, minute: 0, second: 0, of: lastTradingDay)!
-                    startTime = calendar.date(byAdding: .second, value: -(secondsInHour  * candlesCount), to: lastTradingHours)!
-                } else if weekday == 1 {
-                    let lastTradingDay = calendar.date(byAdding: .day, value: -2, to: currentDate)!
-                    let lastTradingHours = calendar.date(bySettingHour: 16, minute: 0, second: 0, of: lastTradingDay)!
-                    startTime = calendar.date(byAdding: .second, value: -(secondsInHour  * candlesCount), to: lastTradingHours)!
-                }
-            }
-            return (Int(startTime.timeIntervalSince1970), Int(currentDate.timeIntervalSince1970))
+            return timeIntervalCondition(timeframe: self)
 
-            
         case .day:
             // Возвращаем интервал для дня
-            var startTime = Date()
-            if isTradingHours {
-                startTime = calendar.date(byAdding: .second, value: -(secondsInDay * candlesCount), to: currentDate)!
-            } else {
-                
-                if weekday >= 3 && weekday <= 6 {
-                    let lastTradingDay = calendar.date(byAdding: .day, value: -1, to: currentDate)!
-                    let lastTradingHours = calendar.date(bySettingHour: 16, minute: 0, second: 0, of: lastTradingDay)!
-                    startTime = calendar.date(byAdding: .second, value: -(secondsInDay * candlesCount), to: lastTradingHours)!
-                } else if weekday == 2 {
-                    let lastTradingDay = calendar.date(byAdding: .day, value: 0, to: currentDate)!
-                    let lastTradingHours = calendar.date(bySettingHour: 16, minute: 0, second: 0, of: lastTradingDay)!
-                    startTime = calendar.date(byAdding: .second, value: -(secondsInDay * candlesCount), to: lastTradingHours)!
-                } else if weekday == 7 {
-                    let lastTradingDay = calendar.date(byAdding: .day, value: -1, to: currentDate)!
-                    let lastTradingHours = calendar.date(bySettingHour: 16, minute: 0, second: 0, of: lastTradingDay)!
-                    startTime = calendar.date(byAdding: .second, value: -(secondsInDay * candlesCount), to: lastTradingHours)!
-                } else if weekday == 1 {
-                    let lastTradingDay = calendar.date(byAdding: .day, value: -2, to: currentDate)!
-                    let lastTradingHours = calendar.date(bySettingHour: 16, minute: 0, second: 0, of: lastTradingDay)!
-                    startTime = calendar.date(byAdding: .second, value: -(secondsInDay * candlesCount), to: lastTradingHours)!
-                }
-            }
-            return (Int(startTime.timeIntervalSince1970), Int(currentDate.timeIntervalSince1970))
+            return timeIntervalCondition(timeframe: self)
             
         case .weekend:
             // Возвращаем интервал для недели
-            let startTime = calendar.date(byAdding: .second, value: -(secondsInDay * 7 * candlesCount), to: currentDate)!
-            return (Int(startTime.timeIntervalSince1970), Int(currentDate.timeIntervalSince1970))
+            return timeIntervalCondition(timeframe: self)
         }
     }
 }

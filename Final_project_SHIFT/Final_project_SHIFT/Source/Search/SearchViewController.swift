@@ -158,11 +158,11 @@ extension SearchViewController: UISearchBarDelegate {
             
             // Обработка полученных данных
             switch result {
-            case .success(let stocks):
-                for (index, stock) in stocks.enumerated() {
-                    if stock.type == "Common Stock" && !stock.symbol.contains(".") {
-                        self.searchResults.append(SearchCellModel(fullName: stock.description, symbol: stock.symbol, type: stock.type, index: index))
-                    }
+            case .success(let fetchedStocks):
+                let stocks = fetchedStocks.filter { $0.type == "Common Stock" && !$0.symbol.contains(".") }
+                for (index, stock) in stocks.enumerated()  {
+                    self.searchResults.append(SearchCellModel(fullName: stock.description, symbol: stock.symbol, type: stock.type, index: index))
+                    
                 }
                 self.collectionView.reloadData()
             case .failure(let error):
