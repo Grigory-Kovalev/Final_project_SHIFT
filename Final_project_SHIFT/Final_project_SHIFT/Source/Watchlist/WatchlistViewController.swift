@@ -9,6 +9,8 @@ import UIKit
 
 final class WatchlistViewController: UIViewController {
     
+    private var dataArray = [LastPriceModel]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -25,10 +27,23 @@ final class WatchlistViewController: UIViewController {
             .foregroundColor: Resources.Colors.green
         ]
         navigationController?.navigationBar.titleTextAttributes = attributes
-
+        
+        WSManager.shared.connectToWebSocket() // подключаемся
+        WSManager.shared.subscribeBtcUsd() //подписываемся на получение данных
+        self.getData() //получаем данные
+        
     }
     
-//    override func loadView() {
-//        
-//    }
+    //    override func loadView() {
+    //
+    //    }
+    private func getData() {
+        //получаем данные
+        WSManager.shared.receiveData() { [weak self] (data) in
+            guard let self = self else { return }
+            guard let data = data else { return }
+            //self.dataArray = data // кладем данные в переменную и дальше можно делать с ними то что требуется
+            print(data)
+        }
+    }
 }

@@ -306,3 +306,169 @@ final class NetworkService {
         task.resume()
     }
 }
+
+extension Decodable {
+    static func decode(with decoder: JSONDecoder = JSONDecoder(), from data: Data) throws -> Self? {
+        do {
+            let newdata = try decoder.decode(Self.self, from: data)
+            return newdata
+        } catch {
+            print("decodable model error", error.localizedDescription)
+            return nil
+        }
+    }
+    static func decodeArray(with decoder: JSONDecoder = JSONDecoder(), from data: Data) throws -> [Self]{
+        do {
+            let newdata = try decoder.decode([Self].self, from: data)
+            return newdata
+        } catch {
+            print("decodable model error", error.localizedDescription)
+            return []
+        }
+    }
+}
+
+// MARK: - Welcome
+struct LastPriceModel: Codable {
+    let data: [LastPriceModelData]
+    let type: String
+}
+
+// MARK: - Datum
+struct LastPriceModelData: Codable {
+    let p: Double
+    let s: String
+    let t: Int
+    let v: Double
+}
+
+class WSManager {
+    static let shared = WSManager() // Создаем синглтон
+    private init() {}
+    
+    private var dataArray = [LastPriceModel]()
+    private var data: LastPriceModel?
+    
+    let webSocketTask = URLSession(configuration: .default).webSocketTask(with: URL(string: "wss://ws.finnhub.io?token=c8s4fv2ad3idbo5bhsbg")!)
+    
+    // Функция вызова подключения
+    func connectToWebSocket() {
+        webSocketTask.resume()
+        receiveData { _ in }
+    }
+    
+    // Функция подписки на что-либо  {"type": "subscribe", "symbol": "BINANCE:BTCUSDT"}
+
+    func subscribeBtcUsd() {
+        let message = URLSessionWebSocketTask.Message.string("{\"type\": \"subscribe\", \"symbol\": \"BINANCE:BTCUSDT\"}")
+        webSocketTask.send(message) { error in
+            if let error = error {
+                print("WebSocket couldn’t send message because: \(error)")
+            }
+        }
+    }
+    
+    // Функция отписки от чего-либо
+    func unSubscribeBtcUsd() {
+        let message = URLSessionWebSocketTask.Message.string("UNSUBSCRIBE: ОТ_ЧЕГО_ОТПИСЫВАЕМСЯ")
+        webSocketTask.send(message) { error in
+            if let error = error {
+                print("WebSocket couldn’t send message because: \(error)")
+            }
+        }
+    }
+    
+    // Функция получения данных с использованием эскейпинга, чтобы передать данные наружу
+    func receiveData(completion: @escaping (LastPriceModel?) -> Void) {
+        webSocketTask.receive { [weak self] result in
+            switch result {
+            case .failure(let error):
+                print("Error in receiving message: \(error)")
+            case .success(let message):
+                switch message {
+                case .string(let text):
+                    if text == "{\"type\":\"ping\"}" {
+                        // Отправка сообщения "pong" в ответ на "ping"
+                        let pongMessage = URLSessionWebSocketTask.Message.string("{\"type\":\"pong\"}")
+                        self?.webSocketTask.send(pongMessage) { error in
+                            if let error = error {
+                                print("WebSocket couldn’t send message because: \(error)")
+                            }
+                        }
+                    } else {
+                        let data: Data? = text.data(using: .utf8)
+                        let srvData = try? JSONDecoder().decode(LastPriceModel.self, from: data ?? Data())
+                        if let srvData = srvData {
+                            self?.data = srvData
+                            self?.dataArray.append(srvData)
+                        }
+                    }
+                case .data(let data):
+                    print("Received data: \(data)")
+                @unknown default:
+                    debugPrint("Unknown message")
+                }
+                
+                self?.receiveData(completion: completion) // Рекурсия
+            }
+        }
+        completion(self.data) // Отправляем в комплишн
+    }
+
+}
+
+
+//class TradeUpdatesWebSocket: NSObject, URLSessionWebSocketDelegate {
+//    var webSocketTask: URLSessionWebSocketTask?
+//
+//    func connectToTradeUpdates() {
+//        // Установка WebSocket-соединения
+//        let url = URL(string: "wss://ws.finnhub.io?token=YOUR_API_KEY")!
+//        let urlSession = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
+//        webSocketTask = urlSession.webSocketTask(with: url)
+//        webSocketTask?.resume()
+//
+//        // Отправка сообщения-запроса
+//        let requestMessage = "{\"type\":\"subscribe\",\"symbol\":\"AAPL\"}"
+//        let messageData = requestMessage.data(using: .utf8)
+//        webSocketTask?.send(.data(messageData!)) { error in
+//            if let error = error {
+//                // Обработка ошибки отправки запроса
+//                print("Ошибка при отправке запроса: \(error.localizedDescription)")
+//            } else {
+//                // Запрос успешно отправлен
+//            }
+//        }
+//
+//        // Получение данных
+//        receiveData()
+//    }
+//
+//
+//    func receiveData() {
+//        webSocketTask?.receive { [weak self] result in
+//            switch result {
+//            case .success(let message):
+//                if let stringData = String(data: URLSessionWebSocketTask.Message.data, encoding: .utf8) {
+//                    // Обработка полученных данных о последних ценах сделок
+//                    print(stringData)
+//                }
+//
+//                // Продолжаем прослушивание данных
+//                self?.receiveData()
+//
+//            case .failure(let error):
+//                // Обработка ошибки подключения или получения данных
+//                print("Ошибка при получении данных: \(error.localizedDescription)")
+//            }
+//        }
+//    }
+//
+//    func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didOpenWithProtocol protocol: String?) {
+//        print("Соединение установлено")
+//    }
+//
+//    func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didCloseWith closeCode: URLSessionWebSocketTask.CloseCode, reason: Data?) {
+//        print("Соединение закрыто")
+//    }
+//}
