@@ -68,7 +68,7 @@ struct CompanyProfileView: View {
                     
                     Text(stockProfileModel.name)
                         .font(.title3)
-                        .foregroundColor(Color(Resources.Colors.dullDark))
+                        .foregroundColor(Color(Resources.Colors.gray))
                 }
                 
                 HStack {
@@ -76,7 +76,7 @@ struct CompanyProfileView: View {
                     
                     Text("Location: \(stockProfileModel.country)")
                         .font(.title3)
-                        .foregroundColor(Color(Resources.Colors.dullDark))
+                        .foregroundColor(Color(Resources.Colors.gray))
                 }
                 
                 HStack {
@@ -84,7 +84,7 @@ struct CompanyProfileView: View {
                     
                     Text("IPO: \(dateIPO.formatted(date: .long, time: .omitted))")
                         .font(.title3)
-                        .foregroundColor(Color(Resources.Colors.dullDark))
+                        .foregroundColor(Color(Resources.Colors.gray))
                 }
             }
             .padding(.top, 30)
@@ -103,7 +103,7 @@ struct CompanyProfileView: View {
                     
                     Text("Exchange: \(stockProfileModel.exchange)")
                         .font(.title3)
-                        .foregroundColor(Color(Resources.Colors.dullDark))
+                        .foregroundColor(Color(Resources.Colors.gray))
                 }
             }
             .padding(.vertical, 30)
@@ -118,7 +118,7 @@ struct CompanyProfileView: View {
                     
                     Text("Market capitalization: " + amount)
                         .font(.title3)
-                        .foregroundColor(Color(Resources.Colors.dullDark))
+                        .foregroundColor(Color(Resources.Colors.gray))
                 }
                 
                 HStack(alignment: .top) {
@@ -126,7 +126,7 @@ struct CompanyProfileView: View {
                     
                     Text("Share outstanding: " + String(format: "%.2f", stockProfileModel.shareOutstanding))
                         .font(.title3)
-                        .foregroundColor(Color(Resources.Colors.dullDark))
+                        .foregroundColor(Color(Resources.Colors.gray))
                 }
             }
         }

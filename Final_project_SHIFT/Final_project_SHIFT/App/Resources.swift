@@ -12,12 +12,15 @@ enum Resources {
         static let green = UIColor(red: 63/255, green: 191/255, blue: 160/255, alpha: 1.0)
         static let gray = UIColor(red: 142/255, green: 142/255, blue: 142/255, alpha: 1.0)
         static let dullDark = UIColor(red: 62/255, green: 62/255, blue: 62/255, alpha: 1.0)
+        
+        static let priceGreen = UIColor(red: 0.0, green: 0.6, blue: 0.0, alpha: 1.0)
+        static let priceRed = UIColor(red: 0.6, green: 0.0, blue: 0.0, alpha: 1.0)
     }
     
     enum Strings {
         enum TabBar {
-            static var home = "Главная"
-            static var search = "Поиск"
+            static var home = "Home"
+            static var search = "Search"
         }
     }
     

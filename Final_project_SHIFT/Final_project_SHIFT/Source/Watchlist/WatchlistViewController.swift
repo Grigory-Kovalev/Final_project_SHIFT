@@ -22,14 +22,62 @@ final class WatchlistViewController: UIViewController {
     let persistentStorageService = PersistentStorageService()
     
     var dataSource = [PersistentStorageServiceModel]()
-
+    
     private let reuseIdentifier = "CellIdentifier"
     
     private var blurEffectView: UIVisualEffectView?
     
+    private lazy var exchangeStatusView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.alignment = .center
+        stackView.spacing = 8.0
+
+        let label = UILabel()
+        let now = Date() // Получаем текущую дату и время
+        var calendar = Calendar.current
+        let newYorkTimeZone = TimeZone(identifier: "America/New_York")
+        calendar.timeZone = newYorkTimeZone!
+
+        let openHour = 9
+        let openMinute = 30
+        let closeHour = 16
+
+        let weekday = calendar.component(.weekday, from: now)
+        if weekday >= 2 && weekday <= 6, // Проверяем, что это понедельник-пятница
+            let openTime = calendar.date(bySettingHour: openHour, minute: openMinute, second: 0, of: now),
+            let closeTime = calendar.date(bySettingHour: closeHour, minute: 0, second: 0, of: now),
+            calendar.isDate(now, inSameDayAs: openTime) || calendar.isDate(now, inSameDayAs: closeTime),
+            now >= openTime && now <= closeTime {
+            // Биржа открыта с понедельника по пятницу
+            label.text = "Stock exchange is open"
+            label.textColor = Resources.Colors.gray
+
+            let sunImage = UIImageView(image: UIImage(systemName: "sun.max"))
+            sunImage.tintColor = .yellow
+
+            stackView.addArrangedSubview(label)
+            stackView.addArrangedSubview(sunImage)
+        } else {
+            // Биржа закрыта или не рабочий день
+            label.text = "Stock exchange is closed"
+            label.textColor = Resources.Colors.gray
+
+            let moonImage = UIImageView(image: UIImage(systemName: "moon.zzz"))
+            moonImage.tintColor = .blue
+
+            stackView.addArrangedSubview(label)
+            stackView.addArrangedSubview(moonImage)
+        }
+
+        return stackView
+    }()
+
+    
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
+        layout.minimumLineSpacing = 15
         layout.itemSize = CGSize(width: UIScreen.main.bounds.width * 0.9, height: UIScreen.main.bounds.height * 0.1)
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         collectionView.register(WatchlistViewCell.self, forCellWithReuseIdentifier: self.reuseIdentifier)
@@ -97,9 +145,15 @@ final class WatchlistViewController: UIViewController {
     //    }
     
     private func setupUI() {
+        self.view.addSubview(exchangeStatusView)
+        exchangeStatusView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(8)
+            make.centerX.equalToSuperview()
+        }
+        
         self.view.addSubview(favoriteStocksLabel)
         favoriteStocksLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(16)
+            make.top.equalTo(exchangeStatusView.snp.bottom).inset(-16)
             make.leading.equalToSuperview().inset(16)
         }
         
@@ -127,12 +181,17 @@ final class WatchlistViewController: UIViewController {
                     // Обновляем соответствующую ячейку в коллекции
                     let indexPath = IndexPath(item: index, section: 0)
                     DispatchQueue.main.async {
-                        self.collectionView.reloadItems(at: [indexPath])
+                    if let cell = self.collectionView.cellForItem(at: indexPath) as? WatchlistViewCell {
+                        // Обновляем только нужный лейбл в ячейке
+                            //cell.priceLabel.text = "\(price)"
+                        cell.updateValue(price: price)
+                        }
                     }
                 }
             }
         }
     }
+
 
 
     private func setUIInteractionEnabled(_ enabled: Bool) {

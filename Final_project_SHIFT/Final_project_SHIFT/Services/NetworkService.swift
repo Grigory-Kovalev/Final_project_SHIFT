@@ -120,7 +120,9 @@ enum TimeFrameResolution: String {
         }
         
         // Получаем текущую дату и время
-        let calendar = Calendar.current
+        var calendar = Calendar.current
+        let newYorkTimeZone = TimeZone(identifier: "America/New_York")
+        calendar.timeZone = newYorkTimeZone!
         let currentDate = Date()
         
         // Получаем компоненты текущей даты и времени

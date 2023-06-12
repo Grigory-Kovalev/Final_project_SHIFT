@@ -17,6 +17,9 @@ struct WatchlistCellModel {
 
 final class WatchlistViewCell: UICollectionViewCell {
     
+    private var previousPrice: Double?
+    private var currencySymbol: String?
+    
     private lazy var logoImage: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -115,9 +118,38 @@ final class WatchlistViewCell: UICollectionViewCell {
         nameLabel.text = model.name
         tickerLabel.text = model.ticker
         priceLabel.text = "\(model.price) \(model.currency.getCurrencySymbol())"
+        currencySymbol = model.currency.getCurrencySymbol()
         
         if let url = URL(string: model.logo) {
                 logoImage.sd_setImage(with: url, placeholderImage: nil)
             }
     }
+    
+    func updateValue(price: Double) {
+        // Округляем значение цены до двух знаков после запятой
+        let roundedPrice = String(format: "%.2f", price)
+
+        // Формируем строку с добавлением символа валюты
+        let formattedPrice = "\(roundedPrice) \(self.currencySymbol ?? "")"
+
+        // Обновляем только нужный лейбл в ячейке
+        self.priceLabel.text = formattedPrice
+        
+        // Сравниваем текущую цену с предыдущей ценой и устанавливаем цвет текста
+        if let previousPrice = self.previousPrice {
+            let priceChange = price - previousPrice
+            if priceChange > 0 {
+                self.priceLabel.textColor = Resources.Colors.priceGreen
+            } else if priceChange < 0 {
+                self.priceLabel.textColor = Resources.Colors.priceRed
+            } else {
+                // Если цена не изменилась, можно использовать стандартный цвет
+                self.priceLabel.textColor = .label
+            }
+        }
+        
+        // Сохраняем текущую цену как предыдущую для следующего обновления
+        self.previousPrice = price
+    }
+
 }
