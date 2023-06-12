@@ -18,13 +18,11 @@ struct WatchlistModel {
 final class WatchlistViewController: UIViewController {
     
     let networkManager = NetworkService()
+    
     let persistentStorageService = PersistentStorageService()
     
     var dataSource = [PersistentStorageServiceModel]()
 
-    
-    //private var dataArray = [LastStocksDataModel]()
-    
     private let reuseIdentifier = "CellIdentifier"
     
     private var blurEffectView: UIVisualEffectView?
@@ -32,13 +30,20 @@ final class WatchlistViewController: UIViewController {
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.itemSize = CGSize(width: UIScreen.main.bounds.width * 0.9, height: UIScreen.main.bounds.height * 0.12)
+        layout.itemSize = CGSize(width: UIScreen.main.bounds.width * 0.9, height: UIScreen.main.bounds.height * 0.1)
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         collectionView.register(WatchlistViewCell.self, forCellWithReuseIdentifier: self.reuseIdentifier)
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.layer.cornerRadius = 15
         return collectionView
+    }()
+    
+    private lazy var favoriteStocksLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Favorite stocks"
+        label.font = UIFont.systemFont(ofSize: 22, weight: .black)
+        return label
     }()
     
     private lazy var activityIndicator: UIActivityIndicatorView = {
@@ -58,11 +63,11 @@ final class WatchlistViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         WSManager.shared.connectToWebSocket() // подключаемся
-        WSManager.shared.subscribeTo(symbols: dataSource.map({ $0.ticker })) //подписываемся на получение данных
-        
         // Получите данные из Core Data и сохраните их в dataSource
         dataSource = persistentStorageService.loadStocksFromCoreData()!
-        print(dataSource)
+        sortStocksAlphabetically()
+        WSManager.shared.subscribeTo(symbols: dataSource.map({ $0.ticker })) //подписываемся на получение данных
+        
         self.collectionView.reloadData()
     }
 
@@ -84,6 +89,7 @@ final class WatchlistViewController: UIViewController {
         ]
         navigationController?.navigationBar.titleTextAttributes = attributes
         setupUI()
+        getData()
     }
     
     //    override func loadView() {
@@ -91,9 +97,15 @@ final class WatchlistViewController: UIViewController {
     //    }
     
     private func setupUI() {
+        self.view.addSubview(favoriteStocksLabel)
+        favoriteStocksLabel.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(16)
+            make.leading.equalToSuperview().inset(16)
+        }
+        
         self.view.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(16)
+            make.top.equalTo(favoriteStocksLabel.snp.bottom).inset(-8)
             make.horizontalEdges.equalToSuperview()
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
@@ -103,37 +115,33 @@ final class WatchlistViewController: UIViewController {
     private func getData() {
         WSManager.shared.receiveData { [weak self] data in
             guard let self = self, let response = data else { return }
-
-            var responseTickers = [String]()
             for stock in response.data {
-                responseTickers.append(stock.s)
-            }
+                let ticker = stock.s
+                let price = stock.p
 
-            // Находим соответствующую модель данных в dataSource
-            if let index = self.dataSource.firstIndex(where: { responseTickers.contains($0.ticker) }) {
-                print(index)
-                // Обновляем цену акции в модели данных
-                if response.data[index].p != 0 {
-                    let price = response.data[index].p
-                    print(price)
+                // Находим соответствующую модель данных в dataSource по тикеру акции
+                if let index = self.dataSource.firstIndex(where: { $0.ticker == ticker }) {
+                    // Обновляем цену акции в модели данных
                     self.dataSource[index].price = price
-                }
 
-                // Обновляем соответствующую ячейку в коллекции
-                let indexPath = IndexPath(item: index, section: 0)
-                DispatchQueue.main.async {
-                    self.collectionView.reloadItems(at: [indexPath])
+                    // Обновляем соответствующую ячейку в коллекции
+                    let indexPath = IndexPath(item: index, section: 0)
+                    DispatchQueue.main.async {
+                        self.collectionView.reloadItems(at: [indexPath])
+                    }
                 }
             }
         }
     }
 
 
-
-    
     private func setUIInteractionEnabled(_ enabled: Bool) {
         collectionView.isUserInteractionEnabled = enabled
         tabBarController?.tabBar.isUserInteractionEnabled = enabled
+    }
+    
+    private func sortStocksAlphabetically() {
+        dataSource.sort { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
     }
     
     private func createBlurEffect(isOn: Bool) {

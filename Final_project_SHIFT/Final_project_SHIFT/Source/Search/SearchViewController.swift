@@ -24,7 +24,7 @@ final class SearchViewController: UIViewController {
         searchBar.delegate = self
         searchBar.placeholder = "Enter stock ticker"
         searchBar.showsCancelButton = false
-        searchBar.text = "MSFT"
+        //searchBar.text = "MSFT"
         return searchBar
     }()
     

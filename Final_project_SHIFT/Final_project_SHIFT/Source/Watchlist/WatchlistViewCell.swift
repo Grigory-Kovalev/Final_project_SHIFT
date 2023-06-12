@@ -29,8 +29,10 @@ final class WatchlistViewCell: UICollectionViewCell {
     
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
+        //label.layer.borderWidth = 2
+        //label.layer.borderColor = CGColor(red: 0, green: 0, blue: 0, alpha: 1)
         label.numberOfLines = 0
-        label.font = UIFont.systemFont(ofSize: 15)
+        label.font = UIFont.systemFont(ofSize: 12)
         return label
     }()
     private lazy var tickerLabel: UILabel = {
@@ -41,7 +43,7 @@ final class WatchlistViewCell: UICollectionViewCell {
     
     private lazy var priceLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
+        label.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
         return label
     }()
     
@@ -59,30 +61,29 @@ final class WatchlistViewCell: UICollectionViewCell {
         
         self.contentView.addSubview(logoImage)
         logoImage.snp.makeConstraints { make in
-            make.leading.equalToSuperview().inset(16)
+            make.leading.equalToSuperview().inset(8)
             make.centerY.equalToSuperview()
-            make.height.equalTo(30)
-            make.width.equalTo(30)
+            make.height.equalTo(45)
+            make.width.equalTo(45)
         }
-        
+
         self.contentView.addSubview(tickerLabel)
         tickerLabel.snp.makeConstraints { make in
-            make.leading.equalTo(logoImage).inset(47)
+            make.leading.equalTo(logoImage.snp.trailing).inset(-8)
             make.bottom.equalTo(logoImage.snp.centerY).inset(12)
         }
-        
-        self.contentView.addSubview(nameLabel)
-        nameLabel.snp.makeConstraints { make in
-            make.leading.equalTo(tickerLabel)
-            make.top.equalTo(tickerLabel).inset(24)
-            make.width.equalToSuperview().offset(-80)
-            
-        }
-        
+
         self.contentView.addSubview(priceLabel)
         priceLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.trailing.equalToSuperview().inset(16)
+        }
+        
+        self.contentView.addSubview(nameLabel)
+        nameLabel.snp.makeConstraints { make in
+            make.leading.equalTo(logoImage.snp.trailing).inset(-8)
+            make.trailing.equalTo(priceLabel.snp.leading).inset(-8)
+            make.top.equalTo(tickerLabel).inset(27)
         }
     }
     
@@ -114,5 +115,9 @@ final class WatchlistViewCell: UICollectionViewCell {
         nameLabel.text = model.name
         tickerLabel.text = model.ticker
         priceLabel.text = "\(model.price) \(model.currency.getCurrencySymbol())"
+        
+        if let url = URL(string: model.logo) {
+                logoImage.sd_setImage(with: url, placeholderImage: nil)
+            }
     }
 }

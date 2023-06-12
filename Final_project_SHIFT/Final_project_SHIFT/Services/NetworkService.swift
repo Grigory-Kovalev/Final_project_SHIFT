@@ -373,9 +373,8 @@ class WSManager {
     }
     
     // Функция подписки на что-либо  {"type": "subscribe", "symbol": "BINANCE:BTCUSDT"}
-
     func subscribeTo(symbols: [String]) {
-        if symbols.count != 0 {
+        if !symbols.isEmpty {
             for symbol in symbols {
                 let message = URLSessionWebSocketTask.Message.string("{\"type\": \"subscribe\", \"symbol\": \"\(symbol)\"}")
                 webSocketTask.send(message) { error in
@@ -387,10 +386,9 @@ class WSManager {
         }
     }
 
-    
     // Функция отписки от чего-либо
     func unSubscribeFrom(symbols: [String]) {
-        if symbols.count != 0 {
+        if !symbols.isEmpty {
             for symbol in symbols {
                 let message = URLSessionWebSocketTask.Message.string("{\"type\": \"unsubscribe\", \"symbol\": \"\(symbol)\"}")
                 webSocketTask.send(message) { error in
