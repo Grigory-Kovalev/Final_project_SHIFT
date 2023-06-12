@@ -5,6 +5,7 @@
 //  Created by Григорий Ковалев on 30.05.2023.
 //
 
+import CoreData
 import SDWebImage
 import SDWebImageSVGCoder
 import UIKit
@@ -12,6 +13,17 @@ import UIKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    //MARK: - persistent config
+    lazy var persistentContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: "StocksModel")
+        container.loadPersistentStores { (_, error) in
+            if let error = error {
+                fatalError("Не удалось загрузить хранилище Core Data: \(error)")
+            }
+        }
+        return container
+    }()
+    
     override init() {
         super.init()
             setUpDependencies() // Initialize SVGCoder

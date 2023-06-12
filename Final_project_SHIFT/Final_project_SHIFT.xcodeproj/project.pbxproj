@@ -28,6 +28,9 @@
 		3F9800AE2A2616CA00D99EA3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9800AD2A2616CA00D99EA3 /* SceneDelegate.swift */; };
 		3F9800B52A2616CC00D99EA3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F9800B42A2616CC00D99EA3 /* Assets.xcassets */; };
 		3F9800B82A2616CC00D99EA3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F9800B62A2616CC00D99EA3 /* LaunchScreen.storyboard */; };
+		3FFADDCC2A3611FA00299BBD /* WatchlistViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFADDCB2A3611FA00299BBD /* WatchlistViewCell.swift */; };
+		3FFADDCF2A36E4AA00299BBD /* StocksModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3FFADDCD2A36E4AA00299BBD /* StocksModel.xcdatamodeld */; };
+		3FFADDD12A36EA3300299BBD /* PersistentStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFADDD02A36EA3300299BBD /* PersistentStorageService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,6 +54,9 @@
 		3F9800B42A2616CC00D99EA3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3F9800B72A2616CC00D99EA3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3F9800B92A2616CC00D99EA3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3FFADDCB2A3611FA00299BBD /* WatchlistViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistViewCell.swift; sourceTree = "<group>"; };
+		3FFADDCE2A36E4AA00299BBD /* StocksModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = StocksModel.xcdatamodel; sourceTree = "<group>"; };
+		3FFADDD02A36EA3300299BBD /* PersistentStorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentStorageService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +86,7 @@
 			isa = PBXGroup;
 			children = (
 				3F8B693E2A2DA4AE00B125FB /* WatchlistViewController.swift */,
+				3FFADDCB2A3611FA00299BBD /* WatchlistViewCell.swift */,
 			);
 			path = Watchlist;
 			sourceTree = "<group>";
@@ -102,6 +109,8 @@
 			isa = PBXGroup;
 			children = (
 				3F8B69502A2DF49F00B125FB /* NetworkService.swift */,
+				3FFADDD02A36EA3300299BBD /* PersistentStorageService.swift */,
+				3FFADDCD2A36E4AA00299BBD /* StocksModel.xcdatamodeld */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -253,7 +262,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3FFADDCF2A36E4AA00299BBD /* StocksModel.xcdatamodeld in Sources */,
 				3F8B69512A2DF49F00B125FB /* NetworkService.swift in Sources */,
+				3FFADDD12A36EA3300299BBD /* PersistentStorageService.swift in Sources */,
 				3F8B694A2A2DE0AF00B125FB /* StockDetailViewController.swift in Sources */,
 				3F66DB002A31E6830078ECA0 /* CandlesChartView.swift in Sources */,
 				3F66DB022A31E7020078ECA0 /* CandleChartModel.swift in Sources */,
@@ -267,6 +278,7 @@
 				3F8B693D2A2DA23300B125FB /* TabBarController.swift in Sources */,
 				3F8B69432A2DC11900B125FB /* Resources.swift in Sources */,
 				3F9800AC2A2616CA00D99EA3 /* AppDelegate.swift in Sources */,
+				3FFADDCC2A3611FA00299BBD /* WatchlistViewCell.swift in Sources */,
 				3F9800AE2A2616CA00D99EA3 /* SceneDelegate.swift in Sources */,
 				3F8B69452A2DC23D00B125FB /* Extensions.swift in Sources */,
 			);
@@ -527,6 +539,19 @@
 			productName = SnapKit;
 		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		3FFADDCD2A36E4AA00299BBD /* StocksModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				3FFADDCE2A36E4AA00299BBD /* StocksModel.xcdatamodel */,
+			);
+			currentVersion = 3FFADDCE2A36E4AA00299BBD /* StocksModel.xcdatamodel */;
+			path = StocksModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 3F9800A02A2616CA00D99EA3 /* Project object */;
 }

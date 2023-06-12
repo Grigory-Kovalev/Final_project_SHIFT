@@ -13,7 +13,9 @@ class StockDetailViewController: UIViewController {
     
     private let stockDetailModel: StockDetailModel
     private var backButton: UIBarButtonItem!
-    var isFavorite = false
+    var isFavorite: Bool?
+    
+    let persistentStorageService = PersistentStorageService()
     
     init(stockDetailModel: StockDetailModel) {
         self.stockDetailModel = stockDetailModel
@@ -26,14 +28,15 @@ class StockDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        isFavorite = persistentStorageService.isStockFavorite(ticker: stockDetailModel.symbol)
+
         navigationItem.title = stockDetailModel.symbol
         
         createBackButton()
         
         updateFavoriteButtonImage()
         
-        let favoriteButton = isFavorite ? UIImage(systemName: "star.fill")?.withRenderingMode(.alwaysOriginal) : UIImage(systemName: "star")?.withRenderingMode(.alwaysOriginal).withTintColor(tintColorForFavoriteButton())
+        let favoriteButton = isFavorite ?? false ? UIImage(systemName: "star.fill")?.withRenderingMode(.alwaysOriginal) : UIImage(systemName: "star")?.withRenderingMode(.alwaysOriginal).withTintColor(tintColorForFavoriteButton())
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: favoriteButton, style: .plain, target: self, action: #selector(favoriteButtonTapped))
         
@@ -100,12 +103,19 @@ class StockDetailViewController: UIViewController {
     }
     
     @objc private func favoriteButtonTapped() {
-        self.isFavorite.toggle()
+        isFavorite?.toggle()
         updateFavoriteButtonImage()
+        
+        if isFavorite ?? false {
+            persistentStorageService.saveStockToCoreData(ticker: stockDetailModel.symbol, name: stockDetailModel.companyName, logo: stockDetailModel.stockProfile.logo, currency: stockDetailModel.stockProfile.currency, price: stockDetailModel.candles.c.last ?? 0, isFavorite: true)
+        } else {
+            persistentStorageService.deleteStockBy(ticker: stockDetailModel.symbol)
+        }
     }
+
     
     private func updateFavoriteButtonImage() {
-        let favoriteButtonImage = isFavorite ? UIImage(systemName: "star.fill")?.withRenderingMode(.alwaysOriginal) : UIImage(systemName: "star")?.withRenderingMode(.alwaysOriginal).withTintColor(tintColorForFavoriteButton())
+        let favoriteButtonImage = isFavorite ?? false ? UIImage(systemName: "star.fill")?.withRenderingMode(.alwaysOriginal) : UIImage(systemName: "star")?.withRenderingMode(.alwaysOriginal).withTintColor(tintColorForFavoriteButton())
         navigationItem.rightBarButtonItem?.image = favoriteButtonImage
     }
 }
