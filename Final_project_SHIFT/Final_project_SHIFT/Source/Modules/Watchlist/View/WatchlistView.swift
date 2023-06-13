@@ -19,7 +19,7 @@ final class WatchlistView: UIView {
     private weak var navigationController: UINavigationController?
         
     private enum Metrics {
-        static let titleLabelTopInset: CGFloat = -18
+        static let titleLabelTopInset: CGFloat = 60
         static let titleLabelHorizontal: CGFloat = 16
         static let stackViewSpacing: CGFloat = 8.0
         static let collectionViewMinimumLineSpacing: CGFloat = 15.0
@@ -27,12 +27,11 @@ final class WatchlistView: UIView {
         static let blurEffectAlpha: CGFloat = 1
         static let activityIndicatorSize: CGFloat = 50.0
         static let favoriteStocksLabelLeadingInset: CGFloat = 16.0
-        static let exchangeStatusViewTopInset: CGFloat = -16.0
-        static let collectionViewBottomInset: CGFloat = 16.0
+        static let exchangeStatusViewTopOffset: CGFloat = 16.0
         static let collectionViewWidthMultiplier: CGFloat = 0.9
         static let collectionViewHeightMultiplier: CGFloat = 0.1
-        static let favoriteStocksLabelTopInset: CGFloat = -16
-        static let collectionViewTopInset: CGFloat = -8
+        static let favoriteStocksLabelTopOffset: CGFloat = 16.0
+        static let collectionViewTopOffset: CGFloat = 8
     }
     
     // MARK: - Subviews
@@ -145,7 +144,7 @@ extension WatchlistView: IWatchlistView {
         tabBarController.tabBar.tintColor = Resources.Colors.TabBar.selectedItemColor
         
         //Nav
-        navigationController.navigationItem.title = Resources.Strings.Watchlist.titleLabel
+        //navigationController.navigationItem.title = Resources.Strings.Watchlist.titleLabel
     }
 }
 // MARK: - Layout
@@ -153,28 +152,28 @@ private extension WatchlistView {
     func setupUI() {
         self.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(self.safeAreaLayoutGuide.snp.top).inset(Metrics.titleLabelTopInset)
+            make.top.equalToSuperview().inset(Metrics.titleLabelTopInset)
             make.leading.equalTo(self.safeAreaLayoutGuide.snp.leading).inset(Metrics.titleLabelHorizontal)
             make.trailing.equalTo(self.safeAreaLayoutGuide.snp.trailing).inset(Metrics.titleLabelHorizontal)
         }
         
         self.addSubview(exchangeStatusView)
         exchangeStatusView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).inset(Metrics.exchangeStatusViewTopInset)
+            make.top.equalTo(titleLabel.snp.bottom).offset(Metrics.exchangeStatusViewTopOffset)
             make.centerX.equalToSuperview()
         }
         
         self.addSubview(favoriteStocksLabel)
         favoriteStocksLabel.snp.makeConstraints { make in
-            make.top.equalTo(exchangeStatusView.snp.bottom).inset(Metrics.favoriteStocksLabelTopInset)
+            make.top.equalTo(exchangeStatusView.snp.bottom).offset(Metrics.favoriteStocksLabelTopOffset)
             make.leading.equalToSuperview().inset(Metrics.favoriteStocksLabelLeadingInset)
         }
         
         self.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(favoriteStocksLabel.snp.bottom).inset(Metrics.collectionViewTopInset)
+            make.top.equalTo(favoriteStocksLabel.snp.bottom).offset(Metrics.collectionViewTopOffset)
             make.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom).inset(Metrics.collectionViewBottomInset)
+            make.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom)
         }
         
         self.addSubview(activityIndicator)

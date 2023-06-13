@@ -34,6 +34,8 @@
 		3FFADDD82A38277100299BBD /* WatchlistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFADDD72A38277100299BBD /* WatchlistView.swift */; };
 		3FFADDDA2A3827BF00299BBD /* WatchlistEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFADDD92A3827BF00299BBD /* WatchlistEntity.swift */; };
 		3FFADDE02A385EC300299BBD /* WatchlistPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFADDDF2A385EC300299BBD /* WatchlistPresenter.swift */; };
+		3FFADDE22A388DD300299BBD /* WatchlistInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFADDE12A388DD300299BBD /* WatchlistInteractor.swift */; };
+		3FFADDE42A388F8E00299BBD /* WatchlistRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFADDE32A388F8E00299BBD /* WatchlistRouter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,6 +65,8 @@
 		3FFADDD72A38277100299BBD /* WatchlistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistView.swift; sourceTree = "<group>"; };
 		3FFADDD92A3827BF00299BBD /* WatchlistEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistEntity.swift; sourceTree = "<group>"; };
 		3FFADDDF2A385EC300299BBD /* WatchlistPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistPresenter.swift; sourceTree = "<group>"; };
+		3FFADDE12A388DD300299BBD /* WatchlistInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistInteractor.swift; sourceTree = "<group>"; };
+		3FFADDE32A388F8E00299BBD /* WatchlistRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistRouter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,8 +96,10 @@
 			isa = PBXGroup;
 			children = (
 				3FFADDD62A38274E00299BBD /* View */,
+				3FFADDE12A388DD300299BBD /* WatchlistInteractor.swift */,
 				3FFADDDF2A385EC300299BBD /* WatchlistPresenter.swift */,
 				3FFADDDB2A38538800299BBD /* Entity */,
+				3FFADDE32A388F8E00299BBD /* WatchlistRouter.swift */,
 			);
 			path = Watchlist;
 			sourceTree = "<group>";
@@ -311,6 +317,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3FFADDE22A388DD300299BBD /* WatchlistInteractor.swift in Sources */,
 				3FFADDD82A38277100299BBD /* WatchlistView.swift in Sources */,
 				3FFADDCF2A36E4AA00299BBD /* StocksModel.xcdatamodeld in Sources */,
 				3F8B69512A2DF49F00B125FB /* NetworkService.swift in Sources */,
@@ -322,6 +329,7 @@
 				3F8B69472A2DD0AB00B125FB /* SearchViewCell.swift in Sources */,
 				3F8B694C2A2DE17D00B125FB /* StockDetailView.swift in Sources */,
 				3FFADDE02A385EC300299BBD /* WatchlistPresenter.swift in Sources */,
+				3FFADDE42A388F8E00299BBD /* WatchlistRouter.swift in Sources */,
 				3F8B69412A2DA51400B125FB /* SearchViewController.swift in Sources */,
 				3F66DB2E2A32E49C0078ECA0 /* StockProfileModel.swift in Sources */,
 				3F66DAFE2A31E5D20078ECA0 /* StockDetailModel.swift in Sources */,

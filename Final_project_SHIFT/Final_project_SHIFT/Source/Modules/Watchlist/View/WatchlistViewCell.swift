@@ -24,8 +24,8 @@ final class WatchlistViewCell: UICollectionViewCell {
         static let tickerLabelLeadingOffset = 8
         static let tickerLabelBottomInset = 12
         static let priceLabelTrailingInset = 16
-        static let nameLabelLeadingOffset = 8
-        static let nameLabelTrailingOffset = 8
+        static let nameLabelLeadingInset = -8
+        static let nameLabelTrailingInset = -8
         static let nameLabelTopInset = 27
         static let backgroundCornerRadius: CGFloat = 15
         static let backgroundBorderWidth: CGFloat = 2
@@ -150,8 +150,8 @@ private extension WatchlistViewCell {
         
         self.contentView.addSubview(nameLabel)
         nameLabel.snp.makeConstraints { make in
-            make.leading.equalTo(logoImage.snp.trailing).offset(Metrics.nameLabelLeadingOffset)
-            make.trailing.equalTo(priceLabel.snp.leading).offset(Metrics.nameLabelTrailingOffset)
+            make.leading.equalTo(logoImage.snp.trailing).inset(Metrics.nameLabelLeadingInset)
+            make.trailing.equalTo(priceLabel.snp.leading).inset(Metrics.nameLabelTrailingInset)
             make.top.equalTo(tickerLabel).inset(Metrics.nameLabelTopInset)
         }
     }
