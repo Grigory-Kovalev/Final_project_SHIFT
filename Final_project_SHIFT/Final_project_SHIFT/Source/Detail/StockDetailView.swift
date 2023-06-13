@@ -89,7 +89,7 @@ struct StockDetailView: View {
                 Picker("Resolution", selection: $selectedResolution) {
                     Text("\(TimeFrameResolution.fifteenMinutes.rawValue)M").tag(2)
                     Text("\(TimeFrameResolution.thirtyMinutes.rawValue)M").tag(3)
-                    Text("\(TimeFrameResolution.hour.rawValue)M").tag(4)
+                    Text("1H").tag(4)
                     Text(TimeFrameResolution.day.rawValue).tag(5)
                     Text(TimeFrameResolution.weekend.rawValue).tag(6)
                 }

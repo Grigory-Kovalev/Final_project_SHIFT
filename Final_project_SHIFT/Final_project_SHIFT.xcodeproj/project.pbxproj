@@ -135,9 +135,12 @@
 			isa = PBXGroup;
 			children = (
 				3F9800C12A2646FA00D99EA3 /* App */,
+				3F8B693C2A2DA23300B125FB /* TabBarController.swift */,
 				3F9800C22A26471C00D99EA3 /* Source */,
 				3F9800BF2A26467700D99EA3 /* Resources */,
 				3F9800B92A2616CC00D99EA3 /* Info.plist */,
+				3F8B69442A2DC23D00B125FB /* Extensions.swift */,
+				3F8B69422A2DC11900B125FB /* Resources.swift */,
 				3F8B694F2A2DF46200B125FB /* Services */,
 			);
 			path = Final_project_SHIFT;
@@ -165,9 +168,6 @@
 			children = (
 				3F9800AB2A2616CA00D99EA3 /* AppDelegate.swift */,
 				3F9800AD2A2616CA00D99EA3 /* SceneDelegate.swift */,
-				3F8B69422A2DC11900B125FB /* Resources.swift */,
-				3F8B69442A2DC23D00B125FB /* Extensions.swift */,
-				3F8B693C2A2DA23300B125FB /* TabBarController.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";

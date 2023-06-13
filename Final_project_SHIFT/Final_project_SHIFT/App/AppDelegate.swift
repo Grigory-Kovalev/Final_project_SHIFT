@@ -24,9 +24,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return container
     }()
     
+    //MARK: - Initialize SVGCoder
     override init() {
         super.init()
-            setUpDependencies() // Initialize SVGCoder
+            setUpDependencies()
         }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -45,7 +46,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
-// Initialize SVGCoder
+//MARK: - Initialize SVGCoder
 private extension AppDelegate {
     
     func setUpDependencies() {

@@ -55,6 +55,14 @@ class StockDetailViewController: UIViewController {
         hostingController.didMove(toParent: self)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if stockDetailModel.candles.c.last != persistentStorageService.getLastPriceFrom(ticker: stockDetailModel.symbol) {
+            persistentStorageService.deleteStockBy(ticker: stockDetailModel.symbol)
+            persistentStorageService.saveStockToCoreData(ticker: stockDetailModel.symbol, name: stockDetailModel.companyName, logo: stockDetailModel.stockProfile.logo, currency: stockDetailModel.stockProfile.currency, price: stockDetailModel.candles.c.last ?? 0, isFavorite: true)
+        }
+    }
+    
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         updateBackButtonImage()
@@ -107,7 +115,9 @@ class StockDetailViewController: UIViewController {
         updateFavoriteButtonImage()
         
         if isFavorite ?? false {
+            
             persistentStorageService.saveStockToCoreData(ticker: stockDetailModel.symbol, name: stockDetailModel.companyName, logo: stockDetailModel.stockProfile.logo, currency: stockDetailModel.stockProfile.currency, price: stockDetailModel.candles.c.last ?? 0, isFavorite: true)
+
         } else {
             persistentStorageService.deleteStockBy(ticker: stockDetailModel.symbol)
         }

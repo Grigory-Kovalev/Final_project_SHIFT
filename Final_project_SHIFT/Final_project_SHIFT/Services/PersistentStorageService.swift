@@ -167,4 +167,39 @@ final class PersistentStorageService {
         }
     }
 
+    func getLastPriceFrom(ticker: String) -> Double? {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return nil
+        }
+        
+        let context = appDelegate.persistentContainer.viewContext
+        
+        // Создаем запрос на получение сущностей
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "StockEntity")
+        
+        do {
+            // Получаем массив сущностей
+            let entities = try context.fetch(fetchRequest)
+            
+            var stocksModel: [PersistentStorageServiceModel] = []
+            for entity in entities {
+                if let entity = entity as? NSManagedObject {
+                    
+                    if let ticker = entity.value(forKey: "ticker") as? String, let name = entity.value(forKey: "name") as? String, let logo = entity.value(forKey: "logo") as? String, let currency = entity.value(forKey: "currency") as? String, let price = entity.value(forKey: "price") as? Double, let isFavorite = entity.value(forKey: "isFavorite") as? Bool {
+
+                        let stock = PersistentStorageServiceModel(ticker: ticker, name: name, logo: logo, currency: currency, price: price, isFavorite: isFavorite)
+                        stocksModel.append(stock)
+                    }
+                }
+            }
+            guard let selectedStock = stocksModel.filter({ $0.ticker == ticker }).first else { return nil }
+            
+            return selectedStock.price
+        } catch {
+            print("Ошибка при загрузке акций из Core Data: \(error)")
+        }
+        
+        return nil
+    }
+    
 }
