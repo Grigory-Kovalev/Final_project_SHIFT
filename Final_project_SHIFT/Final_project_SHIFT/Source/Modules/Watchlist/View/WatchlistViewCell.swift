@@ -13,7 +13,7 @@ protocol IWatchlistViewCell: AnyObject {
 }
 
 final class WatchlistViewCell: UICollectionViewCell {
-    
+    // MARK: - Properties
     private var previousPrice: Double?
     private var currencySymbol: String?
     
@@ -31,6 +31,7 @@ final class WatchlistViewCell: UICollectionViewCell {
         static let backgroundBorderWidth: CGFloat = 2
     }
     
+    // MARK: - Subviews
     private lazy var logoImage: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -60,6 +61,7 @@ final class WatchlistViewCell: UICollectionViewCell {
         return label
     }()
     
+    // MARK: - Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
         configure()
@@ -69,6 +71,7 @@ final class WatchlistViewCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
     //MARK: - light/вфкл theme tracking
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
@@ -84,6 +87,7 @@ final class WatchlistViewCell: UICollectionViewCell {
     }
 }
 
+// MARK: - IWatchlistViewCell
 extension WatchlistViewCell: IWatchlistViewCell {
     func setModel(with model: WatchlistModel) {
         nameLabel.text = model.name
@@ -121,18 +125,8 @@ extension WatchlistViewCell: IWatchlistViewCell {
     }
 }
 
+// MARK: - Layout
 private extension WatchlistViewCell {
-    func updateBorderColor() {
-        self.contentView.layer.borderColor = currentThemeIsDark() ? UIColor.white.cgColor : UIColor.black.cgColor
-    }
-    
-    func configure() {
-        self.contentView.layer.cornerRadius = Metrics.backgroundCornerRadius
-        self.contentView.backgroundColor = Resources.Colors.Watchlist.cellBackground
-        self.contentView.layer.borderWidth = Metrics.backgroundBorderWidth
-        updateBorderColor()
-    }
-    
     func setupUI() {
         self.contentView.addSubview(logoImage)
         logoImage.snp.makeConstraints { make in
@@ -160,5 +154,19 @@ private extension WatchlistViewCell {
             make.trailing.equalTo(priceLabel.snp.leading).offset(Metrics.nameLabelTrailingOffset)
             make.top.equalTo(tickerLabel).inset(Metrics.nameLabelTopInset)
         }
+    }
+}
+
+// MARK: - Configure
+private extension WatchlistViewCell {
+    func updateBorderColor() {
+        self.contentView.layer.borderColor = currentThemeIsDark() ? UIColor.white.cgColor : UIColor.black.cgColor
+    }
+    
+    func configure() {
+        self.contentView.layer.cornerRadius = Metrics.backgroundCornerRadius
+        self.contentView.backgroundColor = Resources.Colors.Watchlist.cellBackground
+        self.contentView.layer.borderWidth = Metrics.backgroundBorderWidth
+        updateBorderColor()
     }
 }

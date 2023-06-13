@@ -33,6 +33,7 @@
 		3FFADDD12A36EA3300299BBD /* PersistentStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFADDD02A36EA3300299BBD /* PersistentStorageService.swift */; };
 		3FFADDD82A38277100299BBD /* WatchlistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFADDD72A38277100299BBD /* WatchlistView.swift */; };
 		3FFADDDA2A3827BF00299BBD /* WatchlistEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFADDD92A3827BF00299BBD /* WatchlistEntity.swift */; };
+		3FFADDE02A385EC300299BBD /* WatchlistPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFADDDF2A385EC300299BBD /* WatchlistPresenter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,6 +62,7 @@
 		3FFADDD02A36EA3300299BBD /* PersistentStorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentStorageService.swift; sourceTree = "<group>"; };
 		3FFADDD72A38277100299BBD /* WatchlistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistView.swift; sourceTree = "<group>"; };
 		3FFADDD92A3827BF00299BBD /* WatchlistEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistEntity.swift; sourceTree = "<group>"; };
+		3FFADDDF2A385EC300299BBD /* WatchlistPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistPresenter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +92,7 @@
 			isa = PBXGroup;
 			children = (
 				3FFADDD62A38274E00299BBD /* View */,
+				3FFADDDF2A385EC300299BBD /* WatchlistPresenter.swift */,
 				3FFADDDB2A38538800299BBD /* Entity */,
 			);
 			path = Watchlist;
@@ -318,6 +321,7 @@
 				3F66DB262A32E3B60078ECA0 /* CompanyProfileView.swift in Sources */,
 				3F8B69472A2DD0AB00B125FB /* SearchViewCell.swift in Sources */,
 				3F8B694C2A2DE17D00B125FB /* StockDetailView.swift in Sources */,
+				3FFADDE02A385EC300299BBD /* WatchlistPresenter.swift in Sources */,
 				3F8B69412A2DA51400B125FB /* SearchViewController.swift in Sources */,
 				3F66DB2E2A32E49C0078ECA0 /* StockProfileModel.swift in Sources */,
 				3F66DAFE2A31E5D20078ECA0 /* StockDetailModel.swift in Sources */,

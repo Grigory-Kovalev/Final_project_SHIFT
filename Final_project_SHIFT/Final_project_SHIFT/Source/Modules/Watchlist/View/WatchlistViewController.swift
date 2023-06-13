@@ -8,7 +8,7 @@
 import UIKit
 
 final class WatchlistViewController: UIViewController {
-    
+    // MARK: Properties
     private let customView = WatchlistView()
     
     let networkManager = NetworkService()
@@ -17,6 +17,7 @@ final class WatchlistViewController: UIViewController {
     
     var dataSource = [PersistentStorageServiceModel]()
     
+    // MARK: Lifecycle
     override func loadView() {
         self.view = self.customView
     }

@@ -14,6 +14,7 @@ protocol IWatchlistView: AnyObject {
 
 final class WatchlistView: UIView {
     
+    // MARK: - Properties
     private weak var tabBarController: UITabBarController?
     private weak var navigationController: UINavigationController?
         
@@ -34,6 +35,7 @@ final class WatchlistView: UIView {
         static let collectionViewTopInset: CGFloat = -8
     }
     
+    // MARK: - Subviews
     private var blurEffectView: UIVisualEffectView?
     
     private let titleLabel: UILabel = {
@@ -104,7 +106,7 @@ final class WatchlistView: UIView {
         return activityIndicator
     }()
     
-    //MARK: - Init
+    // MARK: - Initialization
     init() {
         super.init(frame: .zero)
         configureView()
@@ -114,7 +116,10 @@ final class WatchlistView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+}
+
+// MARK: - Public Method
+extension WatchlistView {
     func createBlurEffect(isOn: Bool) {
         if isOn {
             let blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
@@ -130,7 +135,7 @@ final class WatchlistView: UIView {
     }
 }
 
-//MARK: - Extensions
+//MARK: - IWatchlistView
 extension WatchlistView: IWatchlistView {
     func setupControllers(with tabBarController: UITabBarController, with navigationController: UINavigationController) {
         self.tabBarController = tabBarController
@@ -143,7 +148,7 @@ extension WatchlistView: IWatchlistView {
         navigationController.navigationItem.title = Resources.Strings.Watchlist.titleLabel
     }
 }
-
+// MARK: - Layout
 private extension WatchlistView {
     func setupUI() {
         self.addSubview(titleLabel)
@@ -180,6 +185,7 @@ private extension WatchlistView {
     }
 }
 
+// MARK: - Configure
 private extension WatchlistView {
     func configureView() {
         self.backgroundColor = Resources.Colors.backgroundColor
