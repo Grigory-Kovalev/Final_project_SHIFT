@@ -1,4 +1,3 @@
-//
 //  WatchlistView.swift
 //  Final_project_SHIFT
 //
@@ -7,62 +6,70 @@
 
 import UIKit
 
+protocol IWatchlistView: AnyObject {
+    //var tapButtonHandler: (() -> Void)? { get set }
+
+    func setupControllers(with tabBarController: UITabBarController, with navigationController: UINavigationController)
+}
+
 final class WatchlistView: UIView {
     
     private weak var tabBarController: UITabBarController?
     private weak var navigationController: UINavigationController?
-    
-    let reuseIdentifier = "CellIdentifier"
-    
-    private enum Metrics {
-        static let topLabelOffset: CGFloat = 150
-        static let bottomLabelOffset: CGFloat = -40
-        static let hOffset: CGFloat = 10
         
-        static let borderWidth: CGFloat = 1
-        static let numberOfLines: Int = 1
+    private enum Metrics {
+        static let titleLabelTopInset: CGFloat = -18
+        static let titleLabelHorizontal: CGFloat = 16
+        static let stackViewSpacing: CGFloat = 8.0
+        static let collectionViewMinimumLineSpacing: CGFloat = 15.0
+        static let collectionViewCornerRadius: CGFloat = 15.0
+        static let blurEffectAlpha: CGFloat = 1
+        static let activityIndicatorSize: CGFloat = 50.0
+        static let favoriteStocksLabelLeadingInset: CGFloat = 16.0
+        static let exchangeStatusViewTopInset: CGFloat = -16.0
+        static let collectionViewBottomInset: CGFloat = 16.0
+        static let collectionViewWidthMultiplier: CGFloat = 0.9
+        static let collectionViewHeightMultiplier: CGFloat = 0.1
+        static let favoriteStocksLabelTopInset: CGFloat = -16
+        static let collectionViewTopInset: CGFloat = -8
     }
     
     private var blurEffectView: UIVisualEffectView?
+    
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = Resources.Strings.Watchlist.titleLabel
+        label.textAlignment = .center
+        label.font = Resources.Fonts.thickFont
+        label.textColor = Resources.Colors.green
+        return label
+    }()
     
     private lazy var exchangeStatusView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.alignment = .center
-        stackView.spacing = 8.0
+        stackView.spacing = Metrics.stackViewSpacing
 
         let label = UILabel()
-        let now = Date() // Получаем текущую дату и время
-        var calendar = Calendar.current
-        let newYorkTimeZone = TimeZone(identifier: "America/New_York")
-        calendar.timeZone = newYorkTimeZone!
 
-        let openHour = 9
-        let openMinute = 30
-        let closeHour = 16
-
-        let weekday = calendar.component(.weekday, from: now)
-        if weekday >= 2 && weekday <= 6, // Проверяем, что это понедельник-пятница
-            let openTime = calendar.date(bySettingHour: openHour, minute: openMinute, second: 0, of: now),
-            let closeTime = calendar.date(bySettingHour: closeHour, minute: 0, second: 0, of: now),
-            calendar.isDate(now, inSameDayAs: openTime) || calendar.isDate(now, inSameDayAs: closeTime),
-            now >= openTime && now <= closeTime {
+        if Resources.Condition.exchangeStatus {
             // Биржа открыта с понедельника по пятницу
-            label.text = "Stock exchange is open"
+            label.text = Resources.Strings.Watchlist.exchangeStatusViewOpenText
             label.textColor = Resources.Colors.gray
 
-            let sunImage = UIImageView(image: UIImage(systemName: "sun.max"))
-            sunImage.tintColor = .yellow
+            let sunImage = UIImageView(image: UIImage(systemName: Resources.Strings.Watchlist.exchangeStatusViewOpenImage))
+            sunImage.tintColor = Resources.Colors.Watchlist.sunImageColor
 
             stackView.addArrangedSubview(label)
             stackView.addArrangedSubview(sunImage)
         } else {
             // Биржа закрыта или не рабочий день
-            label.text = "Stock exchange is closed"
+            label.text = Resources.Strings.Watchlist.exchangeStatusViewCloseText
             label.textColor = Resources.Colors.gray
 
-            let moonImage = UIImageView(image: UIImage(systemName: "moon.zzz"))
-            moonImage.tintColor = .blue
+            let moonImage = UIImageView(image: UIImage(systemName: Resources.Strings.Watchlist.exchangeStatusViewCloseImage))
+            moonImage.tintColor = Resources.Colors.Watchlist.moonImageColor
 
             stackView.addArrangedSubview(label)
             stackView.addArrangedSubview(moonImage)
@@ -73,25 +80,25 @@ final class WatchlistView: UIView {
     
     private lazy var favoriteStocksLabel: UILabel = {
         let label = UILabel()
-        label.text = "Favorite stocks"
-        label.font = UIFont.systemFont(ofSize: 22, weight: .black)
+        label.text = Resources.Strings.Watchlist.favoriteStocksLabelText
+        label.font = Resources.Fonts.thickFont
         return label
     }()
     
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.minimumLineSpacing = 15
-        layout.itemSize = CGSize(width: UIScreen.main.bounds.width * 0.9, height: UIScreen.main.bounds.height * 0.1)
+        layout.minimumLineSpacing = Metrics.collectionViewMinimumLineSpacing
+        layout.itemSize = CGSize(width: UIScreen.main.bounds.width * Metrics.collectionViewWidthMultiplier, height: UIScreen.main.bounds.height * Metrics.collectionViewHeightMultiplier)
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
-        collectionView.register(WatchlistViewCell.self, forCellWithReuseIdentifier: self.reuseIdentifier)
-        collectionView.layer.cornerRadius = 15
+        collectionView.register(WatchlistViewCell.self, forCellWithReuseIdentifier: Resources.Strings.Watchlist.watchlistCellIdentifier)
+        collectionView.layer.cornerRadius = Metrics.collectionViewCornerRadius
         return collectionView
     }()
     
     lazy var activityIndicator: UIActivityIndicatorView = {
         let activityIndicator = UIActivityIndicatorView(style: .large)
-        activityIndicator.color = .gray
+        activityIndicator.color = Resources.Colors.activityIndicatorColor
         activityIndicator.center = self.center
         activityIndicator.hidesWhenStopped = true
         return activityIndicator
@@ -108,17 +115,13 @@ final class WatchlistView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupControllers(with tabBarController: UITabBarController, with navigationController: UINavigationController) {
-        self.tabBarController = tabBarController
-        self.navigationController = navigationController
-    }
-    
     func createBlurEffect(isOn: Bool) {
         if isOn {
             let blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
             blurEffectView = UIVisualEffectView(effect: blurEffect)
             blurEffectView?.frame = collectionView.bounds
             blurEffectView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            blurEffectView?.alpha = Metrics.blurEffectAlpha
             collectionView.addSubview(blurEffectView!)
         } else {
             blurEffectView?.removeFromSuperview()
@@ -128,53 +131,57 @@ final class WatchlistView: UIView {
 }
 
 //MARK: - Extensions
-//extension WatchlistView: IView
-//{
-//    func set(text: String) {
-//        self.label.text = text
-//    }
-//}
+extension WatchlistView: IWatchlistView {
+    func setupControllers(with tabBarController: UITabBarController, with navigationController: UINavigationController) {
+        self.tabBarController = tabBarController
+        self.navigationController = navigationController
+        //tabBar
+        tabBarController.tabBar.unselectedItemTintColor = Resources.Colors.TabBar.unselectedItemColor
+        tabBarController.tabBar.tintColor = Resources.Colors.TabBar.selectedItemColor
+        
+        //Nav
+        navigationController.navigationItem.title = Resources.Strings.Watchlist.titleLabel
+    }
+}
 
 private extension WatchlistView {
     func setupUI() {
+        self.addSubview(titleLabel)
+        titleLabel.snp.makeConstraints { make in
+            make.bottom.equalTo(self.safeAreaLayoutGuide.snp.top).inset(Metrics.titleLabelTopInset)
+            make.leading.equalTo(self.safeAreaLayoutGuide.snp.leading).inset(Metrics.titleLabelHorizontal)
+            make.trailing.equalTo(self.safeAreaLayoutGuide.snp.trailing).inset(Metrics.titleLabelHorizontal)
+        }
+        
         self.addSubview(exchangeStatusView)
         exchangeStatusView.snp.makeConstraints { make in
-            make.top.equalTo(self.safeAreaLayoutGuide.snp.top).inset(8)
+            make.top.equalTo(titleLabel.snp.bottom).inset(Metrics.exchangeStatusViewTopInset)
             make.centerX.equalToSuperview()
         }
         
         self.addSubview(favoriteStocksLabel)
         favoriteStocksLabel.snp.makeConstraints { make in
-            make.top.equalTo(exchangeStatusView.snp.bottom).inset(-16)
-            make.leading.equalToSuperview().inset(16)
+            make.top.equalTo(exchangeStatusView.snp.bottom).inset(Metrics.favoriteStocksLabelTopInset)
+            make.leading.equalToSuperview().inset(Metrics.favoriteStocksLabelLeadingInset)
         }
         
         self.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(favoriteStocksLabel.snp.bottom).inset(-8)
-            make.horizontalEdges.equalToSuperview()
-            make.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom)
+            make.top.equalTo(favoriteStocksLabel.snp.bottom).inset(Metrics.collectionViewTopInset)
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom).inset(Metrics.collectionViewBottomInset)
         }
         
         self.addSubview(activityIndicator)
+        activityIndicator.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.width.height.equalTo(Metrics.activityIndicatorSize)
+        }
     }
 }
 
 private extension WatchlistView {
     func configureView() {
-        self.backgroundColor = .systemBackground
-        
-        //tabBar
-        self.tabBarController?.tabBar.unselectedItemTintColor = .systemGray
-        self.tabBarController?.tabBar.tintColor = .label
-        
-        //Nav
-        self.navigationController?.navigationItem.title = "Watchlist"
-        let attributes: [NSAttributedString.Key: Any] = [
-            //.font: UIFont.boldSystemFont(ofSize: 18),
-            .foregroundColor: Resources.Colors.green
-        ]
-        self.navigationController?.navigationBar.titleTextAttributes = attributes
+        self.backgroundColor = Resources.Colors.backgroundColor
     }
 }
-

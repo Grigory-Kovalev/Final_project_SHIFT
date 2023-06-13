@@ -17,36 +17,35 @@ final class WatchlistViewController: UIViewController {
     
     var dataSource = [PersistentStorageServiceModel]()
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        WSManager.shared.unSubscribeFrom(symbols: dataSource.map({ $0.ticker }))
-        //WSManager.shared.disconnectWebSocket()
+    override func loadView() {
+        self.view = self.customView
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        WSManager.shared.connectToWebSocket() // подключаемся
-        // Получите данные из Core Data и сохраните их в dataSource
-        dataSource = persistentStorageService.loadStocksFromCoreData()!
-        sortStocksAlphabetically()
-        WSManager.shared.subscribeTo(symbols: dataSource.map({ $0.ticker })) //подписываемся на получение данных
-        
-        customView.collectionView.reloadData()
-    }
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
         customView.setupControllers(with: self.tabBarController!, with: self.navigationController!)
-        
         customView.collectionView.dataSource = self
         customView.collectionView.delegate = self
         
         getData()
     }
     
-    override func loadView() {
-        self.view = self.customView
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        // подключаемся
+        WSManager.shared.connectToWebSocket()
+        // Получите данные из Core Data и сохраните их в dataSource
+        dataSource = persistentStorageService.loadStocksFromCoreData()!
+        sortStocksAlphabetically()
+        //подписываемся на получение данных
+        WSManager.shared.subscribeTo(symbols: dataSource.map({ $0.ticker }))
+        customView.collectionView.reloadData()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        WSManager.shared.unSubscribeFrom(symbols: dataSource.map({ $0.ticker }))
+        //WSManager.shared.disconnectWebSocket()
     }
     
     private func setUIInteractionEnabled(_ enabled: Bool) {
@@ -72,7 +71,7 @@ final class WatchlistViewController: UIViewController {
                         if let cell = self.customView.collectionView.cellForItem(at: indexPath) as? WatchlistViewCell {
                         // Обновляем только нужный лейбл в ячейке
                             //cell.priceLabel.text = "\(price)"
-                        cell.updateValue(price: price)
+                        cell.updatePriceLabel(by: price)
                         }
                     }
                 }
@@ -101,7 +100,7 @@ extension WatchlistViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: customView.reuseIdentifier, for: indexPath) as! WatchlistViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Resources.Strings.Watchlist.watchlistCellIdentifier, for: indexPath) as! WatchlistViewCell
         let searchData = dataSource[indexPath.item]
         cell.setModel(with: WatchlistModel(ticker: searchData.ticker, name: searchData.name, logo: searchData.logo, price: searchData.price, currency: searchData.currency))
         return cell
