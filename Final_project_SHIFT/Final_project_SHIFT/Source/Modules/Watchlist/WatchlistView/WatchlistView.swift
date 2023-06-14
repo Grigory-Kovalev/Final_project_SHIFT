@@ -6,7 +6,8 @@
 
 import UIKit
 
-protocol IWatchlistView: AnyObject {
+protocol WatchlistViewProtocol: AnyObject {
+    var collectionView: UICollectionView { get }
     func setupControllers(with tabBarController: UITabBarController, with navigationController: UINavigationController)
 }
 
@@ -133,7 +134,7 @@ extension WatchlistView {
 }
 
 //MARK: - IWatchlistView
-extension WatchlistView: IWatchlistView {
+extension WatchlistView: WatchlistViewProtocol {
     func setupControllers(with tabBarController: UITabBarController, with navigationController: UINavigationController) {
         self.tabBarController = tabBarController
         self.navigationController = navigationController
