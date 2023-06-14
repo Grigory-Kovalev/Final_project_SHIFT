@@ -20,6 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if let error = error {
                 fatalError("Не удалось загрузить хранилище Core Data: \(error)")
             }
+            container.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
         }
         return container
     }()

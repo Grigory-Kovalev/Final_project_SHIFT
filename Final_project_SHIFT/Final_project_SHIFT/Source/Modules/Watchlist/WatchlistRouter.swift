@@ -8,16 +8,34 @@
 import UIKit
 
 // MARK: - Router
-protocol WatchlistRouterProtocol: AnyObject {
-    func showStockDetail(with model: StockDetailModel)
+protocol IWatchlistRouter: AnyObject {
+    //func showStockDetail(with model: StockDetailModel)
 }
 
 // Пример имплементации WatchlistRouter
-class WatchlistRouter: WatchlistRouterProtocol {
-    weak var viewController: UIViewController?
+class WatchlistRouter {
+    weak var presentor: IWatchlistPresenter?
+    //weak var viewController: UIViewController?
     
-    func showStockDetail(with model: StockDetailModel) {
-        let stockDetailViewController = StockDetailViewController(stockDetailModel: model)
-        viewController?.navigationController?.pushViewController(stockDetailViewController, animated: true)
-    }
+//    func showStockDetail(with model: StockDetailModel) {
+//        let stockDetailViewController = StockDetailViewController(stockDetailModel: model)
+//        viewController?.navigationController?.pushViewController(stockDetailViewController, animated: true)
+//    }
 }
+
+extension WatchlistRouter: IWatchlistRouter {
+    
+}
+//protocol IVIPERRouter: AnyObject
+//{
+//    func nextModule()
+//}
+//
+//final class VIPERRouter {}
+//
+//extension VIPERRouter: IVIPERRouter
+//{
+//    func nextModule() {
+//        // routing
+//    }
+//}

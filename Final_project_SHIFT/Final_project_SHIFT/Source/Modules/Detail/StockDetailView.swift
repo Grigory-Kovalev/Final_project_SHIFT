@@ -28,27 +28,27 @@ struct StockDetailView: View {
         return Double(stockDetailModel.candles.o.first ?? 0) < Double(stockDetailModel.candles.c.last ?? 0)
     }
     
-    var priceDifference: (sign: String, price: String){
+    var priceDifference: (sign: StockDetailModel, price: StockDetailModel){
         let difference = Double(stockDetailModel.candles.c.last ?? 0) - Double(stockDetailModel.candles.o.first ?? 0)
-        let price = String(format: "%.2f", abs(difference))
+        let price = StockDetailModel(format: "%.2f", abs(difference))
         let sign = "\(difference > 0 ? "+" : "-")"
         return (sign, price)
     }
     
-    var percentageDifference: String {
+    var percentageDifference: StockDetailModel {
         let percentage = ((Double(stockDetailModel.candles.c.last ?? 0) / Double(stockDetailModel.candles.o.first ?? 0) - 1) * 100)
-        return String(format: "%.2f", percentage)
+        return StockDetailModel(format: "%.2f", percentage)
     }
     
-    var maxPrice: String {
+    var maxPrice: StockDetailModel {
         return stockDetailModel.candles.h.max()?.formatted() ?? ""
     }
     
-    var minPrice: String {
+    var minPrice: StockDetailModel {
         return stockDetailModel.candles.l.min()?.formatted() ?? ""
     }
     
-    var getCurrencySymbol: String {
+    var getCurrencySymbol: StockDetailModel {
         
         stockDetailModel.stockProfile.currency.getCurrencySymbol()
     }
