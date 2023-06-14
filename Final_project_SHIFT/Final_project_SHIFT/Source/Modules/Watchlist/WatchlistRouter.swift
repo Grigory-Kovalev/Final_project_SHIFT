@@ -14,7 +14,7 @@ protocol IWatchlistRouter: AnyObject {
 
 // Пример имплементации WatchlistRouter
 class WatchlistRouter {
-    weak var presentor: IWatchlistPresenter?
+    weak var view: IWatchlistViewController?
     //weak var viewController: UIViewController?
     
 //    func showStockDetail(with model: StockDetailModel) {

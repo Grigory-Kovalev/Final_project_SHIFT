@@ -13,11 +13,11 @@ class WatchlistModuleBuilder {
         let router = WatchlistRouter()
         let presenter = WatchlistPresenter(interactor: interactor, router: router)
         let viewController = WatchlistViewController()
-        viewController.delegate = presenter
+        //viewController.delegate = presenter
         viewController.presenter = presenter
         presenter.view = viewController
         interactor.presentor = presenter
-        router.presentor = presenter
+        router.view = viewController
         return viewController
     }
 }

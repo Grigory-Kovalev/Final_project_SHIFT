@@ -119,7 +119,7 @@ final class SearchViewController: UIViewController {
         tabBarController?.tabBar.isUserInteractionEnabled = enabled
     }
     
-     private func createAlertController(title: StockDetailModel, message: StockDetailModel) {
+     private func createAlertController(title: String, message: String) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
         let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
@@ -176,7 +176,7 @@ extension SearchViewController: UISearchBarDelegate {
         // Здесь вы можете выполнить действия по очистке поисковых результатов или закрытию поисковой строки
     }
     
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: StockDetailModel) {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         // Метод вызывается, когда текст в поисковой строке изменяется
         // Здесь вы можете реагировать на изменения и выполнять дополнительные действия, например, фильтрацию результатов поиска в реальном времени
     }

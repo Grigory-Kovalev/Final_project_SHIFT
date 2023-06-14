@@ -12,7 +12,7 @@ protocol IWatchlistInteractor {
     func connectToWebSocket()
     func subscribeToWebSocket(symbols: [String])
     func receiveDataFromWebSocket()
-    func loadStockDetailModel(ticker: String) -> StockDetailModel?
+    func loadStockDetailModel(ticker: String)
     func unsubscribeFromWebSocket(symbols: [String])
 }
 
@@ -48,7 +48,7 @@ extension WatchlistInteractor: IWatchlistInteractor {
         }
     }
     
-    func loadStockDetailModel(ticker: String) -> StockDetailModel? {
+    func loadStockDetailModel(ticker: String) {
         networkManager.fetchStockProfile(symbol: ticker) { [weak self] result in
             switch result {
             case .success(let stockProfile):
@@ -57,7 +57,6 @@ extension WatchlistInteractor: IWatchlistInteractor {
                     case .success(let fetchedCandles):
                         let model = StockDetailModel(symbol: ticker, companyName: stockProfile.name, stockProfile: stockProfile, currentRange: .weekend, candles: fetchedCandles)
                         self?.presentor?.didLoadStockDetailModel(model: model)
-                        re
                         
                     case .failure(let error):
                         print("Error fetching candles: \(error)")

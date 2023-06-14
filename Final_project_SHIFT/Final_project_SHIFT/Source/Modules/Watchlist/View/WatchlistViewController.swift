@@ -8,19 +8,40 @@
 import UIKit
 
 protocol IWatchlistViewController: AnyObject {
+    var tapButtonHandler: ((String) -> Void)? { get set }
+    
     func setStockDetailModel(with model: StockDetailModel)
     func setCellLabelPrice(indexPath: IndexPath, ticker: String, price: Double)
-    func didTapCellButton()
+    func setDataSource(data: [PersistentStorageServiceModel])
 }
 
 extension WatchlistViewController: IWatchlistViewController {
-    func didTapCellButton() {
-        presenter?.handleCellButtonTap(ticker: <#T##String#>)
+    var tapButtonHandler: ((String) -> Void)? {
+        get {
+            
+        }
+        set {
+            
+        }
     }
     
     
+    
+    
+    func setDataSource(data: [PersistentStorageServiceModel]) {
+        self.dataSource = data
+    }
+    
     func setStockDetailModel(with model: StockDetailModel) {
-        
+        DispatchQueue.main.async {
+            self.stockDetailModel = model
+             //Отключаем индикатор
+            self.customView.activityIndicator.stopAnimating()
+            // Отключаем блюр
+            self.customView.createBlurEffect(isOn: false)
+            // Разрешаем пользовательское взаимодействие
+            self.setUIInteractionEnabled(true)
+        }
     }
     
     func setCellLabelPrice(indexPath: IndexPath, ticker: String, price: Double) {
@@ -34,27 +55,25 @@ extension WatchlistViewController: IWatchlistViewController {
     }
 }
 
+
+
+
 final class WatchlistViewController: UIViewController {
+    
+    
+    
+    
+    
     // MARK: Properties
+    
     private let customView = WatchlistView()
     
-    
-    //let networkManager = NetworkService()
-    
+    var dataSource = [PersistentStorageServiceModel]()
+    var stockDetailModel: StockDetailModel?
+        
     let persistentStorageService = PersistentStorageService()
-    
-    //var dataSource = [PersistentStorageServiceModel]()
-    
+        
     var presenter: IWatchlistPresenter?
-    
-//    init(presenter: IWatchlistPresenter) {
-//        self.presenter = presenter
-//        super.init()
-//    }
-    
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
     
     // MARK: Lifecycle
     override func loadView() {
@@ -70,63 +89,25 @@ final class WatchlistViewController: UIViewController {
         customView.collectionView.dataSource = self
         customView.collectionView.delegate = self
         
-        //getData()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         presenter?.viewDidAppear()
-//        // подключаемся
-//        WSManager.shared.connectToWebSocket()
-//        // Получите данные из Core Data и сохраните их в dataSource
-//        dataSource = persistentStorageService.loadStocksFromCoreData()!
-//        sortStocksAlphabetically() //presentor
-//        //подписываемся на получение данных
-//        WSManager.shared.subscribeTo(symbols: dataSource.map({ $0.ticker }))
+
         customView.collectionView.reloadData()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         presenter?.viewDidDisappear()
-//        WSManager.shared.unSubscribeFrom(symbols: dataSource.map({ $0.ticker }))
-        //WSManager.shared.disconnectWebSocket()
+
     }
     
     private func setUIInteractionEnabled(_ enabled: Bool) {
         customView.collectionView.isUserInteractionEnabled = enabled
         self.tabBarController?.tabBar.isUserInteractionEnabled = enabled
     }
-    
-//    private func getData() {
-//        WSManager.shared.receiveData { [weak self] data in
-//            guard let self = self, let response = data else { return }
-//            for stock in response.data {
-//                let ticker = stock.s
-//                let price = stock.p
-//
-//                // Находим соответствующую модель данных в dataSource по тикеру акции
-//                if let index = self.dataSource.firstIndex(where: { $0.ticker == ticker }) {
-//                    // Обновляем цену акции в модели данных
-//                    self.dataSource[index].price = price
-//
-//                    // Обновляем соответствующую ячейку в коллекции
-//                    let indexPath = IndexPath(item: index, section: 0)
-//                    DispatchQueue.main.async {
-//                        if let cell = self.customView.collectionView.cellForItem(at: indexPath) as? WatchlistViewCell {
-//                        // Обновляем только нужный лейбл в ячейке
-//                            //cell.priceLabel.text = "\(price)"
-//                        cell.updatePriceLabel(by: price)
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-    
-//    private func sortStocksAlphabetically() {
-//        dataSource.sort { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
-//    }
     
     private func createAlertController(title: String, message: String) {
        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -141,14 +122,13 @@ final class WatchlistViewController: UIViewController {
 extension WatchlistViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // Вернуть количество элементов в коллекции
-        return presenter?.getDataSource().count ?? 0
-        //return dataSource.count
+        return self.dataSource.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Resources.Strings.Watchlist.watchlistCellIdentifier, for: indexPath) as! WatchlistViewCell
-        let searchData = presenter?.getDataSource()[indexPath.item]
-        cell.setModel(with: WatchlistModel(ticker: searchData!.ticker, name: searchData!.name, logo: searchData!.logo, price: searchData!.price, currency: searchData!.currency))
+        let searchData = self.dataSource[indexPath.item]
+        cell.setModel(with: WatchlistModel(ticker: searchData.ticker, name: searchData.name, logo: searchData.logo, price: searchData.price, currency: searchData.currency))
         return cell
     }
 }
@@ -158,8 +138,9 @@ extension WatchlistViewController: UICollectionViewDataSource {
 extension WatchlistViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        let symbol = (presenter?.getDataSource()[indexPath.row].ticker)!
-        let companyName = (presenter?.getDataSource()[indexPath.row].name)
+        let symbol = (self.dataSource[indexPath.row].ticker)
+        tapButtonHandler?(symbol)
+        //let companyName = (self.dataSource[indexPath.row].name)
         
         customView.createBlurEffect(isOn: true)
         //Запускаем индикатор
@@ -167,7 +148,11 @@ extension WatchlistViewController: UICollectionViewDelegate {
         // Отключаем пользовательское взаимодействие
         setUIInteractionEnabled(false)
         
-        didTapCellButton()
+        let destinationController = StockDetailViewController(stockDetailModel: self.stockDetailModel ?? StockDetailModel(symbol: "", companyName: "", stockProfile: StockProfileModel(country: "", currency: "", estimateCurrency: "", exchange: "", finnhubIndustry: "", ipo: "", logo: "", marketCapitalization: 0, name: "", phone: "", shareOutstanding: 0, ticker: "", weburl: ""), currentRange: .weekend, candles: Candles(c: [Double](), h: [Double](), l: [Double](), o: [Double](), s: "", t: [Int](), v: [Int]())))
+        destinationController.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(destinationController, animated: true)
+        
+        //didTapCellButton()
         
 //        networkManager.fetchStockProfile(symbol: symbol ?? "AAPL") { [weak self] result in
 //            switch result {

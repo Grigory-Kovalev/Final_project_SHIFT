@@ -18,10 +18,9 @@ protocol IWatchlistPresenter: AnyObject {
     func didReceiveDataFromWebSocket(data: LastStocksDataModel?)
     func didLoadStockDetailModel(model: StockDetailModel)
     func didUnsubscribeFromWebSocket()
-    func getDataSource() -> [PersistentStorageServiceModel]
-    
-    func handleCellButtonTap(ticker: String)
+
 }
+
 
 
 class WatchlistPresenter {
@@ -31,7 +30,6 @@ class WatchlistPresenter {
     var router: IWatchlistRouter
     
     var dataSource = [PersistentStorageServiceModel]()
-    var selectedTicker = ""
     private var stockDetailModel: StockDetailModel?
     
     init(interactor: IWatchlistInteractor, router: IWatchlistRouter) {
@@ -39,27 +37,29 @@ class WatchlistPresenter {
         self.router = router
     }
     
+    func configureView() {
+//            view?.tapCellButtonHandler = { [weak self] text in
+//                self?.handleButtonTap(ticker: text)
+//            }
+        }
+    
+    func handleButtonTap(ticker: String) {
+        // Обработка нажатия кнопки с переданным текстом
+        
+    }
 }
 
 extension WatchlistPresenter: IWatchlistPresenter {
-    func handleCellButtonTap(ticker: String) {
-        <#code#>
-    }
-    
-
-    
-    func getDataSource() -> [PersistentStorageServiceModel] {
-        return dataSource
-    }
-    
     
     func didLoadStockDetailModel(model: StockDetailModel) {
+        var ticker = ""
+//        self.view?.tapButtonHandler { [weak self] ticker in
+//            self.ticker = ticker
+//        }
+        
+        self.interactor.loadStockDetailModel(ticker: <#T##String#>)
         self.stockDetailModel = model
-    }
-    
-    func didSubscribeToWebSocket() {
-        let tickers = dataSource.map({ $0.ticker })
-        interactor.subscribeToWebSocket(symbols: tickers)
+        self.view?.setStockDetailModel(with: model)
     }
     
     func didReceiveDataFromWebSocket(data: LastStocksDataModel?) {
@@ -80,21 +80,28 @@ extension WatchlistPresenter: IWatchlistPresenter {
         }
     }
     
+    func didLoadDataFromPersistentStorage(stocks: [PersistentStorageServiceModel]?) {
+        guard let stocks else { return }
+        self.dataSource = stocks
+        self.view?.setDataSource(data: stocks)
+        
+        
+        
+    }
+    
+    func didSubscribeToWebSocket() {
+        let tickers = dataSource.map({ $0.ticker })
+        interactor.subscribeToWebSocket(symbols: tickers)
+    }
+    
+    
     func didUnsubscribeFromWebSocket() {
         let tickers = dataSource.map({ $0.ticker })
         interactor.unsubscribeFromWebSocket(symbols: tickers)
     }
     
     func didConnectToWebSocket() {
-    }
-    
-    func didLoadDataFromPersistentStorage(stocks: [PersistentStorageServiceModel]?) {
-        guard let stocks else { return }
-        self.dataSource = stocks
-        //self.view?.setStocks(with: stocks)
-        
-        
-        
+        self.interactor.connectToWebSocket()
     }
     
     func viewDidLoad() {

@@ -22,7 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         tabBarController.tabBar.backgroundColor = .secondarySystemFill
         
-        let WatchlistVC = WatchlistViewController()
+        let WatchlistVC = WatchlistModuleBuilder.build()
         WatchlistVC.tabBarItem = UITabBarItem(title: Resources.Strings.TabBar.home, image: Resources.Images.TabBar.home, selectedImage: nil)
         let SearchVC = SearchViewController()
         SearchVC.tabBarItem = UITabBarItem(title: Resources.Strings.TabBar.search, image: Resources.Images.TabBar.search, selectedImage: nil)
