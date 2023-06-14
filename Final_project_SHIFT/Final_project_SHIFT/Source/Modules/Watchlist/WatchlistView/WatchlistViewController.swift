@@ -26,6 +26,7 @@ class WatchlistViewController: UIViewController, WatchlistViewControllerProtocol
     var presenter: WatchlistPresenterProtocol?
     
     override func loadView() {
+        super.loadView()
         view = customView
     }
     

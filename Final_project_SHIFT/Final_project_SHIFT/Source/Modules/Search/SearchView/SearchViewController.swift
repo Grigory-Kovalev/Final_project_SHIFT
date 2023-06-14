@@ -5,7 +5,7 @@
 //  Created by Григорий Ковалев on 05.06.2023.
 //
 
-import SnapKit
+
 import UIKit
 
 final class SearchViewController: UIViewController {
@@ -17,15 +17,20 @@ final class SearchViewController: UIViewController {
     private var searchResults = [SearchCellModel]()
     
     private let customView = SearchView()
-        
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
+    
+    override func loadView() {
+        super.loadView()
+        self.view = customView
     }
     
-        override func loadView() {
-            view = customView
-        }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        customView.setupControllers(with: self.tabBarController!, with: self.navigationController!)
+        customView.collectionView.delegate = self
+        customView.collectionView.dataSource = self
+        customView.searchBar.delegate = self
+        print(customView.searchBar)
+    }
     
     private func setUIInteractionEnabled(_ enabled: Bool) {
         customView.searchBar.isUserInteractionEnabled = enabled
@@ -33,10 +38,10 @@ final class SearchViewController: UIViewController {
         tabBarController?.tabBar.isUserInteractionEnabled = enabled
     }
     
-     private func createAlertController(title: String, message: String) {
+    private func createAlertController(title: String, message: String) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
-         let submitAction = UIAlertAction(title: Resources.Strings.SearchScreen.alertSubmitTitle, style: .default, handler: nil)
+        let submitAction = UIAlertAction(title: Resources.Strings.SearchScreen.alertSubmitTitle, style: .default, handler: nil)
         alertController.addAction(submitAction)
         present(alertController, animated: true, completion: nil)
     }
@@ -91,7 +96,7 @@ extension SearchViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = customView.collectionView.dequeueReusableCell(withReuseIdentifier: Resources.Strings.WatchlistScreen.watchlistCellIdentifier, for: indexPath) as! SearchViewCell
+        let cell = customView.collectionView.dequeueReusableCell(withReuseIdentifier: Resources.Strings.SearchScreen.watchlistCellIdentifier, for: indexPath) as! SearchViewCell
         let searchData = searchResults[indexPath.item]
         cell.setModel(with: searchData)
         return cell
@@ -141,6 +146,6 @@ extension SearchViewController: UICollectionViewDelegate {
                 self?.createAlertController(title: "Error", message: "Failed to get company profile data")
             }
         }
-
+        
     }
 }

@@ -5,6 +5,7 @@
 //  Created by Григорий Ковалев on 15.06.2023.
 //
 
+import SnapKit
 import UIKit
 
 protocol SearchViewProtocol: AnyObject {
@@ -19,10 +20,9 @@ final class SearchView: UIView {
     private weak var navigationController: UINavigationController?
         
     private enum Metrics {
-        static let collectionViewCornerRadius: CGFloat = 15
+        static let collectionViewCornerRadius: CGFloat = 15.0
         static let collectionViewWidthMultiplier: CGFloat = 0.9
         static let collectionViewHeightMultiplier: CGFloat = 0.12
-
     }
     
     // MARK: - Subviews
@@ -43,7 +43,7 @@ final class SearchView: UIView {
         return activityIndicator
     }()
     
-    internal lazy var collectionView: UICollectionView = {
+    lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.itemSize = CGSize(width: UIScreen.main.bounds.width * Metrics.collectionViewWidthMultiplier, height: UIScreen.main.bounds.height * Metrics.collectionViewHeightMultiplier)

@@ -141,9 +141,6 @@ extension WatchlistView: WatchlistViewProtocol {
         //tabBar
         tabBarController.tabBar.unselectedItemTintColor = Resources.Colors.TabBar.unselectedItemColor
         tabBarController.tabBar.tintColor = Resources.Colors.TabBar.selectedItemColor
-        
-        //Nav
-        //navigationController.navigationItem.title = Resources.Strings.Watchlist.titleLabel
     }
 }
 // MARK: - Layout
