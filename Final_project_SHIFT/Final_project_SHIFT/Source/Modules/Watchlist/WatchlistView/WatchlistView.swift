@@ -7,8 +7,6 @@
 import UIKit
 
 protocol IWatchlistView: AnyObject {
-    //var tapButtonHandler: (() -> Void)? { get set }
-
     func setupControllers(with tabBarController: UITabBarController, with navigationController: UINavigationController)
 }
 

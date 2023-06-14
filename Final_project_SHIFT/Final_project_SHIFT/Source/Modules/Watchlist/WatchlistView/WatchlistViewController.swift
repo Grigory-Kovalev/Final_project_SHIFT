@@ -17,8 +17,6 @@ final class WatchlistViewController: UIViewController {
     
     var dataSource = [PersistentStorageServiceModel]()
     
-    
-    
     // MARK: Lifecycle
     override func loadView() {
         self.view = self.customView

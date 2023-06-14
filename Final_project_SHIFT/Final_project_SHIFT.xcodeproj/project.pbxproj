@@ -28,14 +28,12 @@
 		3F9800AE2A2616CA00D99EA3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9800AD2A2616CA00D99EA3 /* SceneDelegate.swift */; };
 		3F9800B52A2616CC00D99EA3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F9800B42A2616CC00D99EA3 /* Assets.xcassets */; };
 		3F9800B82A2616CC00D99EA3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F9800B62A2616CC00D99EA3 /* LaunchScreen.storyboard */; };
+		3FD370B42A3A02A50042CA95 /* WatchlistPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD370B32A3A02A50042CA95 /* WatchlistPresenter.swift */; };
 		3FFADDCC2A3611FA00299BBD /* WatchlistViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFADDCB2A3611FA00299BBD /* WatchlistViewCell.swift */; };
 		3FFADDCF2A36E4AA00299BBD /* StocksModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3FFADDCD2A36E4AA00299BBD /* StocksModel.xcdatamodeld */; };
 		3FFADDD12A36EA3300299BBD /* PersistentStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFADDD02A36EA3300299BBD /* PersistentStorageService.swift */; };
 		3FFADDD82A38277100299BBD /* WatchlistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFADDD72A38277100299BBD /* WatchlistView.swift */; };
-		3FFADDDA2A3827BF00299BBD /* WatchlistEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFADDD92A3827BF00299BBD /* WatchlistEntity.swift */; };
-		3FFADDE02A385EC300299BBD /* WatchlistPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFADDDF2A385EC300299BBD /* WatchlistPresenter.swift */; };
-		3FFADDE22A388DD300299BBD /* WatchlistInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFADDE12A388DD300299BBD /* WatchlistInteractor.swift */; };
-		3FFADDE42A388F8E00299BBD /* WatchlistRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFADDE32A388F8E00299BBD /* WatchlistRouter.swift */; };
+		3FFADDDA2A3827BF00299BBD /* WatchlistModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFADDD92A3827BF00299BBD /* WatchlistModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,14 +57,12 @@
 		3F9800B42A2616CC00D99EA3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3F9800B72A2616CC00D99EA3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3F9800B92A2616CC00D99EA3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3FD370B32A3A02A50042CA95 /* WatchlistPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WatchlistPresenter.swift; path = ../../../../../../../Desktop/VIPER/VIPER/WatchlistPresenter.swift; sourceTree = "<group>"; };
 		3FFADDCB2A3611FA00299BBD /* WatchlistViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistViewCell.swift; sourceTree = "<group>"; };
 		3FFADDCE2A36E4AA00299BBD /* StocksModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = StocksModel.xcdatamodel; sourceTree = "<group>"; };
 		3FFADDD02A36EA3300299BBD /* PersistentStorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentStorageService.swift; sourceTree = "<group>"; };
 		3FFADDD72A38277100299BBD /* WatchlistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistView.swift; sourceTree = "<group>"; };
-		3FFADDD92A3827BF00299BBD /* WatchlistEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistEntity.swift; sourceTree = "<group>"; };
-		3FFADDDF2A385EC300299BBD /* WatchlistPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistPresenter.swift; sourceTree = "<group>"; };
-		3FFADDE12A388DD300299BBD /* WatchlistInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistInteractor.swift; sourceTree = "<group>"; };
-		3FFADDE32A388F8E00299BBD /* WatchlistRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistRouter.swift; sourceTree = "<group>"; };
+		3FFADDD92A3827BF00299BBD /* WatchlistModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,11 +91,9 @@
 		3F8B694D2A2DF34900B125FB /* Watchlist */ = {
 			isa = PBXGroup;
 			children = (
-				3FFADDD62A38274E00299BBD /* View */,
-				3FFADDE12A388DD300299BBD /* WatchlistInteractor.swift */,
-				3FFADDDF2A385EC300299BBD /* WatchlistPresenter.swift */,
-				3FFADDDB2A38538800299BBD /* Entity */,
-				3FFADDE32A388F8E00299BBD /* WatchlistRouter.swift */,
+				3FD370B12A3A01AE0042CA95 /* WatchlistModel */,
+				3FD370B22A3A02320042CA95 /* WatchlistPresenter */,
+				3FFADDD62A38274E00299BBD /* WatchlistView */,
 			);
 			path = Watchlist;
 			sourceTree = "<group>";
@@ -152,7 +146,6 @@
 				3F8B694F2A2DF46200B125FB /* Services */,
 				3F8B693C2A2DA23300B125FB /* TabBarController.swift */,
 				3F9800C22A26471C00D99EA3 /* Source */,
-				3F9800B92A2616CC00D99EA3 /* Info.plist */,
 			);
 			path = Final_project_SHIFT;
 			sourceTree = "<group>";
@@ -161,7 +154,8 @@
 			isa = PBXGroup;
 			children = (
 				3F9800B42A2616CC00D99EA3 /* Assets.xcassets */,
-				3F8B69422A2DC11900B125FB /* Resources.swift */,
+				3F9800B62A2616CC00D99EA3 /* LaunchScreen.storyboard */,
+				3F9800B92A2616CC00D99EA3 /* Info.plist */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -171,7 +165,6 @@
 			children = (
 				3F9800AB2A2616CA00D99EA3 /* AppDelegate.swift */,
 				3F9800AD2A2616CA00D99EA3 /* SceneDelegate.swift */,
-				3F9800B62A2616CC00D99EA3 /* LaunchScreen.storyboard */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -184,10 +177,28 @@
 			path = Source;
 			sourceTree = "<group>";
 		};
+		3FD370B12A3A01AE0042CA95 /* WatchlistModel */ = {
+			isa = PBXGroup;
+			children = (
+				3FFADDD92A3827BF00299BBD /* WatchlistModel.swift */,
+			);
+			path = WatchlistModel;
+			sourceTree = "<group>";
+		};
+		3FD370B22A3A02320042CA95 /* WatchlistPresenter */ = {
+			isa = PBXGroup;
+			children = (
+				3FD370B32A3A02A50042CA95 /* WatchlistPresenter.swift */,
+			);
+			name = WatchlistPresenter;
+			path = Model;
+			sourceTree = "<group>";
+		};
 		3FFADDD22A38239300299BBD /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
 				3F8B69442A2DC23D00B125FB /* Extensions.swift */,
+				3F8B69422A2DC11900B125FB /* Resources.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -219,22 +230,14 @@
 			path = Modules;
 			sourceTree = "<group>";
 		};
-		3FFADDD62A38274E00299BBD /* View */ = {
+		3FFADDD62A38274E00299BBD /* WatchlistView */ = {
 			isa = PBXGroup;
 			children = (
 				3FFADDD72A38277100299BBD /* WatchlistView.swift */,
 				3F8B693E2A2DA4AE00B125FB /* WatchlistViewController.swift */,
 				3FFADDCB2A3611FA00299BBD /* WatchlistViewCell.swift */,
 			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		3FFADDDB2A38538800299BBD /* Entity */ = {
-			isa = PBXGroup;
-			children = (
-				3FFADDD92A3827BF00299BBD /* WatchlistEntity.swift */,
-			);
-			path = Entity;
+			path = WatchlistView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -317,7 +320,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3FFADDE22A388DD300299BBD /* WatchlistInteractor.swift in Sources */,
 				3FFADDD82A38277100299BBD /* WatchlistView.swift in Sources */,
 				3FFADDCF2A36E4AA00299BBD /* StocksModel.xcdatamodeld in Sources */,
 				3F8B69512A2DF49F00B125FB /* NetworkService.swift in Sources */,
@@ -328,8 +330,7 @@
 				3F66DB262A32E3B60078ECA0 /* CompanyProfileView.swift in Sources */,
 				3F8B69472A2DD0AB00B125FB /* SearchViewCell.swift in Sources */,
 				3F8B694C2A2DE17D00B125FB /* StockDetailView.swift in Sources */,
-				3FFADDE02A385EC300299BBD /* WatchlistPresenter.swift in Sources */,
-				3FFADDE42A388F8E00299BBD /* WatchlistRouter.swift in Sources */,
+				3FD370B42A3A02A50042CA95 /* WatchlistPresenter.swift in Sources */,
 				3F8B69412A2DA51400B125FB /* SearchViewController.swift in Sources */,
 				3F66DB2E2A32E49C0078ECA0 /* StockProfileModel.swift in Sources */,
 				3F66DAFE2A31E5D20078ECA0 /* StockDetailModel.swift in Sources */,
@@ -338,7 +339,7 @@
 				3F8B69432A2DC11900B125FB /* Resources.swift in Sources */,
 				3F9800AC2A2616CA00D99EA3 /* AppDelegate.swift in Sources */,
 				3FFADDCC2A3611FA00299BBD /* WatchlistViewCell.swift in Sources */,
-				3FFADDDA2A3827BF00299BBD /* WatchlistEntity.swift in Sources */,
+				3FFADDDA2A3827BF00299BBD /* WatchlistModel.swift in Sources */,
 				3F9800AE2A2616CA00D99EA3 /* SceneDelegate.swift in Sources */,
 				3F8B69452A2DC23D00B125FB /* Extensions.swift in Sources */,
 			);
@@ -481,7 +482,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = MC8V6J6849;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Final_project_SHIFT/Info.plist;
+				INFOPLIST_FILE = Final_project_SHIFT/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -511,7 +512,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = MC8V6J6849;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Final_project_SHIFT/Info.plist;
+				INFOPLIST_FILE = Final_project_SHIFT/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
