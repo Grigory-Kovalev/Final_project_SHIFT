@@ -8,15 +8,34 @@
 
 import UIKit
 
-final class SearchViewController: UIViewController {
+protocol SearchViewControllerProtocol: AnyObject {
+    func hideActivityIndicator()
+    func setUIInteractionEnabled(_ enabled: Bool)
+    func getCollectionView() -> UICollectionView
+    func showError()
+}
+
+final class SearchViewController: UIViewController, SearchViewControllerProtocol {
+    func showError() {
+        self.createAlertController(title: Resources.Strings.SearchScreen.alertErrorTitles.0, message: Resources.Strings.SearchScreen.alertErrorTitles.1)
+    }
+    
+    func getCollectionView() -> UICollectionView {
+        return self.customView.collectionView
+    }
+    
+    
+    func hideActivityIndicator() {
+        customView.activityIndicator.stopAnimating()
+    }
     
     private var candles: Candles?
     
     let networkManager = NetworkService()
     
-    private var searchResults = [SearchCellModel]()
     
     private let customView = SearchView()
+    var presenter: SearchPresenterProtocol?
     
     override func loadView() {
         super.loadView()
@@ -29,10 +48,9 @@ final class SearchViewController: UIViewController {
         customView.collectionView.delegate = self
         customView.collectionView.dataSource = self
         customView.searchBar.delegate = self
-        print(customView.searchBar)
     }
     
-    private func setUIInteractionEnabled(_ enabled: Bool) {
+    func setUIInteractionEnabled(_ enabled: Bool) {
         customView.searchBar.isUserInteractionEnabled = enabled
         customView.collectionView.isUserInteractionEnabled = enabled
         tabBarController?.tabBar.isUserInteractionEnabled = enabled
@@ -52,7 +70,7 @@ extension SearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
         //Очищаем массив прошлого списка
-        self.searchResults.removeAll()
+        self.presenter?.searchResultsRemoveAll()
         customView.collectionView.reloadData()
         //Убираем пробелы из запроса
         let trimmedText = customView.searchBar.text?.trimmingCharacters(in: .whitespaces)
@@ -64,27 +82,18 @@ extension SearchViewController: UISearchBarDelegate {
         customView.activityIndicator.startAnimating()
         // Отключаем пользовательское взаимодействие
         setUIInteractionEnabled(false)
+        let ticker = searchBar.text ?? ""
+        presenter?.searchButtonClicked(with: ticker)
         
-        networkManager.fetchSymbolLookup(symbol: searchBar.text ?? "") { [weak self] result in
-            //Отключаем индикатор
-            self?.customView.activityIndicator.stopAnimating()
-            // Разрешаем пользовательское взаимодействие
-            self?.setUIInteractionEnabled(true)
-            
-            // Обработка полученных данных
-            switch result {
-            case .success(let fetchedStocks):
-                let stocks = fetchedStocks.filter { $0.type == Resources.Strings.SearchScreen.stockType && !$0.symbol.contains(".") }
-                for (index, stock) in stocks.enumerated()  {
-                    self?.searchResults.append(SearchCellModel(fullName: stock.description, symbol: stock.symbol, type: stock.type, index: index))
-                    
-                }
-                self?.customView.collectionView.reloadData()
-            case .failure(let error):
-                print("Error: \(error)")
-                self?.createAlertController(title: Resources.Strings.SearchScreen.alertErrorTitles.0, message: Resources.Strings.SearchScreen.alertErrorTitles.1)
-            }
-        }
+    }
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        // Метод вызывается, когда пользователь нажимает на кнопку "Отмена" в поисковой строке
+        // Здесь вы можете выполнить действия по очистке поисковых результатов или закрытию поисковой строки
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        // Метод вызывается, когда текст в поисковой строке изменяется
+        // Здесь вы можете реагировать на изменения и выполнять дополнительные действия, например, фильтрацию результатов поиска в реальном времени
     }
 }
 
@@ -92,13 +101,13 @@ extension SearchViewController: UISearchBarDelegate {
 extension SearchViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // Вернуть количество элементов в коллекции
-        return searchResults.count
+        return self.presenter?.searchResultsCount() ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = customView.collectionView.dequeueReusableCell(withReuseIdentifier: Resources.Strings.SearchScreen.watchlistCellIdentifier, for: indexPath) as! SearchViewCell
-        let searchData = searchResults[indexPath.item]
-        cell.setModel(with: searchData)
+        let searchData = self.presenter?.searchResultsItem(by: indexPath.item)
+        cell.setModel(with: searchData!)
         return cell
     }
 }
@@ -107,15 +116,18 @@ extension SearchViewController: UICollectionViewDataSource {
 extension SearchViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        let symbol = searchResults[indexPath.row].symbol
-        let companyName = searchResults[indexPath.row].fullName
+        let symbol = self.presenter?.searchResultsItem(by: indexPath.row).symbol
+        let companyName = self.presenter?.searchResultsItem(by: indexPath.row).fullName
+        
+        guard let symbol else { return }
+        guard let companyName else { return }
         
         customView.createBlurEffect(isOn: true)
         //Запускаем индикатор
         customView.activityIndicator.startAnimating()
         // Отключаем пользовательское взаимодействие
         setUIInteractionEnabled(false)
-        
+                
         networkManager.fetchStockProfile(symbol: symbol) { [weak self] result in
             switch result {
             case .success(let stockProfile):
@@ -146,6 +158,5 @@ extension SearchViewController: UICollectionViewDelegate {
                 self?.createAlertController(title: "Error", message: "Failed to get company profile data")
             }
         }
-        
     }
 }
