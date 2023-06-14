@@ -34,7 +34,6 @@ class WatchlistViewController: UIViewController, WatchlistViewControllerProtocol
         customView.setupControllers(with: self.tabBarController!, with: self.navigationController!)
         customView.collectionView.dataSource = self
         customView.collectionView.delegate = self
-        print(presenter)
         presenter?.viewDidLoad()
     }
     
@@ -89,7 +88,7 @@ extension WatchlistViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Resources.Strings.Watchlist.watchlistCellIdentifier, for: indexPath) as! WatchlistViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Resources.Strings.WatchlistScreen.watchlistCellIdentifier, for: indexPath) as! WatchlistViewCell
         let searchData = presenter?.getStock(at: indexPath.item)
         cell.setModel(with: WatchlistModel(ticker: searchData?.ticker ?? "", name: searchData?.name ?? "", logo: searchData?.logo ?? "", price: searchData?.price ?? 0, currency: searchData?.currency ?? ""))
         return cell

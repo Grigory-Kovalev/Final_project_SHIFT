@@ -42,7 +42,6 @@ class WatchlistPresenter: WatchlistPresenterProtocol {
     func viewDidAppear() {
         WSManager.shared.connectToWebSocket()
         dataSource = persistentStorageService.loadStocksFromCoreData() ?? []
-        print(dataSource)
         sortStocksAlphabetically()
         WSManager.shared.subscribeTo(symbols: dataSource.map({ $0.ticker }))
         viewController?.reloadCollectionView()
@@ -76,13 +75,13 @@ class WatchlistPresenter: WatchlistPresenterProtocol {
                         destinationController.hidesBottomBarWhenPushed = true
                         self?.viewController?.navigationController?.pushViewController(destinationController, animated: true)
                         
-                    case .failure(let error):
+                    case .failure(_):
                         self?.viewController?.hideActivityIndicator()
                         self?.viewController?.showError(message: "Failed to get company candles data")
                     }
                 }
                 
-            case .failure(let error):
+            case .failure(_):
                 self?.viewController?.hideActivityIndicator()
                 self?.viewController?.showError(message: "Failed to get company profile data")
             }

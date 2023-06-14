@@ -7,16 +7,6 @@
 
 import Foundation
 
-// Протокол модели
-protocol WatchlistModelProtocol {
-    var ticker: String { get }
-    var name: String { get }
-    var logo: String { get }
-    var price: Double { get set }
-    var currency: String { get }
-}
-
-
 struct WatchlistModel {
     let ticker: String
     let name: String

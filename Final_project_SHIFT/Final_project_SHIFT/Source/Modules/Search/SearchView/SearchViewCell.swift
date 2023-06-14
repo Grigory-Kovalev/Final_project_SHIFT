@@ -8,13 +8,6 @@
 import SnapKit
 import UIKit
 
-struct SearchCellModel {
-    let fullName: String
-    let symbol: String
-    let type: String
-    let index: Int
-}
-
 final class SearchViewCell: UICollectionViewCell {
     
     private lazy var indexImage: UIImageView = {

@@ -46,7 +46,7 @@ enum Resources {
             static var search = "Search"
         }
         
-        enum Watchlist {
+        enum WatchlistScreen {
             static let exchangeStatusViewOpenText = "Stock exchange is open"
             static let exchangeStatusViewOpenImage = "sun.max"
             static let exchangeStatusViewCloseText = "Stock exchange is closed"
@@ -54,6 +54,16 @@ enum Resources {
             static let titleLabel = "Watchlist"
             static let watchlistCellIdentifier = "CellIdentifier"
             static let favoriteStocksLabelText = "Favorite stocks"
+        }
+        
+        enum SearchScreen {
+            static let watchlistCellIdentifier = "CellIdentifier"
+            static let searchBarPlaceholder = "Enter stock ticker"
+            static let cancelButtonTitle = "Cancel"
+            static let navigationTitle = "Search"
+            static let alertSubmitTitle = "OK"
+            static let stockType = "Common Stock"
+            static let alertErrorTitles = ("Error", "Failed to get data for the specified ticker")
         }
     }
     
