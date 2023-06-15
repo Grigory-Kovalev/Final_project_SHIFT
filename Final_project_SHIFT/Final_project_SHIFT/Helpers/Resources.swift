@@ -13,6 +13,7 @@ enum Resources {
         enum TabBar {
             static let selectedItemColor = UIColor.label
             static let unselectedItemColor = UIColor.gray
+            static let backgroundColor = UIColor.secondarySystemFill
         }
         
         enum Watchlist {
@@ -54,7 +55,7 @@ enum Resources {
         }
         
         enum WatchlistScreen {
-            static let exchangeStatusViewOpenText = "Stock exchange is open"
+            static let exchangeStatusViewOpenText = " exchange is open"
             static let exchangeStatusViewOpenImage = "sun.max"
             static let exchangeStatusViewCloseText = "Stock exchange is closed"
             static let exchangeStatusViewCloseImage = "moon.zzz"
@@ -103,32 +104,5 @@ enum Resources {
         
         static let lightModeImage = UIImage(named: "lightModeBackButton")?.withRenderingMode(.alwaysOriginal)
         static let darkModeImage = UIImage(named: "darkModeBackButton")?.withRenderingMode(.alwaysOriginal)
-    }
-    
-    enum Condition {
-        static var exchangeStatus: Bool {
-            let now = Date()
-            var calendar = Calendar.current
-            let newYorkTimeZone = TimeZone(identifier: Resources.Strings.exchangeTimeZone)
-            calendar.timeZone = newYorkTimeZone!
-
-            let openHour = 9
-            let openMinute = 30
-            let closeHour = 16
-
-            let weekday = calendar.component(.weekday, from: now)
-
-            let isWorkDay = weekday >= 2 && weekday <= 6
-            let openTime = calendar.date(bySettingHour: openHour, minute: openMinute, second: 0, of: now)
-            let closeTime = calendar.date(bySettingHour: closeHour, minute: 0, second: 0, of: now)
-
-            if isWorkDay, let openTime = openTime, let closeTime = closeTime,
-                calendar.isDate(now, inSameDayAs: openTime) || calendar.isDate(now, inSameDayAs: closeTime),
-                now >= openTime && now <= closeTime {
-                return true
-            } else {
-                return false
-            }
-        }
     }
 }

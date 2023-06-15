@@ -53,9 +53,9 @@ final class WatchlistView: UIView {
 
         let label = UILabel()
 
-        if Resources.Condition.exchangeStatus {
-            // Биржа открыта с понедельника по пятницу
-            label.text = Resources.Strings.WatchlistScreen.exchangeStatusViewOpenText
+        if (FinhubExchangeManager.exchangeName != nil) {
+            let exchangeName = FinhubExchangeManager.exchangeName ?? "Unknown Exchange"
+            label.text = "\(exchangeName) \(Resources.Strings.WatchlistScreen.exchangeStatusViewOpenText)"
             label.textColor = Resources.Colors.gray
 
             let sunImage = UIImageView(image: UIImage(systemName: Resources.Strings.WatchlistScreen.exchangeStatusViewOpenImage))
@@ -64,7 +64,6 @@ final class WatchlistView: UIView {
             stackView.addArrangedSubview(label)
             stackView.addArrangedSubview(sunImage)
         } else {
-            // Биржа закрыта или не рабочий день
             label.text = Resources.Strings.WatchlistScreen.exchangeStatusViewCloseText
             label.textColor = Resources.Colors.gray
 
@@ -77,7 +76,7 @@ final class WatchlistView: UIView {
 
         return stackView
     }()
-    
+
     private lazy var favoriteStocksLabel: UILabel = {
         let label = UILabel()
         label.text = Resources.Strings.WatchlistScreen.favoriteStocksLabelText

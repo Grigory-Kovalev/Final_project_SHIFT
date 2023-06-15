@@ -15,7 +15,7 @@
 		3F66DB2C2A32E4290078ECA0 /* SDWebImageSVGCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 3F66DB2B2A32E4290078ECA0 /* SDWebImageSVGCoder */; };
 		3F66DB2E2A32E49C0078ECA0 /* StockProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F66DB2D2A32E49C0078ECA0 /* StockProfileModel.swift */; };
 		3F8B693B2A2D9BCB00B125FB /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3F8B693A2A2D9BCB00B125FB /* SnapKit */; };
-		3F8B693D2A2DA23300B125FB /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8B693C2A2DA23300B125FB /* TabBarController.swift */; };
+		3F8B693D2A2DA23300B125FB /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8B693C2A2DA23300B125FB /* CustomTabBarController.swift */; };
 		3F8B693F2A2DA4AE00B125FB /* WatchlistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8B693E2A2DA4AE00B125FB /* WatchlistViewController.swift */; };
 		3F8B69412A2DA51400B125FB /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8B69402A2DA51400B125FB /* SearchViewController.swift */; };
 		3F8B69432A2DC11900B125FB /* Resources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8B69422A2DC11900B125FB /* Resources.swift */; };
@@ -36,6 +36,8 @@
 		3FD370C52A3AC3480042CA95 /* SearchAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD370C42A3AC3480042CA95 /* SearchAssembly.swift */; };
 		3FD370CA2A3B13230042CA95 /* StockDetailPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD370C92A3B13230042CA95 /* StockDetailPresenter.swift */; };
 		3FD370CC2A3B15030042CA95 /* StockDetailAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD370CB2A3B15030042CA95 /* StockDetailAssembly.swift */; };
+		3FD370CE2A3B2E440042CA95 /* NetworkServiceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD370CD2A3B2E440042CA95 /* NetworkServiceModel.swift */; };
+		3FD370D02A3B32E00042CA95 /* FinhubExchangeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD370CF2A3B32E00042CA95 /* FinhubExchangeManager.swift */; };
 		3FFADDCC2A3611FA00299BBD /* WatchlistViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFADDCB2A3611FA00299BBD /* WatchlistViewCell.swift */; };
 		3FFADDCF2A36E4AA00299BBD /* StocksModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3FFADDCD2A36E4AA00299BBD /* StocksModel.xcdatamodeld */; };
 		3FFADDD12A36EA3300299BBD /* PersistentStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFADDD02A36EA3300299BBD /* PersistentStorageService.swift */; };
@@ -49,7 +51,7 @@
 		3F66DB012A31E7020078ECA0 /* CandleChartModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleChartModel.swift; sourceTree = "<group>"; };
 		3F66DB252A32E3B60078ECA0 /* CompanyProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyProfileView.swift; sourceTree = "<group>"; };
 		3F66DB2D2A32E49C0078ECA0 /* StockProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockProfileModel.swift; sourceTree = "<group>"; };
-		3F8B693C2A2DA23300B125FB /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		3F8B693C2A2DA23300B125FB /* CustomTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
 		3F8B693E2A2DA4AE00B125FB /* WatchlistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistViewController.swift; sourceTree = "<group>"; };
 		3F8B69402A2DA51400B125FB /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		3F8B69422A2DC11900B125FB /* Resources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Resources.swift; sourceTree = "<group>"; };
@@ -72,6 +74,8 @@
 		3FD370C42A3AC3480042CA95 /* SearchAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchAssembly.swift; sourceTree = "<group>"; };
 		3FD370C92A3B13230042CA95 /* StockDetailPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockDetailPresenter.swift; sourceTree = "<group>"; };
 		3FD370CB2A3B15030042CA95 /* StockDetailAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockDetailAssembly.swift; sourceTree = "<group>"; };
+		3FD370CD2A3B2E440042CA95 /* NetworkServiceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkServiceModel.swift; sourceTree = "<group>"; };
+		3FD370CF2A3B32E00042CA95 /* FinhubExchangeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinhubExchangeManager.swift; sourceTree = "<group>"; };
 		3FFADDCB2A3611FA00299BBD /* WatchlistViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistViewCell.swift; sourceTree = "<group>"; };
 		3FFADDCE2A36E4AA00299BBD /* StocksModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = StocksModel.xcdatamodel; sourceTree = "<group>"; };
 		3FFADDD02A36EA3300299BBD /* PersistentStorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentStorageService.swift; sourceTree = "<group>"; };
@@ -178,7 +182,6 @@
 			children = (
 				3F9800AB2A2616CA00D99EA3 /* AppDelegate.swift */,
 				3F9800AD2A2616CA00D99EA3 /* SceneDelegate.swift */,
-				3F8B693C2A2DA23300B125FB /* TabBarController.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -186,6 +189,7 @@
 		3F9800C22A26471C00D99EA3 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				3F8B693C2A2DA23300B125FB /* CustomTabBarController.swift */,
 				3FFADDD52A38261400299BBD /* Modules */,
 			);
 			path = Source;
@@ -251,6 +255,7 @@
 			children = (
 				3F8B69442A2DC23D00B125FB /* Extensions.swift */,
 				3F8B69422A2DC11900B125FB /* Resources.swift */,
+				3FD370CF2A3B32E00042CA95 /* FinhubExchangeManager.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -259,6 +264,7 @@
 			isa = PBXGroup;
 			children = (
 				3F8B69502A2DF49F00B125FB /* NetworkService.swift */,
+				3FD370CD2A3B2E440042CA95 /* NetworkServiceModel.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -373,6 +379,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3FFADDD82A38277100299BBD /* WatchlistView.swift in Sources */,
+				3FD370D02A3B32E00042CA95 /* FinhubExchangeManager.swift in Sources */,
 				3FFADDCF2A36E4AA00299BBD /* StocksModel.xcdatamodeld in Sources */,
 				3F8B69512A2DF49F00B125FB /* NetworkService.swift in Sources */,
 				3FD370BE2A3A32E50042CA95 /* SearchModel.swift in Sources */,
@@ -390,8 +397,9 @@
 				3FD370C12A3A33A50042CA95 /* SearchView.swift in Sources */,
 				3FD370C52A3AC3480042CA95 /* SearchAssembly.swift in Sources */,
 				3F66DAFE2A31E5D20078ECA0 /* StockDetailModel.swift in Sources */,
+				3FD370CE2A3B2E440042CA95 /* NetworkServiceModel.swift in Sources */,
 				3F8B693F2A2DA4AE00B125FB /* WatchlistViewController.swift in Sources */,
-				3F8B693D2A2DA23300B125FB /* TabBarController.swift in Sources */,
+				3F8B693D2A2DA23300B125FB /* CustomTabBarController.swift in Sources */,
 				3FD370CA2A3B13230042CA95 /* StockDetailPresenter.swift in Sources */,
 				3F8B69432A2DC11900B125FB /* Resources.swift in Sources */,
 				3F9800AC2A2616CA00D99EA3 /* AppDelegate.swift in Sources */,
