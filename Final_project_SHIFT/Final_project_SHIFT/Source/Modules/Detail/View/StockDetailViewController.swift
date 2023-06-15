@@ -9,14 +9,22 @@ import SnapKit
 import SwiftUI
 import UIKit
 
+protocol StockDetailVCProtocol: AnyObject {
+    
+}
+
 class StockDetailViewController: UIViewController {
     
+    // MARK: - Properties
     private let stockDetailModel: StockDetailModel
     private var backButton: UIBarButtonItem!
     var isFavorite: Bool?
     
+    var presenter: StockDetailPresenterProtocol?
+    
     let persistentStorageService = PersistentStorageService()
     
+    // MARK: - Init
     init(stockDetailModel: StockDetailModel) {
         self.stockDetailModel = stockDetailModel
         super.init(nibName: nil, bundle: nil)
@@ -26,20 +34,23 @@ class StockDetailViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        isFavorite = persistentStorageService.isStockFavorite(ticker: stockDetailModel.symbol)
-        self.navigationController?.navigationBar.isHidden = false
-        navigationItem.title = stockDetailModel.symbol
-        
-        createBackButton()
-        
+        self.configurView()
+        self.swiftUIhosting()
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        updateBackButtonImage()
         updateFavoriteButtonImage()
-        
-        let favoriteButton = isFavorite ?? false ? UIImage(systemName: "star.fill")?.withRenderingMode(.alwaysOriginal) : UIImage(systemName: "star")?.withRenderingMode(.alwaysOriginal).withTintColor(tintColorForFavoriteButton())
-        
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: favoriteButton, style: .plain, target: self, action: #selector(favoriteButtonTapped))
-        
+    }
+}
+
+// MARK: - swiftUIhosting
+private extension StockDetailViewController {
+    func swiftUIhosting() {
         let swiftUIView = StockDetailView(selectedResolution: stockDetailModel.currentRange.getTag(), data: Candles.getCandles(candles: stockDetailModel.candles), stock: stockDetailModel)
         
         let hostingController = UIHostingController(rootView: swiftUIView)
@@ -54,49 +65,58 @@ class StockDetailViewController: UIViewController {
         }
         hostingController.didMove(toParent: self)
     }
-    
-//    override func viewDidAppear(_ animated: Bool) {
-//        super.viewDidAppear(animated)
-//        if stockDetailModel.candles.c.last != persistentStorageService.getLastPriceFrom(ticker: stockDetailModel.symbol) {
-//            persistentStorageService.deleteStockBy(ticker: stockDetailModel.symbol)
-//            persistentStorageService.saveStockToCoreData(ticker: stockDetailModel.symbol, name: stockDetailModel.companyName, logo: stockDetailModel.stockProfile.logo, currency: stockDetailModel.stockProfile.currency, price: stockDetailModel.candles.c.last ?? 0, isFavorite: true)
-//        }
-//    }
-    
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        updateBackButtonImage()
+}
+
+// MARK: - configurView
+private extension StockDetailViewController {
+    func configurView() {
+        isFavorite = persistentStorageService.isStockFavorite(ticker: stockDetailModel.symbol)
+        
+        self.navigationController?.navigationBar.isHidden = false
+        navigationItem.title = stockDetailModel.symbol
+        
+        createBackButton()
+        
         updateFavoriteButtonImage()
+        
+        let favoriteButton = isFavorite ?? false ? UIImage(systemName: "star.fill")?.withRenderingMode(.alwaysOriginal) : UIImage(systemName: "star")?.withRenderingMode(.alwaysOriginal).withTintColor(tintColorForFavoriteButton())
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: favoriteButton, style: .plain, target: self, action: #selector(favoriteButtonTapped))
+        
     }
+}
+
+// MARK: - Private Methods
+private extension StockDetailViewController {
     
     // MARK: - Back Button
-    
-    private func createBackButton() {
+    func createBackButton() {
         backButton = UIBarButtonItem(image: backButtonImage(), style: .plain, target: self, action: #selector(backButtonTapped))
         navigationItem.leftBarButtonItem = backButton
     }
     
-    private func updateBackButtonImage() {
+    func updateBackButtonImage() {
         backButton.image = backButtonImage()
     }
     
-    private func backButtonImage() -> UIImage? {
+    func backButtonImage() -> UIImage? {
         return currentThemeIsDark() ? Resources.Images.darkModeImage : Resources.Images.lightModeImage
     }
     
     // MARK: - Favorite Button
     
-    private func tintColorForFavoriteButton() -> UIColor {
+    func tintColorForFavoriteButton() -> UIColor {
         return currentThemeIsDark() ? .white : .black
     }
     
-    private func createFavoriteButton() {
-        
+    func updateFavoriteButtonImage() {
+        let favoriteButtonImage = isFavorite ?? false ? UIImage(systemName: "star.fill")?.withRenderingMode(.alwaysOriginal) : UIImage(systemName: "star")?.withRenderingMode(.alwaysOriginal).withTintColor(tintColorForFavoriteButton())
+        navigationItem.rightBarButtonItem?.image = favoriteButtonImage
     }
     
     // MARK: - Theme Handling
     
-    private func currentThemeIsDark() -> Bool {
+    func currentThemeIsDark() -> Bool {
         if #available(iOS 13.0, *) {
             return traitCollection.userInterfaceStyle == .dark
         } else {
@@ -106,29 +126,22 @@ class StockDetailViewController: UIViewController {
     
     // MARK: - Button Actions
     
-    @objc private func backButtonTapped() {
+    @objc func backButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
     
-    @objc private func favoriteButtonTapped() {
+    @objc func favoriteButtonTapped() {
         isFavorite?.toggle()
         updateFavoriteButtonImage()
         
         if isFavorite ?? false {
-            
             persistentStorageService.saveStockToCoreData(ticker: stockDetailModel.symbol, name: stockDetailModel.companyName, logo: stockDetailModel.stockProfile.logo, currency: stockDetailModel.stockProfile.currency, price: stockDetailModel.candles.c.last ?? 0, isFavorite: true)
-
         } else {
             persistentStorageService.deleteStockBy(ticker: stockDetailModel.symbol)
         }
     }
-
-    
-    private func updateFavoriteButtonImage() {
-        let favoriteButtonImage = isFavorite ?? false ? UIImage(systemName: "star.fill")?.withRenderingMode(.alwaysOriginal) : UIImage(systemName: "star")?.withRenderingMode(.alwaysOriginal).withTintColor(tintColorForFavoriteButton())
-        navigationItem.rightBarButtonItem?.image = favoriteButtonImage
-    }
 }
 
-
-
+extension StockDetailViewController: StockDetailVCProtocol {
+    
+}

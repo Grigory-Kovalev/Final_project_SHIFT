@@ -18,7 +18,7 @@ protocol WatchlistPresenterProtocol {
     func getStock(at index: Int) -> WatchlistModel
 }
 
-class WatchlistPresenter {
+final class WatchlistPresenter {
     
     // MARK: - Properties
     weak var viewController: WatchlistViewControllerProtocol?

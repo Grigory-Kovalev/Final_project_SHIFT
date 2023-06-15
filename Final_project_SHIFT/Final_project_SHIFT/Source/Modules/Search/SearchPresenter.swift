@@ -15,7 +15,7 @@ protocol SearchPresenterProtocol {
     func didSelectStock(at index: Int)
 }
 
-class SearchPresenter {
+final class SearchPresenter {
     
     // MARK: - Properties
     weak var viewController: SearchViewControllerProtocol?
@@ -114,3 +114,4 @@ extension SearchPresenter: SearchPresenterProtocol {
         }
     }
 }
+
