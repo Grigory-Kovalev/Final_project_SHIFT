@@ -73,6 +73,7 @@ enum Resources {
             static let alertErrorTitles = ("Error", "Failed to get data for the specified ticker")
             static let alertErrorCandlesTitles = ("Error", "Failed to get company candles data")
             static let alertErrorProfileTitles = ("Error", "Failed to get company profile data")
+            static let alertZeroStock = ("Notification", "There is no information on the specified ticker")
         }
     }
     

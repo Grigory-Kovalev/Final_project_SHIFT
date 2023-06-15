@@ -56,9 +56,16 @@ extension SearchPresenter: SearchPresenterProtocol {
                 self?.searchResultsRemoveAll()
                 for (index, stock) in stocks.enumerated()  {
                     self?.searchResults.append(SearchCellModel(fullName: stock.description, symbol: stock.symbol, type: stock.type, index: index))
-                    
                 }
-                DispatchQueue.main.async {
+                if !(self?.searchResults.isEmpty ?? true) {
+                    DispatchQueue.main.async {
+                        self?.viewController?.getCollectionView().reloadData()
+                        self?.viewController?.hideActivityIndicator()
+                        self?.viewController?.setUIInteractionEnabled(true)
+                        self?.viewController?.createBlurEffect(isOn: false)
+                    }
+                } else {
+                    self?.viewController?.showError(title: Resources.Strings.SearchScreen.alertZeroStock.0, message: Resources.Strings.SearchScreen.alertZeroStock.1)
                     self?.viewController?.getCollectionView().reloadData()
                     self?.viewController?.hideActivityIndicator()
                     self?.viewController?.setUIInteractionEnabled(true)
