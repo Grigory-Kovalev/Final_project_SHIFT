@@ -7,7 +7,6 @@
 
 import UIKit
 
-// Протокол презентера
 protocol WatchlistPresenterProtocol {
     var numberOfStocks: Int { get }
     
@@ -19,18 +18,52 @@ protocol WatchlistPresenterProtocol {
     func getStock(at index: Int) -> WatchlistModel
 }
 
-class WatchlistPresenter: WatchlistPresenterProtocol {
+class WatchlistPresenter {
+    
+    // MARK: - Properties
     weak var viewController: WatchlistViewControllerProtocol?
     private let networkManager: NetworkService
     private let persistentStorageService: PersistentStorageService
     private var dataSource: [PersistentStorageServiceModel] = []
     
+    // MARK: - Init
     init(view: WatchlistViewControllerProtocol, networkManager: NetworkService, persistentStorageService: PersistentStorageService) {
         self.viewController = view
         self.networkManager = networkManager
         self.persistentStorageService = persistentStorageService
     }
+
+    // MARK: - Private methods
+    private func getData() {
+        WSManager.shared.receiveData { [weak self] data in
+            guard let self = self, let response = data else {
+                return
+            }
+            for stock in response.data {
+                let ticker = stock.s
+                let price = stock.p
+                
+                if let index = self.dataSource.firstIndex(where: { $0.ticker == ticker }) {
+                    self.dataSource[index].price = price
+                    
+                    let indexPath = IndexPath(item: index, section: 0)
+                    DispatchQueue.main.async {
+                        if let cell = self.viewController?.getCollectionView().cellForItem(at: indexPath) as? WatchlistViewCell {
+                            cell.updatePriceLabel(by: price)
+                        }
+                    }
+                }
+            }
+        }
+    }
     
+    private func sortStocksAlphabetically() {
+        dataSource.sort { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+    }
+}
+
+// MARK: - WatchlistPresenterProtocol
+extension WatchlistPresenter: WatchlistPresenterProtocol {
     var numberOfStocks: Int {
         return dataSource.count
     }
@@ -71,7 +104,7 @@ class WatchlistPresenter: WatchlistPresenterProtocol {
                         let destinationController = StockDetailViewController(stockDetailModel: StockDetailModel(symbol: symbol, companyName: companyName, stockProfile: stockProfile, currentRange: .weekend, candles: fetchedCandles))
                         DispatchQueue.main.async {
                             destinationController.hidesBottomBarWhenPushed = true
-                            self?.viewController?.navigationController?.pushViewController(destinationController, animated: true)                            
+                            self?.viewController?.navigationController?.pushViewController(destinationController, animated: true)
                         }
                         
                     case .failure(_):
@@ -91,33 +124,4 @@ class WatchlistPresenter: WatchlistPresenterProtocol {
         let stock = dataSource[index]
         return WatchlistModel(ticker: stock.ticker, name: stock.name, logo: stock.logo, price: stock.price, currency: stock.currency)
     }
-    
-    
-    private func getData() {
-        WSManager.shared.receiveData { [weak self] data in
-            guard let self = self, let response = data else {
-                return
-            }
-            for stock in response.data {
-                let ticker = stock.s
-                let price = stock.p
-                
-                if let index = self.dataSource.firstIndex(where: { $0.ticker == ticker }) {
-                    self.dataSource[index].price = price
-                    
-                    let indexPath = IndexPath(item: index, section: 0)
-                    DispatchQueue.main.async {
-                        if let cell = self.viewController?.getCollectionView().cellForItem(at: indexPath) as? WatchlistViewCell {
-                            cell.updatePriceLabel(by: price)
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    private func sortStocksAlphabetically() {
-        dataSource.sort { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
-    }
 }
-

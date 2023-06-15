@@ -19,11 +19,13 @@ protocol SearchViewControllerProtocol: AnyObject {
     func showError(title: String, message: String)
 }
 
-final class SearchViewController: UIViewController, SearchViewControllerProtocol {
+final class SearchViewController: UIViewController {
     
+    // MARK: - Properties
     private let customView = SearchView()
     var presenter: SearchPresenterProtocol?
     
+    // MARK: - Lifecycle
     override func loadView() {
         super.loadView()
         self.view = customView
@@ -41,35 +43,19 @@ final class SearchViewController: UIViewController, SearchViewControllerProtocol
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
+        self.navigationController?.navigationBar.isHidden = true
     }
     
-    func setUIInteractionEnabled(_ enabled: Bool) {
-        customView.searchBar.isUserInteractionEnabled = enabled
-        customView.collectionView.isUserInteractionEnabled = enabled
-        tabBarController?.tabBar.isUserInteractionEnabled = enabled
-    }
-    
-    func showActivityIndicator() {
-        customView.activityIndicator.startAnimating()
-    }
-    
-    func createBlurEffect(isOn: Bool) {
-        self.customView.createBlurEffect(isOn: isOn)
-    }
-    
-    func showError(title: String, message: String) {
-        self.createAlertController(title: title, message: message)
-    }
-    
-    func getCollectionView() -> UICollectionView {
-        return self.customView.collectionView
-    }
-    
-    func hideActivityIndicator() {
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        customView.createBlurEffect(isOn: false)
+        //Запускаем индикатор
         customView.activityIndicator.stopAnimating()
+        // Отключаем пользовательское взаимодействие
+        setUIInteractionEnabled(true)
     }
     
+    // MARK: - Private Method
     private func createAlertController(title: String, message: String) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
@@ -125,48 +111,41 @@ extension SearchViewController: UICollectionViewDataSource {
 extension SearchViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-//        customView.createBlurEffect(isOn: true)
-//        //Запускаем индикатор
-//        customView.activityIndicator.startAnimating()
-//        // Отключаем пользовательское взаимодействие
-//        setUIInteractionEnabled(false)
+        customView.createBlurEffect(isOn: true)
+        //Запускаем индикатор
+        customView.activityIndicator.startAnimating()
+        // Отключаем пользовательское взаимодействие
+        setUIInteractionEnabled(false)
                 
         self.presenter?.didSelectStock(at: indexPath.row)
     }
 }
 
-
-
-
-
-
-//networkManager.fetchStockProfile(symbol: symbol) { [weak self] result in
-//            switch result {
-//            case .success(let stockProfile):
-//                self?.networkManager.fetchStockCandles(symbol: symbol, timeFrame: .weekend) { [weak self] result in
-//                    switch result {
-//                    case .success(let fetchedCandles):
-//                        self?.candles = fetchedCandles
-//
-//                        // Отключаем индикатор
-//                        self?.customView.activityIndicator.stopAnimating()
-//                        // Отключаем блюр
-//                        self?.customView.createBlurEffect(isOn: false)
-//                        // Разрешаем пользовательское взаимодействие
-//                        self?.setUIInteractionEnabled(true)
-//
-//                        let destinationController = StockDetailViewController(stockDetailModel: StockDetailModel(symbol: symbol, companyName: companyName, stockProfile: stockProfile, currentRange: .weekend, candles: fetchedCandles))
-//                        destinationController.hidesBottomBarWhenPushed = true
-//                        self?.navigationController?.pushViewController(destinationController, animated: true)
-//
-//                    case .failure(let error):
-//                        print("Error fetching candles: \(error)")
-//                        self?.createAlertController(title: "Error", message: "Failed to get company candles data")
-//                    }
-//                }
-//
-//            case .failure(let error):
-//                print("Error: \(error)")
-//                self?.createAlertController(title: "Error", message: "Failed to get company profile data")
-//            }
-//        }
+//MARK: - SearchViewControllerProtocol
+extension SearchViewController: SearchViewControllerProtocol {
+    func setUIInteractionEnabled(_ enabled: Bool) {
+        customView.searchBar.isUserInteractionEnabled = enabled
+        customView.collectionView.isUserInteractionEnabled = enabled
+        tabBarController?.tabBar.isUserInteractionEnabled = enabled
+    }
+    
+    func showActivityIndicator() {
+        customView.activityIndicator.startAnimating()
+    }
+    
+    func createBlurEffect(isOn: Bool) {
+        self.customView.createBlurEffect(isOn: isOn)
+    }
+    
+    func showError(title: String, message: String) {
+        self.createAlertController(title: title, message: message)
+    }
+    
+    func getCollectionView() -> UICollectionView {
+        return self.customView.collectionView
+    }
+    
+    func hideActivityIndicator() {
+        customView.activityIndicator.stopAnimating()
+    }
+}

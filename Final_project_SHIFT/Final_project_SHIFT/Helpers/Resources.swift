@@ -20,6 +20,13 @@ enum Resources {
             static let moonImageColor = UIColor.blue
             static let cellBackground = UIColor.systemGray.withAlphaComponent(0.3)
         }
+        
+        enum Search {
+            static let cellBackground = UIColor.systemGray.withAlphaComponent(0.3)
+            static let borderCellWhite = UIColor.white.cgColor
+            static let borderCellBlack = UIColor.black.cgColor
+        }
+        
         static let labelColor = UIColor.label
         static let activityIndicatorColor = UIColor.gray
         static let backgroundColor = UIColor.systemBackground
@@ -104,5 +111,4 @@ enum Resources {
             }
         }
     }
-
 }

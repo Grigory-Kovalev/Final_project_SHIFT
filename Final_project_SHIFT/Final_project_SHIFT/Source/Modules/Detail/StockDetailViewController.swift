@@ -29,7 +29,7 @@ class StockDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         isFavorite = persistentStorageService.isStockFavorite(ticker: stockDetailModel.symbol)
-
+        self.navigationController?.navigationBar.isHidden = false
         navigationItem.title = stockDetailModel.symbol
         
         createBackButton()

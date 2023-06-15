@@ -9,17 +9,13 @@ import SnapKit
 import UIKit
 
 protocol SearchViewProtocol: AnyObject {
-    var collectionView: UICollectionView { get }    
-    func viewDidLoad(navigationController: UINavigationController)
+    var collectionView: UICollectionView { get }
     
+    func viewDidLoad(navigationController: UINavigationController)
     func getSearchBar() -> UISearchBar
 }
 
 final class SearchView: UIView {
-    
-    func getSearchBar() -> UISearchBar {
-        return searchBar
-    }
     
     // MARK: - Properties
     private weak var tabBarController: UITabBarController?
@@ -79,6 +75,7 @@ final class SearchView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    //MARK: - Private Method
     @objc private func cancelButtonTapped() {
         searchBar.resignFirstResponder()
     }
@@ -97,6 +94,10 @@ extension SearchView {
             blurEffectView?.removeFromSuperview()
             blurEffectView = nil
         }
+    }
+    
+    func getSearchBar() -> UISearchBar {
+        return searchBar
     }
 }
 
@@ -126,19 +127,20 @@ extension SearchView: SearchViewProtocol {
 // MARK: - Layout
 private extension SearchView {
     func setupUI() {
-        self.addSubview(collectionView)
-        collectionView.snp.makeConstraints { make in
-            make.top.equalTo(self.safeAreaLayoutGuide.snp.top)
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom)
-        }
         
         self.addSubview(searchBar)
         searchBar.snp.makeConstraints { make in
             make.top.equalTo(self.safeAreaLayoutGuide.snp.top)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
+        }
+        
+        self.addSubview(collectionView)
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(self.searchBar.snp.bottom)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom)
         }
         
         self.addSubview(activityIndicator)
@@ -148,25 +150,3 @@ private extension SearchView {
         self.searchBar.inputAccessoryView = cancelButton
     }
 }
-
-// MARK: - Configure
-//private extension SearchView {
-//    func configureView() {
-//        self.backgroundColor = Resources.Colors.backgroundColor
-//        
-//        tabBarController?.tabBar.unselectedItemTintColor = Resources.Colors.TabBar.unselectedItemColor
-//        tabBarController?.tabBar.tintColor = Resources.Colors.TabBar.selectedItemColor
-//        
-//        //Nav
-//        navigationController?.navigationItem.title = Resources.Strings.SearchScreen.navigationTitle
-//        let attributes: [NSAttributedString.Key: Any] = [
-//            .foregroundColor: Resources.Colors.green
-//        ]
-//        navigationController?.navigationBar.titleTextAttributes = attributes
-//        //searchBar
-//        
-//        navigationController?.navigationItem.titleView = searchBar
-//        //верхний регистр для клавиатуры
-//        searchBar.autocapitalizationType = .allCharacters
-//    }
-//}

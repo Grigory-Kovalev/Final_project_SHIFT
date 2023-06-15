@@ -10,6 +10,19 @@ import UIKit
 
 final class SearchViewCell: UICollectionViewCell {
     
+    // MARK: - Properties
+    private enum Metrics {
+        static let indexImageLeadingInset: CGFloat = 16
+        static let indexImageLenghtSide: CGFloat = 30
+        static let symbolLabelLeadingInset: CGFloat = 47
+        static let symbolLabelBottomInset: CGFloat = 12
+        static let fullNameLabelTopInset: CGFloat = 24
+        static let fullNameLabelWidthOffset: CGFloat = -80
+        static let contentViewCornerRadius: CGFloat = 15
+        static let contentViewBorderWidth: CGFloat = 2
+    }
+    
+    // MARK: - Subviews
     private lazy var indexImage: UIImageView = {
         let image = UIImageView()
         return image
@@ -18,15 +31,16 @@ final class SearchViewCell: UICollectionViewCell {
     private lazy var fullNameLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
-        label.font = UIFont.systemFont(ofSize: 15)
+        label.font = Resources.Fonts.priceLabelFont
         return label
     }()
     private lazy var symbolLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 22, weight: .black)
+        label.font = Resources.Fonts.thickFont
         return label
     }()
     
+    // MARK: - Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
         configure()
@@ -37,53 +51,9 @@ final class SearchViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setupUI() {
-        
-        self.contentView.addSubview(indexImage)
-        indexImage.snp.makeConstraints { make in
-            make.leading.equalToSuperview().inset(16)
-            make.centerY.equalToSuperview()
-            make.height.equalTo(30)
-            make.width.equalTo(30)
-        }
-        
-        self.contentView.addSubview(symbolLabel)
-        symbolLabel.snp.makeConstraints { make in
-            make.leading.equalTo(indexImage).inset(47)
-            make.bottom.equalTo(indexImage.snp.centerY).inset(12)
-        }
-        
-        self.contentView.addSubview(fullNameLabel)
-        fullNameLabel.snp.makeConstraints { make in
-            make.leading.equalTo(symbolLabel)
-            make.top.equalTo(symbolLabel).inset(24)
-            make.width.equalToSuperview().offset(-80)
-            
-        }
-    }
-    
-    private func configure() {
-        self.contentView.layer.cornerRadius = 15
-        self.contentView.backgroundColor = .systemGray.withAlphaComponent(0.3)
-        self.contentView.layer.borderWidth = 2
-        updateBorderColor()
-    }
-    
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         updateBorderColor()
-    }
-    
-    private func updateBorderColor() {
-        self.contentView.layer.borderColor = currentThemeIsDark() ? UIColor.white.cgColor : UIColor.black.cgColor
-    }
-    
-    private func currentThemeIsDark() -> Bool {
-        if #available(iOS 13.0, *) {
-            return traitCollection.userInterfaceStyle == .dark
-        } else {
-            return false
-        }
     }
     
     func setModel(with model: SearchCellModel) {
@@ -91,5 +61,51 @@ final class SearchViewCell: UICollectionViewCell {
         symbolLabel.text = model.symbol
         
         indexImage.image = UIImage(systemName: "\(model.index.description).circle.fill")?.withTintColor(Resources.Colors.green, renderingMode: .alwaysOriginal)
+    }
+}
+
+// MARK: - Private Methods
+private extension SearchViewCell {
+    func setupUI() {
+        self.contentView.addSubview(indexImage)
+        indexImage.snp.makeConstraints { make in
+            make.leading.equalToSuperview().inset(Metrics.indexImageLeadingInset)
+            make.centerY.equalToSuperview()
+            make.height.equalTo(Metrics.indexImageLenghtSide)
+            make.width.equalTo(Metrics.indexImageLenghtSide)
+        }
+        
+        self.contentView.addSubview(symbolLabel)
+        symbolLabel.snp.makeConstraints { make in
+            make.leading.equalTo(indexImage).inset(Metrics.symbolLabelLeadingInset)
+            make.bottom.equalTo(indexImage.snp.centerY).inset(Metrics.symbolLabelBottomInset)
+        }
+        
+        self.contentView.addSubview(fullNameLabel)
+        fullNameLabel.snp.makeConstraints { make in
+            make.leading.equalTo(symbolLabel)
+            make.top.equalTo(symbolLabel).inset(Metrics.fullNameLabelTopInset)
+            make.width.equalToSuperview().offset(Metrics.fullNameLabelWidthOffset)
+            
+        }
+    }
+    
+    func configure() {
+        self.contentView.layer.cornerRadius = Metrics.contentViewCornerRadius
+        self.contentView.backgroundColor = Resources.Colors.Search.cellBackground
+        self.contentView.layer.borderWidth = Metrics.contentViewBorderWidth
+        updateBorderColor()
+    }
+    
+    func updateBorderColor() {
+        self.contentView.layer.borderColor = currentThemeIsDark() ? Resources.Colors.Search.borderCellWhite : Resources.Colors.Search.borderCellBlack
+    }
+    
+    func currentThemeIsDark() -> Bool {
+        if #available(iOS 13.0, *) {
+            return traitCollection.userInterfaceStyle == .dark
+        } else {
+            return false
+        }
     }
 }
