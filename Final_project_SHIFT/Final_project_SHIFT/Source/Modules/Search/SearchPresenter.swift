@@ -82,7 +82,6 @@ extension SearchPresenter: SearchPresenterProtocol {
     }
     
     func didSelectStock(at index: Int) {
-        
         let ticker = self.searchResultsItem(by: index).symbol
         
         networkManager.fetchStockProfile(symbol: ticker) { [weak self] result in
@@ -92,8 +91,8 @@ extension SearchPresenter: SearchPresenterProtocol {
                     switch result {
                     case .success(let fetchedCandles):
                         
-                        let destinationController = StockDetailViewController(stockDetailModel: StockDetailModel(symbol: ticker, companyName: stockProfile.name, stockProfile: stockProfile, currentRange: .weekend, candles: fetchedCandles))
-                        
+                        let destinationController = StockDetailAssembly().createModule(with: StockDetailModel(symbol: ticker, companyName: stockProfile.name, stockProfile: stockProfile, currentRange: .weekend, candles: fetchedCandles))
+                                                
                         DispatchQueue.main.async {
                             destinationController.hidesBottomBarWhenPushed = true
                             self?.viewController?.navigationController?.pushViewController(destinationController, animated: true)

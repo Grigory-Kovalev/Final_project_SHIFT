@@ -10,30 +10,17 @@ import SwiftUI
 import UIKit
 
 protocol StockDetailVCProtocol: AnyObject {
-    
+    func popViewController()
 }
 
 class StockDetailViewController: UIViewController {
     
     // MARK: - Properties
-    private let stockDetailModel: StockDetailModel
     private var backButton: UIBarButtonItem!
     var isFavorite: Bool?
     
     var presenter: StockDetailPresenterProtocol?
-    
-    let persistentStorageService = PersistentStorageService()
-    
-    // MARK: - Init
-    init(stockDetailModel: StockDetailModel) {
-        self.stockDetailModel = stockDetailModel
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
+        
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,7 +38,10 @@ class StockDetailViewController: UIViewController {
 // MARK: - swiftUIhosting
 private extension StockDetailViewController {
     func swiftUIhosting() {
-        let swiftUIView = StockDetailView(selectedResolution: stockDetailModel.currentRange.getTag(), data: Candles.getCandles(candles: stockDetailModel.candles), stock: stockDetailModel)
+        let model = self.presenter?.getStockDetailViewModel()
+        guard let model else { return }
+        
+        let swiftUIView = StockDetailView(selectedResolution: model.selectedResolution, data: model.data, stock: model.stock)
         
         let hostingController = UIHostingController(rootView: swiftUIView)
         
@@ -70,10 +60,10 @@ private extension StockDetailViewController {
 // MARK: - configurView
 private extension StockDetailViewController {
     func configurView() {
-        isFavorite = persistentStorageService.isStockFavorite(ticker: stockDetailModel.symbol)
+        isFavorite = self.presenter?.isFavoriteTicker()
         
         self.navigationController?.navigationBar.isHidden = false
-        navigationItem.title = stockDetailModel.symbol
+        navigationItem.title = self.presenter?.getTicker()
         
         createBackButton()
         
@@ -127,7 +117,7 @@ private extension StockDetailViewController {
     // MARK: - Button Actions
     
     @objc func backButtonTapped() {
-        navigationController?.popViewController(animated: true)
+        self.presenter?.backButtonTapped()
     }
     
     @objc func favoriteButtonTapped() {
@@ -135,13 +125,16 @@ private extension StockDetailViewController {
         updateFavoriteButtonImage()
         
         if isFavorite ?? false {
-            persistentStorageService.saveStockToCoreData(ticker: stockDetailModel.symbol, name: stockDetailModel.companyName, logo: stockDetailModel.stockProfile.logo, currency: stockDetailModel.stockProfile.currency, price: stockDetailModel.candles.c.last ?? 0, isFavorite: true)
+            self.presenter?.saveStock()
         } else {
-            persistentStorageService.deleteStockBy(ticker: stockDetailModel.symbol)
+            self.presenter?.deleteStock()
         }
     }
 }
 
+// MARK: - StockDetailVCProtocol
 extension StockDetailViewController: StockDetailVCProtocol {
-    
+    func popViewController() {
+        navigationController?.popViewController(animated: true)
+    }    
 }

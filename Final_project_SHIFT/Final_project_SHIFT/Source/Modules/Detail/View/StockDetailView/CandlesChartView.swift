@@ -14,29 +14,30 @@ struct CandlesChartView: View {
     
     @Binding var candles: [CandleChartModel]
     
-    var minY: Double {
+    private var minY: Double {
         let minClose = candles.map { $0.close }.min() ?? 0
         let minYOffset = minClose * 0.005
         let result = minClose - minYOffset
         return result
     }
     
-    var maxY: Double {
+    private var maxY: Double {
         let maxClose = candles.map { $0.close }.max() ?? 0
         let maxYOffset = maxClose * 0.005
         let result = maxClose + maxYOffset
         return result
     }
     
-    var minX: Double {
+    private var minX: Double {
         Double(candles.map { $0.timestamp }.min() ?? 0)
     }
     
-    var maxX: Double {
+    private var maxX: Double {
         Double(candles.map { $0.timestamp }.max() ?? 0)
     }
     
-    var xAxis: [Double] {
+    //Расчет растояний вертикальных линий
+    private var xAxis: [Double] {
         let minValue = minX
         let maxValue = maxX
         let numberOfValues = 5
@@ -49,10 +50,10 @@ struct CandlesChartView: View {
         return values
     }
     
-    var minDate: String {
+    private var minDate: String {
         candles.map { $0.date }.first ?? ""
     }
-    var maxDate: String {
+    private var maxDate: String {
         candles.map { $0.date }.last ?? ""
     }
     

@@ -88,7 +88,6 @@ extension WatchlistPresenter: WatchlistPresenterProtocol {
         let stock = getStock(at: index)
         
         let symbol = stock.ticker
-        let companyName = stock.name
         
         viewController?.createBlurEffect(isOn: true)
         viewController?.showActivityIndicator()
@@ -101,7 +100,7 @@ extension WatchlistPresenter: WatchlistPresenterProtocol {
                     switch result {
                     case .success(let fetchedCandles):
                         
-                        let destinationController = StockDetailViewController(stockDetailModel: StockDetailModel(symbol: symbol, companyName: companyName, stockProfile: stockProfile, currentRange: .weekend, candles: fetchedCandles))
+                        let destinationController = StockDetailAssembly().createModule(with: StockDetailModel(symbol: symbol, companyName: stockProfile.name, stockProfile: stockProfile, currentRange: .weekend, candles: fetchedCandles))
                         DispatchQueue.main.async {
                             destinationController.hidesBottomBarWhenPushed = true
                             self?.viewController?.navigationController?.pushViewController(destinationController, animated: true)
@@ -109,13 +108,13 @@ extension WatchlistPresenter: WatchlistPresenterProtocol {
                         
                     case .failure(_):
                         self?.viewController?.hideActivityIndicator()
-                        self?.viewController?.showError(message: "Failed to get company candles data")
+                        self?.viewController?.showError(message: Resources.Strings.WatchlistScreen.alertMessageCandlesData)
                     }
                 }
                 
             case .failure(_):
                 self?.viewController?.hideActivityIndicator()
-                self?.viewController?.showError(message: "Failed to get company profile data")
+                self?.viewController?.showError(message: Resources.Strings.WatchlistScreen.alertMessageProfileData)
             }
         }
     }

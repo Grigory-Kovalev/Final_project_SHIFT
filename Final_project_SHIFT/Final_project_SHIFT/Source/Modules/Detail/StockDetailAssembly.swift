@@ -15,10 +15,9 @@ class StockDetailAssembly: StockDetailAssemblyProtocol {
     let storageManager = PersistentStorageService()
     
     func createModule(with model: StockDetailModel) -> UIViewController {
-        let view = StockDetailViewController(stockDetailModel: model)
-        let presenter = StockDetailPresenter(view: view, persistentStorageManager: storageManager)
+        let view = StockDetailViewController()
+        let presenter = StockDetailPresenter(view: view, persistentStorageManager: storageManager, stockDetailModel: model)
         
-        // Установка зависимостей
         view.presenter = presenter
         presenter.viewController = view
         

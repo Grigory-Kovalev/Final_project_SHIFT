@@ -34,3 +34,16 @@ extension UIColor {
         return nil
     }
 }
+
+extension String {
+    func getCurrencySymbol() -> String {
+        let currencySymbols: [String: String] = [
+            "USD": "$", // Доллар США
+            "EUR": "€", // Евро
+            "GBP": "£", // Фунт стерлингов
+            "CNY": "¥"  // Йена
+        ]
+        let currencySymbol = currencySymbols[self] ?? ""
+        return currencySymbol
+    }
+}

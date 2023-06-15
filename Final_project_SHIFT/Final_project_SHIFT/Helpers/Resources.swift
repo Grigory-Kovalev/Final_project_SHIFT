@@ -61,6 +61,8 @@ enum Resources {
             static let titleLabel = "Watchlist"
             static let watchlistCellIdentifier = "CellIdentifier"
             static let favoriteStocksLabelText = "Favorite stocks"
+            static let alertMessageCandlesData = "Failed to get company candles data"
+            static let alertMessageProfileData = "Failed to get company profile data"
         }
         
         enum SearchScreen {
@@ -75,6 +77,14 @@ enum Resources {
             static let alertErrorProfileTitles = ("Error", "Failed to get company profile data")
             static let alertZeroStock = ("Notification", "There is no information on the specified ticker")
         }
+        
+        enum StockDetailScreen {
+            enum CompanyProfile {
+                static let about = "About"
+                static let type = "Type"
+                static let marketStats = "Market Stats"
+            }
+        }
     }
     
     enum Images {
@@ -82,6 +92,15 @@ enum Resources {
             static var home = UIImage(systemName: "latch.2.case.fill")
             static var search = UIImage(systemName: "sparkle.magnifyingglass")
         }
+        
+        enum CompanyProfile {
+            static let location = "location"
+            static let ipo = "ipo"
+            static let exchange = "exchange"
+            static let marketCapitalization = "marketCapitalization"
+            static let shareOutstanding = "shareOutstanding"
+        }
+        
         static let lightModeImage = UIImage(named: "lightModeBackButton")?.withRenderingMode(.alwaysOriginal)
         static let darkModeImage = UIImage(named: "darkModeBackButton")?.withRenderingMode(.alwaysOriginal)
     }
