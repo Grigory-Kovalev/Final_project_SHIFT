@@ -26,11 +26,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let watchlistModule = watchlistAssembly.createModule()
         watchlistModule.tabBarItem = UITabBarItem(title: Resources.Strings.TabBar.home, image: Resources.Images.TabBar.home, selectedImage: nil)
         
-        let SearchVC = SearchViewController()
-        SearchVC.tabBarItem = UITabBarItem(title: Resources.Strings.TabBar.search, image: Resources.Images.TabBar.search, selectedImage: nil)
+        let searchAssembly = SearchAssembly()
+        let searchModule = searchAssembly.createModule()
+        searchModule.tabBarItem = UITabBarItem(title: Resources.Strings.TabBar.search, image: Resources.Images.TabBar.search, selectedImage: nil)
         
         let WatchlistNavigationController = UINavigationController(rootViewController: watchlistModule)
-        let SearchNavigationController = UINavigationController(rootViewController: SearchVC)
+        let SearchNavigationController = UINavigationController(rootViewController: searchModule)
         
         tabBarController.setViewControllers([WatchlistNavigationController, SearchNavigationController], animated: false)
         

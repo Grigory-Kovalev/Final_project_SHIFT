@@ -18,7 +18,6 @@ final class SearchView: UIView {
     // MARK: - Properties
     private weak var tabBarController: UITabBarController?
     private weak var navigationController: UINavigationController?
-    weak var vc: SearchViewControllerDelegate?
         
     private enum Metrics {
         static let collectionViewCornerRadius: CGFloat = 15.0
@@ -67,8 +66,8 @@ final class SearchView: UIView {
     // MARK: - Initialization
     init() {
         super.init(frame: .zero)
-        configureView()
         setupUI()
+        configureView()
     }
     
     required init?(coder: NSCoder) {

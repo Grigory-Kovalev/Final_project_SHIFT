@@ -72,8 +72,10 @@ class WatchlistPresenter: WatchlistPresenterProtocol {
                         self?.viewController?.setUIInteractionEnabled(true)
                         
                         let destinationController = StockDetailViewController(stockDetailModel: StockDetailModel(symbol: symbol, companyName: companyName, stockProfile: stockProfile, currentRange: .weekend, candles: fetchedCandles))
-                        destinationController.hidesBottomBarWhenPushed = true
-                        self?.viewController?.navigationController?.pushViewController(destinationController, animated: true)
+                        DispatchQueue.main.async {
+                            destinationController.hidesBottomBarWhenPushed = true
+                            self?.viewController?.navigationController?.pushViewController(destinationController, animated: true)
+                        }
                         
                     case .failure(_):
                         self?.viewController?.hideActivityIndicator()

@@ -9,30 +9,17 @@
 import UIKit
 
 protocol SearchViewControllerProtocol: AnyObject {
+    var navigationController: UINavigationController? { get }
+    
     func hideActivityIndicator()
     func setUIInteractionEnabled(_ enabled: Bool)
     func getCollectionView() -> UICollectionView
-    func showError()
+    func createBlurEffect(isOn: Bool)
+    func showActivityIndicator()
+    func showError(title: String, message: String)
 }
 
 final class SearchViewController: UIViewController, SearchViewControllerProtocol {
-    func showError() {
-        self.createAlertController(title: Resources.Strings.SearchScreen.alertErrorTitles.0, message: Resources.Strings.SearchScreen.alertErrorTitles.1)
-    }
-    
-    func getCollectionView() -> UICollectionView {
-        return self.customView.collectionView
-    }
-    
-    
-    func hideActivityIndicator() {
-        customView.activityIndicator.stopAnimating()
-    }
-    
-    private var candles: Candles?
-    
-    let networkManager = NetworkService()
-    
     
     private let customView = SearchView()
     var presenter: SearchPresenterProtocol?
@@ -54,6 +41,26 @@ final class SearchViewController: UIViewController, SearchViewControllerProtocol
         customView.searchBar.isUserInteractionEnabled = enabled
         customView.collectionView.isUserInteractionEnabled = enabled
         tabBarController?.tabBar.isUserInteractionEnabled = enabled
+    }
+    
+    func showActivityIndicator() {
+        customView.activityIndicator.startAnimating()
+    }
+    
+    func createBlurEffect(isOn: Bool) {
+        customView.createBlurEffect(isOn: isOn)
+    }
+    
+    func showError(title: String, message: String) {
+        self.createAlertController(title: title, message: message)
+    }
+    
+    func getCollectionView() -> UICollectionView {
+        return self.customView.collectionView
+    }
+    
+    func hideActivityIndicator() {
+        customView.activityIndicator.stopAnimating()
     }
     
     private func createAlertController(title: String, message: String) {
@@ -116,47 +123,48 @@ extension SearchViewController: UICollectionViewDataSource {
 extension SearchViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        let symbol = self.presenter?.searchResultsItem(by: indexPath.row).symbol
-        let companyName = self.presenter?.searchResultsItem(by: indexPath.row).fullName
-        
-        guard let symbol else { return }
-        guard let companyName else { return }
-        
         customView.createBlurEffect(isOn: true)
         //Запускаем индикатор
         customView.activityIndicator.startAnimating()
         // Отключаем пользовательское взаимодействие
         setUIInteractionEnabled(false)
                 
-        networkManager.fetchStockProfile(symbol: symbol) { [weak self] result in
-            switch result {
-            case .success(let stockProfile):
-                self?.networkManager.fetchStockCandles(symbol: symbol, timeFrame: .weekend) { [weak self] result in
-                    switch result {
-                    case .success(let fetchedCandles):
-                        self?.candles = fetchedCandles
-                        
-                        // Отключаем индикатор
-                        self?.customView.activityIndicator.stopAnimating()
-                        // Отключаем блюр
-                        self?.customView.createBlurEffect(isOn: false)
-                        // Разрешаем пользовательское взаимодействие
-                        self?.setUIInteractionEnabled(true)
-                        
-                        let destinationController = StockDetailViewController(stockDetailModel: StockDetailModel(symbol: symbol, companyName: companyName, stockProfile: stockProfile, currentRange: .weekend, candles: fetchedCandles))
-                        destinationController.hidesBottomBarWhenPushed = true
-                        self?.navigationController?.pushViewController(destinationController, animated: true)
-                        
-                    case .failure(let error):
-                        print("Error fetching candles: \(error)")
-                        self?.createAlertController(title: "Error", message: "Failed to get company candles data")
-                    }
-                }
-                
-            case .failure(let error):
-                print("Error: \(error)")
-                self?.createAlertController(title: "Error", message: "Failed to get company profile data")
-            }
-        }
+        self.presenter?.didSelectStock(at: indexPath.row)
     }
 }
+
+
+
+
+
+
+//networkManager.fetchStockProfile(symbol: symbol) { [weak self] result in
+//            switch result {
+//            case .success(let stockProfile):
+//                self?.networkManager.fetchStockCandles(symbol: symbol, timeFrame: .weekend) { [weak self] result in
+//                    switch result {
+//                    case .success(let fetchedCandles):
+//                        self?.candles = fetchedCandles
+//
+//                        // Отключаем индикатор
+//                        self?.customView.activityIndicator.stopAnimating()
+//                        // Отключаем блюр
+//                        self?.customView.createBlurEffect(isOn: false)
+//                        // Разрешаем пользовательское взаимодействие
+//                        self?.setUIInteractionEnabled(true)
+//
+//                        let destinationController = StockDetailViewController(stockDetailModel: StockDetailModel(symbol: symbol, companyName: companyName, stockProfile: stockProfile, currentRange: .weekend, candles: fetchedCandles))
+//                        destinationController.hidesBottomBarWhenPushed = true
+//                        self?.navigationController?.pushViewController(destinationController, animated: true)
+//
+//                    case .failure(let error):
+//                        print("Error fetching candles: \(error)")
+//                        self?.createAlertController(title: "Error", message: "Failed to get company candles data")
+//                    }
+//                }
+//
+//            case .failure(let error):
+//                print("Error: \(error)")
+//                self?.createAlertController(title: "Error", message: "Failed to get company profile data")
+//            }
+//        }
