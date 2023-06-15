@@ -35,7 +35,7 @@ final class WatchlistPresenter {
 
     // MARK: - Private methods
     private func getData() {
-        WSManager.shared.receiveData { [weak self] data in
+        WebSocketService.shared.receiveData { [weak self] data in
             guard let self = self, let response = data else {
                 return
             }
@@ -73,15 +73,15 @@ extension WatchlistPresenter: WatchlistPresenterProtocol {
     }
     
     func viewDidAppear() {
-        WSManager.shared.connectToWebSocket()
+        WebSocketService.shared.connectToWebSocket()
         dataSource = persistentStorageService.loadStocksFromCoreData() ?? []
         sortStocksAlphabetically()
-        WSManager.shared.subscribeTo(symbols: dataSource.map({ $0.ticker }))
+        WebSocketService.shared.subscribeTo(symbols: dataSource.map({ $0.ticker }))
         viewController?.reloadCollectionView()
     }
     
     func viewDidDisappear() {
-        WSManager.shared.unSubscribeFrom(symbols: dataSource.map({ $0.ticker }))
+        WebSocketService.shared.unSubscribeFrom(symbols: dataSource.map({ $0.ticker }))
     }
     
     func didSelectStock(at index: Int) {

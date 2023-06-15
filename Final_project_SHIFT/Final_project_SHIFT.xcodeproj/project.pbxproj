@@ -38,6 +38,8 @@
 		3FD370CC2A3B15030042CA95 /* StockDetailAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD370CB2A3B15030042CA95 /* StockDetailAssembly.swift */; };
 		3FD370CE2A3B2E440042CA95 /* NetworkServiceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD370CD2A3B2E440042CA95 /* NetworkServiceModel.swift */; };
 		3FD370D02A3B32E00042CA95 /* FinhubExchangeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD370CF2A3B32E00042CA95 /* FinhubExchangeManager.swift */; };
+		3FD370D22A3B3F1D0042CA95 /* WebSocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD370D12A3B3F1D0042CA95 /* WebSocketService.swift */; };
+		3FD370D42A3B3F460042CA95 /* WebSocketModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD370D32A3B3F460042CA95 /* WebSocketModel.swift */; };
 		3FFADDCC2A3611FA00299BBD /* WatchlistViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFADDCB2A3611FA00299BBD /* WatchlistViewCell.swift */; };
 		3FFADDCF2A36E4AA00299BBD /* StocksModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3FFADDCD2A36E4AA00299BBD /* StocksModel.xcdatamodeld */; };
 		3FFADDD12A36EA3300299BBD /* PersistentStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFADDD02A36EA3300299BBD /* PersistentStorageService.swift */; };
@@ -76,6 +78,8 @@
 		3FD370CB2A3B15030042CA95 /* StockDetailAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockDetailAssembly.swift; sourceTree = "<group>"; };
 		3FD370CD2A3B2E440042CA95 /* NetworkServiceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkServiceModel.swift; sourceTree = "<group>"; };
 		3FD370CF2A3B32E00042CA95 /* FinhubExchangeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinhubExchangeManager.swift; sourceTree = "<group>"; };
+		3FD370D12A3B3F1D0042CA95 /* WebSocketService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketService.swift; sourceTree = "<group>"; };
+		3FD370D32A3B3F460042CA95 /* WebSocketModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketModel.swift; sourceTree = "<group>"; };
 		3FFADDCB2A3611FA00299BBD /* WatchlistViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistViewCell.swift; sourceTree = "<group>"; };
 		3FFADDCE2A36E4AA00299BBD /* StocksModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = StocksModel.xcdatamodel; sourceTree = "<group>"; };
 		3FFADDD02A36EA3300299BBD /* PersistentStorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentStorageService.swift; sourceTree = "<group>"; };
@@ -265,6 +269,8 @@
 			children = (
 				3F8B69502A2DF49F00B125FB /* NetworkService.swift */,
 				3FD370CD2A3B2E440042CA95 /* NetworkServiceModel.swift */,
+				3FD370D12A3B3F1D0042CA95 /* WebSocketService.swift */,
+				3FD370D32A3B3F460042CA95 /* WebSocketModel.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -387,6 +393,7 @@
 				3FFADDD12A36EA3300299BBD /* PersistentStorageService.swift in Sources */,
 				3F8B694A2A2DE0AF00B125FB /* StockDetailViewController.swift in Sources */,
 				3F66DB002A31E6830078ECA0 /* CandlesChartView.swift in Sources */,
+				3FD370D22A3B3F1D0042CA95 /* WebSocketService.swift in Sources */,
 				3F66DB022A31E7020078ECA0 /* CandleChartModel.swift in Sources */,
 				3F66DB262A32E3B60078ECA0 /* CompanyProfileView.swift in Sources */,
 				3FD370B92A3A19960042CA95 /* WatchlistPresenter.swift in Sources */,
@@ -406,6 +413,7 @@
 				3FFADDCC2A3611FA00299BBD /* WatchlistViewCell.swift in Sources */,
 				3FD370CC2A3B15030042CA95 /* StockDetailAssembly.swift in Sources */,
 				3FD370C32A3A53A30042CA95 /* SearchPresenter.swift in Sources */,
+				3FD370D42A3B3F460042CA95 /* WebSocketModel.swift in Sources */,
 				3FFADDDA2A3827BF00299BBD /* WatchlistModel.swift in Sources */,
 				3F9800AE2A2616CA00D99EA3 /* SceneDelegate.swift in Sources */,
 				3F8B69452A2DC23D00B125FB /* Extensions.swift in Sources */,

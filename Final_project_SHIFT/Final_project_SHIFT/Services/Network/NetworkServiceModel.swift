@@ -8,42 +8,39 @@
 import Foundation
 import SwiftUI
 
-struct SearchNetworkResult: Codable {
+struct SearchNetworkResultDTO: Codable {
     let count: Int
-    let result: [Stock]
+    let result: [StockDTO]
 }
 
-struct Stock: Codable {
+
+struct StockDTO: Codable {
     let description: String
     let displaySymbol: String
     let symbol: String
     let type: String
 }
 
-struct Candles: Codable {
+struct Stock {
+    let description: String
+    let displaySymbol: String
+    let symbol: String
+    let type: String
+}
+
+struct CandlesDTO: Codable {
     let c, h, l, o: [Double]
     let s: String
     let t, v: [Int]
-    
-    static func getCandles(candles: Candles) -> [CandleChartModel] {
-        var candleArray = [ CandleChartModel]()
-        
-        let firstCandleColor: Color = .green
-        let firstCandle = CandleChartModel(close: candles.c[0], high: candles.h[0], low: candles.l[0], open: candles.o[0], timestamp: candles.t[0], volume: candles.v[0], color: firstCandleColor)
-        candleArray.append(firstCandle)
-        
-        for index in 1..<candles.c.count {
-            let previousCandle = candleArray[index-1]
-            let currentCandleColor: Color = candles.c[index] > previousCandle.close ? .green : .red
-            
-            let candle = CandleChartModel(close: candles.c[index], high: candles.h[index], low: candles.l[index], open: candles.o[index], timestamp: candles.t[index], volume: candles.v[index], color: currentCandleColor)
-            candleArray.append(candle)
-        }
-        return candleArray
-    }
 }
 
-struct StockProfile: Codable {
+struct Candles {
+    let c, h, l, o: [Double]
+    let s: String
+    let t, v: [Int]
+}
+
+struct StockProfileDTO: Codable {
     let country: String
     let currency: String
     let estimateCurrency: String
@@ -58,6 +55,8 @@ struct StockProfile: Codable {
     let ticker: String
     let weburl: String
 }
+
+
 
 enum TimeFrameResolution: String {
     case minute = "1"
@@ -98,7 +97,7 @@ enum TimeFrameResolution: String {
         let secondsInMinute = 60
         let secondsInHour = secondsInMinute * 60
         let secondsInDay = secondsInHour * 24
-        var candlesCount = 50
+        let candlesCount = 50
         
         let intervalDifference: Int
         
@@ -108,10 +107,8 @@ enum TimeFrameResolution: String {
         case .fiveMinutes:
             intervalDifference = -(secondsInMinute * 5 * candlesCount)
         case .fifteenMinutes:
-            candlesCount = 5
             intervalDifference = -(secondsInMinute * 15 * candlesCount)
         case .thirtyMinutes:
-            candlesCount = 30
             intervalDifference = -(secondsInMinute * 30 * candlesCount)
         case .hour:
             intervalDifference = -(secondsInHour  * candlesCount)
