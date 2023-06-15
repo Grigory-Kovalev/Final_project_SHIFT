@@ -41,23 +41,30 @@ class SearchPresenter: SearchPresenterProtocol {
     }
     
     func searchButtonClicked(with searchText: String) {
+
         networkManager.fetchSymbolLookup(symbol: searchText) { [weak self] result in
-            //Отключаем индикатор
-            self?.viewController?.hideActivityIndicator()
-            // Разрешаем пользовательское взаимодействие
-            self?.viewController?.setUIInteractionEnabled(true)
             
             // Обработка полученных данных
             switch result {
             case .success(let fetchedStocks):
                 let stocks = fetchedStocks.filter { $0.type == Resources.Strings.SearchScreen.stockType && !$0.symbol.contains(".") }
+                
+                //Очищаем массив прошлого списка
+                self?.searchResultsRemoveAll()
                 for (index, stock) in stocks.enumerated()  {
                     self?.searchResults.append(SearchCellModel(fullName: stock.description, symbol: stock.symbol, type: stock.type, index: index))
                     
                 }
-                self?.viewController?.getCollectionView().reloadData()
+                DispatchQueue.main.async {
+                    self?.viewController?.getCollectionView().reloadData()
+                    self?.viewController?.hideActivityIndicator()
+                    self?.viewController?.setUIInteractionEnabled(true)
+                    self?.viewController?.createBlurEffect(isOn: false)
+                }
             case .failure(let error):
                 print("Error: \(error)")
+                self?.viewController?.setUIInteractionEnabled(true)
+                self?.viewController?.hideActivityIndicator()
                 self?.viewController?.showError(title: Resources.Strings.SearchScreen.alertErrorTitles.0, message: Resources.Strings.SearchScreen.alertErrorTitles.1)
             }
         }
@@ -67,19 +74,12 @@ class SearchPresenter: SearchPresenterProtocol {
         
         let ticker = self.searchResultsItem(by: index).symbol
         
-        viewController?.createBlurEffect(isOn: true)
-        viewController?.showActivityIndicator()
-        viewController?.setUIInteractionEnabled(false)
-        
         networkManager.fetchStockProfile(symbol: ticker) { [weak self] result in
             switch result {
             case .success(let stockProfile):
                 self?.networkManager.fetchStockCandles(symbol: ticker, timeFrame: .weekend) { [weak self] result in
                     switch result {
                     case .success(let fetchedCandles):
-                        self?.viewController?.hideActivityIndicator()
-                        self?.viewController?.createBlurEffect(isOn: false)
-                        self?.viewController?.setUIInteractionEnabled(true)
                         
                         let destinationController = StockDetailViewController(stockDetailModel: StockDetailModel(symbol: ticker, companyName: stockProfile.name, stockProfile: stockProfile, currentRange: .weekend, candles: fetchedCandles))
                         

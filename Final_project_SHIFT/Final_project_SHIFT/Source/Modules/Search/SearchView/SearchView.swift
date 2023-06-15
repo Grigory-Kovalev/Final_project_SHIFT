@@ -9,11 +9,17 @@ import SnapKit
 import UIKit
 
 protocol SearchViewProtocol: AnyObject {
-    var collectionView: UICollectionView { get }
-    func setupControllers(with tabBarController: UITabBarController, with navigationController: UINavigationController)
+    var collectionView: UICollectionView { get }    
+    func viewDidLoad(navigationController: UINavigationController)
+    
+    func getSearchBar() -> UISearchBar
 }
 
 final class SearchView: UIView {
+    
+    func getSearchBar() -> UISearchBar {
+        return searchBar
+    }
     
     // MARK: - Properties
     private weak var tabBarController: UITabBarController?
@@ -67,7 +73,6 @@ final class SearchView: UIView {
     init() {
         super.init(frame: .zero)
         setupUI()
-        configureView()
     }
     
     required init?(coder: NSCoder) {
@@ -97,12 +102,24 @@ extension SearchView {
 
 //MARK: - SearchViewProtocol
 extension SearchView: SearchViewProtocol {
-    func setupControllers(with tabBarController: UITabBarController, with navigationController: UINavigationController) {
-        self.tabBarController = tabBarController
-        self.navigationController = navigationController
-        //tabBar
-        tabBarController.tabBar.unselectedItemTintColor = Resources.Colors.TabBar.unselectedItemColor
-        tabBarController.tabBar.tintColor = Resources.Colors.TabBar.selectedItemColor
+
+    
+    func viewDidLoad(navigationController: UINavigationController) {
+        self.backgroundColor = Resources.Colors.backgroundColor
+        
+        tabBarController?.tabBar.unselectedItemTintColor = Resources.Colors.TabBar.unselectedItemColor
+        tabBarController?.tabBar.tintColor = Resources.Colors.TabBar.selectedItemColor
+        
+        //Nav
+        navigationController.navigationItem.title = Resources.Strings.SearchScreen.navigationTitle
+        let attributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: Resources.Colors.green
+        ]
+        navigationController.navigationBar.titleTextAttributes = attributes
+        //searchBar
+        navigationController.navigationItem.titleView = searchBar
+        //верхний регистр для клавиатуры
+        searchBar.autocapitalizationType = .allCharacters
     }
 }
 
@@ -116,28 +133,40 @@ private extension SearchView {
             make.trailing.equalToSuperview()
             make.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom)
         }
+        
+        self.addSubview(searchBar)
+        searchBar.snp.makeConstraints { make in
+            make.top.equalTo(self.safeAreaLayoutGuide.snp.top)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+        }
+        
         self.addSubview(activityIndicator)
+        activityIndicator.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+        }
         self.searchBar.inputAccessoryView = cancelButton
     }
 }
 
 // MARK: - Configure
-private extension SearchView {
-    func configureView() {
-        self.backgroundColor = Resources.Colors.backgroundColor
-        
-        tabBarController?.tabBar.unselectedItemTintColor = Resources.Colors.TabBar.unselectedItemColor
-        tabBarController?.tabBar.tintColor = Resources.Colors.TabBar.selectedItemColor
-        
-        //Nav
-        navigationController?.navigationItem.title = Resources.Strings.SearchScreen.navigationTitle
-        let attributes: [NSAttributedString.Key: Any] = [
-            .foregroundColor: Resources.Colors.green
-        ]
-        navigationController?.navigationBar.titleTextAttributes = attributes
-        //searchBar
-        navigationController?.navigationItem.titleView = searchBar
-        //верхний регистр для клавиатуры
-        searchBar.autocapitalizationType = .allCharacters
-    }
-}
+//private extension SearchView {
+//    func configureView() {
+//        self.backgroundColor = Resources.Colors.backgroundColor
+//        
+//        tabBarController?.tabBar.unselectedItemTintColor = Resources.Colors.TabBar.unselectedItemColor
+//        tabBarController?.tabBar.tintColor = Resources.Colors.TabBar.selectedItemColor
+//        
+//        //Nav
+//        navigationController?.navigationItem.title = Resources.Strings.SearchScreen.navigationTitle
+//        let attributes: [NSAttributedString.Key: Any] = [
+//            .foregroundColor: Resources.Colors.green
+//        ]
+//        navigationController?.navigationBar.titleTextAttributes = attributes
+//        //searchBar
+//        
+//        navigationController?.navigationItem.titleView = searchBar
+//        //верхний регистр для клавиатуры
+//        searchBar.autocapitalizationType = .allCharacters
+//    }
+//}

@@ -38,6 +38,13 @@ class WatchlistViewController: UIViewController, WatchlistViewControllerProtocol
         presenter?.viewDidLoad()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.hideActivityIndicator()
+        self.createBlurEffect(isOn: false)
+        self.setUIInteractionEnabled(true)
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         presenter?.viewDidAppear()

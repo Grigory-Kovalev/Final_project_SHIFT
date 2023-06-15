@@ -31,10 +31,17 @@ final class SearchViewController: UIViewController, SearchViewControllerProtocol
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        customView.setupControllers(with: self.tabBarController!, with: self.navigationController!)
+        self.customView.viewDidLoad(navigationController: self.navigationController!)
         customView.collectionView.delegate = self
         customView.collectionView.dataSource = self
         customView.searchBar.delegate = self
+        
+        self.navigationController?.navigationBar.isHidden = true
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
     }
     
     func setUIInteractionEnabled(_ enabled: Bool) {
@@ -48,7 +55,7 @@ final class SearchViewController: UIViewController, SearchViewControllerProtocol
     }
     
     func createBlurEffect(isOn: Bool) {
-        customView.createBlurEffect(isOn: isOn)
+        self.customView.createBlurEffect(isOn: isOn)
     }
     
     func showError(title: String, message: String) {
@@ -76,31 +83,26 @@ final class SearchViewController: UIViewController, SearchViewControllerProtocol
 extension SearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
-        //Очищаем массив прошлого списка
-        self.presenter?.searchResultsRemoveAll()
-        customView.collectionView.reloadData()
         //Убираем пробелы из запроса
         let trimmedText = customView.searchBar.text?.trimmingCharacters(in: .whitespaces)
         customView.searchBar.text = trimmedText
         
         // Скрыть клавиатуру
         searchBar.resignFirstResponder()
-        //Запускаем индикатор
-        customView.activityIndicator.startAnimating()
-        // Отключаем пользовательское взаимодействие
+
+        // Запускаем активити индикатор
+        showActivityIndicator()
+
+        // Запрещаем пользовательское взаимодействие
         setUIInteractionEnabled(false)
+
+        // Отображаем блюр эффект
+        createBlurEffect(isOn: true)
+        
         let ticker = searchBar.text ?? ""
+        
         presenter?.searchButtonClicked(with: ticker)
         
-    }
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        // Метод вызывается, когда пользователь нажимает на кнопку "Отмена" в поисковой строке
-        // Здесь вы можете выполнить действия по очистке поисковых результатов или закрытию поисковой строки
-    }
-    
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        // Метод вызывается, когда текст в поисковой строке изменяется
-        // Здесь вы можете реагировать на изменения и выполнять дополнительные действия, например, фильтрацию результатов поиска в реальном времени
     }
 }
 
@@ -123,11 +125,11 @@ extension SearchViewController: UICollectionViewDataSource {
 extension SearchViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        customView.createBlurEffect(isOn: true)
-        //Запускаем индикатор
-        customView.activityIndicator.startAnimating()
-        // Отключаем пользовательское взаимодействие
-        setUIInteractionEnabled(false)
+//        customView.createBlurEffect(isOn: true)
+//        //Запускаем индикатор
+//        customView.activityIndicator.startAnimating()
+//        // Отключаем пользовательское взаимодействие
+//        setUIInteractionEnabled(false)
                 
         self.presenter?.didSelectStock(at: indexPath.row)
     }

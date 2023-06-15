@@ -67,14 +67,11 @@ class WatchlistPresenter: WatchlistPresenterProtocol {
                 self?.networkManager.fetchStockCandles(symbol: symbol, timeFrame: .weekend) { [weak self] result in
                     switch result {
                     case .success(let fetchedCandles):
-                        self?.viewController?.hideActivityIndicator()
-                        self?.viewController?.createBlurEffect(isOn: false)
-                        self?.viewController?.setUIInteractionEnabled(true)
                         
                         let destinationController = StockDetailViewController(stockDetailModel: StockDetailModel(symbol: symbol, companyName: companyName, stockProfile: stockProfile, currentRange: .weekend, candles: fetchedCandles))
                         DispatchQueue.main.async {
                             destinationController.hidesBottomBarWhenPushed = true
-                            self?.viewController?.navigationController?.pushViewController(destinationController, animated: true)
+                            self?.viewController?.navigationController?.pushViewController(destinationController, animated: true)                            
                         }
                         
                     case .failure(_):
