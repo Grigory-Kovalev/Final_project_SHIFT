@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct StockProfileModel: Codable {
+struct StockProfileModel {
     let country: String
     let currency: String
     let estimateCurrency: String
@@ -21,4 +21,20 @@ struct StockProfileModel: Codable {
     let shareOutstanding: Double
     let ticker: String
     let weburl: String
+
+    init(from dto: StockProfileModelDTO) {
+        country = dto.country
+        currency = dto.currency
+        estimateCurrency = dto.estimateCurrency
+        exchange = dto.exchange
+        finnhubIndustry = dto.finnhubIndustry
+        ipo = dto.ipo
+        logo = dto.logo
+        marketCapitalization = dto.marketCapitalization
+        name = dto.name
+        phone = dto.phone
+        shareOutstanding = dto.shareOutstanding
+        ticker = dto.ticker
+        weburl = dto.weburl
+    }
 }

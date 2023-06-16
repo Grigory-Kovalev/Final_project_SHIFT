@@ -80,6 +80,8 @@ enum Resources {
         }
         
         enum StockDetailScreen {
+            static let alertErrorTitle = "Error"
+            static let alertErrorMessage = "Trouble loading stock chart"
             enum CompanyProfile {
                 static let about = "About"
                 static let type = "Type"

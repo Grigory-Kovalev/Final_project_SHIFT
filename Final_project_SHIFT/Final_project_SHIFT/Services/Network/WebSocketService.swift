@@ -15,7 +15,6 @@ class WebSocketService {
     private var data: LastStocksDataModelDTO?
     
     let webSocketTask = URLSession(configuration: .default).webSocketTask(with: URL(string: "wss://ws.finnhub.io?token=c8s4fv2ad3idbo5bhsbg")!)
-    
     // Функция вызова подключения
     func connectToWebSocket() {
         if webSocketTask.state == .suspended || webSocketTask.state == .completed {

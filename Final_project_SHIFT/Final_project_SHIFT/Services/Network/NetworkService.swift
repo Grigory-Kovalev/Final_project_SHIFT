@@ -33,7 +33,7 @@ final class NetworkService {
             do {
                 let decoder = JSONDecoder()
                 let resultDTO = try decoder.decode(SearchNetworkResultDTO.self, from: data)
-                let result = resultDTO.result as![Stock]
+                let result = SearchNetworkResult(from: resultDTO).result
                 DispatchQueue.main.async {
                     completion(.success(result))
                 }
@@ -72,7 +72,7 @@ final class NetworkService {
             do {
                 let decoder = JSONDecoder()
                 let candlesDTO = try decoder.decode(CandlesDTO.self, from: data)
-                let candles = Candles(c: candlesDTO.c.map { $0 }, h: candlesDTO.h.map { $0 }, l: candlesDTO.l.map { $0 }, o: candlesDTO.o.map { $0 }, s: candlesDTO.s, t: candlesDTO.t.map { $0 }, v: candlesDTO.v.map { $0 })
+                let candles = Candles(from: candlesDTO)
                 DispatchQueue.main.async {
                     completion(.success(candles))
                 }
@@ -105,9 +105,10 @@ final class NetworkService {
             
             do {
                 let decoder = JSONDecoder()
-                let stockProfile = try decoder.decode(StockProfileModel.self, from: data)
+                let stockProfileDTO = try decoder.decode(StockProfileModelDTO.self, from: data)
+                let result = StockProfileModel(from: stockProfileDTO)
                 DispatchQueue.main.async {
-                    completion(.success(stockProfile))
+                    completion(.success(result))
                 }
             } catch {
                 completion(.failure(error))
@@ -118,23 +119,3 @@ final class NetworkService {
     }
 }
 
-extension Decodable {
-    static func decode(with decoder: JSONDecoder = JSONDecoder(), from data: Data) throws -> Self? {
-        do {
-            let newdata = try decoder.decode(Self.self, from: data)
-            return newdata
-        } catch {
-            print("decodable model error", error.localizedDescription)
-            return nil
-        }
-    }
-    static func decodeArray(with decoder: JSONDecoder = JSONDecoder(), from data: Data) throws -> [Self]{
-        do {
-            let newdata = try decoder.decode([Self].self, from: data)
-            return newdata
-        } catch {
-            print("decodable model error", error.localizedDescription)
-            return []
-        }
-    }
-}

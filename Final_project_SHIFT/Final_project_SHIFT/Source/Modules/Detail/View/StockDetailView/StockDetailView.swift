@@ -17,6 +17,7 @@ struct StockDetailView: View {
     @State private var isLoading: Bool = false
     //Tag выбранного таймфрейма
     @State private var selectedResolution: Int
+    @State private var showAlert = false
     
     let networkManager = NetworkService()
     
@@ -102,12 +103,15 @@ struct StockDetailView: View {
                         switch result {
                         case .success(let fetchedCandles):
                             stockDetailModel.candles = fetchedCandles
-                            candles = getCandles(candles: fetchedCandles)
+                            candles = Candles.getCandles(candles: fetchedCandles)
                         case .failure(let error):
+                            showAlert = true
                             print("Error fetching candles: \(error)")
                         }
                         isLoading = false
                     }
+                }        .alert(isPresented: $showAlert) {
+                    Alert(title: Text(Resources.Strings.StockDetailScreen.alertErrorTitle), message: Text(Resources.Strings.StockDetailScreen.alertErrorMessage), dismissButton: .default(Text("OK")))
                 }
                 
                 ScrollView(showsIndicators: false) {
@@ -137,21 +141,5 @@ struct StockDetailView: View {
                 Spacer()
             }
         }
-    }
-    func getCandles(candles: Candles) -> [CandleChartModel] {
-        var candleArray = [ CandleChartModel]()
-        
-        let firstCandleColor: Color = .green
-        let firstCandle = CandleChartModel(close: candles.c[0], high: candles.h[0], low: candles.l[0], open: candles.o[0], timestamp: candles.t[0], volume: candles.v[0], color: firstCandleColor)
-        candleArray.append(firstCandle)
-        
-        for index in 1..<candles.c.count {
-            let previousCandle = candleArray[index-1]
-            let currentCandleColor: Color = candles.c[index] > previousCandle.close ? .green : .red
-            
-            let candle = CandleChartModel(close: candles.c[index], high: candles.h[index], low: candles.l[index], open: candles.o[index], timestamp: candles.t[index], volume: candles.v[index], color: currentCandleColor)
-            candleArray.append(candle)
-        }
-        return candleArray
     }
 }

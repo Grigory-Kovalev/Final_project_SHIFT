@@ -30,7 +30,7 @@
 		3F9800B82A2616CC00D99EA3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F9800B62A2616CC00D99EA3 /* LaunchScreen.storyboard */; };
 		3FD370B92A3A19960042CA95 /* WatchlistPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD370B82A3A19960042CA95 /* WatchlistPresenter.swift */; };
 		3FD370BB2A3A2D4B0042CA95 /* WatchlistAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD370BA2A3A2D4B0042CA95 /* WatchlistAssembly.swift */; };
-		3FD370BE2A3A32E50042CA95 /* SearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD370BD2A3A32E50042CA95 /* SearchModel.swift */; };
+		3FD370BE2A3A32E50042CA95 /* SearchCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD370BD2A3A32E50042CA95 /* SearchCellModel.swift */; };
 		3FD370C12A3A33A50042CA95 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD370C02A3A33A50042CA95 /* SearchView.swift */; };
 		3FD370C32A3A53A30042CA95 /* SearchPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD370C22A3A53A30042CA95 /* SearchPresenter.swift */; };
 		3FD370C52A3AC3480042CA95 /* SearchAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD370C42A3AC3480042CA95 /* SearchAssembly.swift */; };
@@ -40,6 +40,8 @@
 		3FD370D02A3B32E00042CA95 /* FinhubExchangeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD370CF2A3B32E00042CA95 /* FinhubExchangeManager.swift */; };
 		3FD370D22A3B3F1D0042CA95 /* WebSocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD370D12A3B3F1D0042CA95 /* WebSocketService.swift */; };
 		3FD370D42A3B3F460042CA95 /* WebSocketModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD370D32A3B3F460042CA95 /* WebSocketModel.swift */; };
+		3FD370D62A3C26320042CA95 /* Candles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD370D52A3C26320042CA95 /* Candles.swift */; };
+		3FD370D82A3C27240042CA95 /* SearchNetworkResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD370D72A3C27240042CA95 /* SearchNetworkResult.swift */; };
 		3FFADDCC2A3611FA00299BBD /* WatchlistViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFADDCB2A3611FA00299BBD /* WatchlistViewCell.swift */; };
 		3FFADDCF2A36E4AA00299BBD /* StocksModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3FFADDCD2A36E4AA00299BBD /* StocksModel.xcdatamodeld */; };
 		3FFADDD12A36EA3300299BBD /* PersistentStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFADDD02A36EA3300299BBD /* PersistentStorageService.swift */; };
@@ -70,7 +72,7 @@
 		3F9800B92A2616CC00D99EA3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3FD370B82A3A19960042CA95 /* WatchlistPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistPresenter.swift; sourceTree = "<group>"; };
 		3FD370BA2A3A2D4B0042CA95 /* WatchlistAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistAssembly.swift; sourceTree = "<group>"; };
-		3FD370BD2A3A32E50042CA95 /* SearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchModel.swift; sourceTree = "<group>"; };
+		3FD370BD2A3A32E50042CA95 /* SearchCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCellModel.swift; sourceTree = "<group>"; };
 		3FD370C02A3A33A50042CA95 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		3FD370C22A3A53A30042CA95 /* SearchPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPresenter.swift; sourceTree = "<group>"; };
 		3FD370C42A3AC3480042CA95 /* SearchAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchAssembly.swift; sourceTree = "<group>"; };
@@ -80,6 +82,8 @@
 		3FD370CF2A3B32E00042CA95 /* FinhubExchangeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinhubExchangeManager.swift; sourceTree = "<group>"; };
 		3FD370D12A3B3F1D0042CA95 /* WebSocketService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketService.swift; sourceTree = "<group>"; };
 		3FD370D32A3B3F460042CA95 /* WebSocketModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketModel.swift; sourceTree = "<group>"; };
+		3FD370D52A3C26320042CA95 /* Candles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Candles.swift; sourceTree = "<group>"; };
+		3FD370D72A3C27240042CA95 /* SearchNetworkResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchNetworkResult.swift; sourceTree = "<group>"; };
 		3FFADDCB2A3611FA00299BBD /* WatchlistViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistViewCell.swift; sourceTree = "<group>"; };
 		3FFADDCE2A36E4AA00299BBD /* StocksModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = StocksModel.xcdatamodel; sourceTree = "<group>"; };
 		3FFADDD02A36EA3300299BBD /* PersistentStorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentStorageService.swift; sourceTree = "<group>"; };
@@ -220,7 +224,8 @@
 		3FD370BF2A3A32F30042CA95 /* SearchModel */ = {
 			isa = PBXGroup;
 			children = (
-				3FD370BD2A3A32E50042CA95 /* SearchModel.swift */,
+				3FD370BD2A3A32E50042CA95 /* SearchCellModel.swift */,
+				3FD370D72A3C27240042CA95 /* SearchNetworkResult.swift */,
 			);
 			path = SearchModel;
 			sourceTree = "<group>";
@@ -231,6 +236,7 @@
 				3F66DAFD2A31E5D20078ECA0 /* StockDetailModel.swift */,
 				3F66DB012A31E7020078ECA0 /* CandleChartModel.swift */,
 				3F66DB2D2A32E49C0078ECA0 /* StockProfileModel.swift */,
+				3FD370D52A3C26320042CA95 /* Candles.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -388,7 +394,7 @@
 				3FD370D02A3B32E00042CA95 /* FinhubExchangeManager.swift in Sources */,
 				3FFADDCF2A36E4AA00299BBD /* StocksModel.xcdatamodeld in Sources */,
 				3F8B69512A2DF49F00B125FB /* NetworkService.swift in Sources */,
-				3FD370BE2A3A32E50042CA95 /* SearchModel.swift in Sources */,
+				3FD370BE2A3A32E50042CA95 /* SearchCellModel.swift in Sources */,
 				3FD370BB2A3A2D4B0042CA95 /* WatchlistAssembly.swift in Sources */,
 				3FFADDD12A36EA3300299BBD /* PersistentStorageService.swift in Sources */,
 				3F8B694A2A2DE0AF00B125FB /* StockDetailViewController.swift in Sources */,
@@ -396,6 +402,8 @@
 				3FD370D22A3B3F1D0042CA95 /* WebSocketService.swift in Sources */,
 				3F66DB022A31E7020078ECA0 /* CandleChartModel.swift in Sources */,
 				3F66DB262A32E3B60078ECA0 /* CompanyProfileView.swift in Sources */,
+				3FD370D62A3C26320042CA95 /* Candles.swift in Sources */,
+				3FD370D82A3C27240042CA95 /* SearchNetworkResult.swift in Sources */,
 				3FD370B92A3A19960042CA95 /* WatchlistPresenter.swift in Sources */,
 				3F8B69472A2DD0AB00B125FB /* SearchViewCell.swift in Sources */,
 				3F8B694C2A2DE17D00B125FB /* StockDetailView.swift in Sources */,

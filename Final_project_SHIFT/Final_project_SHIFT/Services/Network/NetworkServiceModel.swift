@@ -13,15 +13,7 @@ struct SearchNetworkResultDTO: Codable {
     let result: [StockDTO]
 }
 
-
 struct StockDTO: Codable {
-    let description: String
-    let displaySymbol: String
-    let symbol: String
-    let type: String
-}
-
-struct Stock {
     let description: String
     let displaySymbol: String
     let symbol: String
@@ -34,13 +26,8 @@ struct CandlesDTO: Codable {
     let t, v: [Int]
 }
 
-struct Candles {
-    let c, h, l, o: [Double]
-    let s: String
-    let t, v: [Int]
-}
 
-struct StockProfileDTO: Codable {
+struct StockProfileModelDTO: Codable {
     let country: String
     let currency: String
     let estimateCurrency: String
@@ -55,8 +42,6 @@ struct StockProfileDTO: Codable {
     let ticker: String
     let weburl: String
 }
-
-
 
 enum TimeFrameResolution: String {
     case minute = "1"
