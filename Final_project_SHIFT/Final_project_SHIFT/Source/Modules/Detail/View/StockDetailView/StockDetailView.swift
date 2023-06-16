@@ -121,8 +121,8 @@ struct StockDetailView: View {
                         .padding(.top, 20)
                         
                         CompanyProfileView(stockProfileModel: stockDetailModel.stockProfile)
-                            .padding(.horizontal, -16)
                     }
+                    .padding(.horizontal, 16)
                 }
                 
                 Spacer()
