@@ -140,7 +140,7 @@ private extension WatchlistViewCell {
         self.contentView.addSubview(tickerLabel)
         tickerLabel.snp.makeConstraints { make in
             make.leading.equalTo(logoImage.snp.trailing).offset(Metrics.tickerLabelLeadingOffset)
-            make.bottom.equalTo(logoImage.snp.centerY).inset(Metrics.tickerLabelBottomInset)
+            make.top.equalTo(logoImage.snp.top)
         }
 
         self.contentView.addSubview(priceLabel)
