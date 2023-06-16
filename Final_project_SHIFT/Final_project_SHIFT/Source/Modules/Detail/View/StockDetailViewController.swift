@@ -40,8 +40,8 @@ private extension StockDetailViewController {
     func swiftUIhosting() {
         let model = self.presenter?.getStockDetailViewModel()
         guard let model else { return }
-        
-        let swiftUIView = StockDetailView(selectedResolution: model.selectedResolution, data: model.data, stock: model.stock)
+        let latestPrice = model.stock.candles.c.last ?? 0
+        let swiftUIView = StockDetailView(selectedResolution: model.selectedResolution, data: model.data, stock: model.stock, latestPrice: latestPrice)
         
         let hostingController = UIHostingController(rootView: swiftUIView)
         

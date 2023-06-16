@@ -18,10 +18,11 @@ struct StockDetailView: View {
     //Tag выбранного таймфрейма
     @State private var selectedResolution: Int
     @State private var showAlert = false
+    let latestPrice: Double
         
-    var latestPrice: Double {
-        stockDetailModel.candles.c.last ?? 0
-    }
+//    var latestPrice: Double {
+//        stockDetailModel.candles.c.last ?? 0
+//    }
     
     var isPriceRise: Bool {
         return Double(stockDetailModel.candles.o.first ?? 0) < Double(stockDetailModel.candles.c.last ?? 0)
@@ -52,10 +53,11 @@ struct StockDetailView: View {
         stockDetailModel.stockProfile.currency.getCurrencySymbol()
     }
     
-    init(selectedResolution: Int, data: [CandleChartModel], stock: StockDetailModel) {
+    init(selectedResolution: Int, data: [CandleChartModel], stock: StockDetailModel, latestPrice: Double) {
         self._candles = State(initialValue: data)
         self._selectedResolution = State(initialValue: selectedResolution)
         self.stockDetailModel = stock
+        self.latestPrice = latestPrice
     }
     
     var body: some View {
