@@ -123,7 +123,6 @@ struct StockDetailView: View {
                         CompanyProfileView(stockProfileModel: stockDetailModel.stockProfile)
                             .padding(.horizontal, -16)
                     }
-                    .padding(.horizontal, 16)
                 }
                 
                 Spacer()
