@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F14DBD12A3C6BF60014444F /* StockDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F14DBD02A3C6BF60014444F /* StockDetailViewModel.swift */; };
 		3F66DAFE2A31E5D20078ECA0 /* StockDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F66DAFD2A31E5D20078ECA0 /* StockDetailModel.swift */; };
 		3F66DB002A31E6830078ECA0 /* CandlesChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F66DAFF2A31E6830078ECA0 /* CandlesChartView.swift */; };
 		3F66DB022A31E7020078ECA0 /* CandleChartModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F66DB012A31E7020078ECA0 /* CandleChartModel.swift */; };
@@ -50,6 +51,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3F14DBD02A3C6BF60014444F /* StockDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockDetailViewModel.swift; sourceTree = "<group>"; };
 		3F66DAFD2A31E5D20078ECA0 /* StockDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockDetailModel.swift; sourceTree = "<group>"; };
 		3F66DAFF2A31E6830078ECA0 /* CandlesChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandlesChartView.swift; sourceTree = "<group>"; };
 		3F66DB012A31E7020078ECA0 /* CandleChartModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleChartModel.swift; sourceTree = "<group>"; };
@@ -254,6 +256,7 @@
 			isa = PBXGroup;
 			children = (
 				3F8B694B2A2DE17D00B125FB /* StockDetailView.swift */,
+				3F14DBD02A3C6BF60014444F /* StockDetailViewModel.swift */,
 				3F66DAFF2A31E6830078ECA0 /* CandlesChartView.swift */,
 				3F66DB252A32E3B60078ECA0 /* CompanyProfileView.swift */,
 			);
@@ -402,6 +405,7 @@
 				3FD370D22A3B3F1D0042CA95 /* WebSocketService.swift in Sources */,
 				3F66DB022A31E7020078ECA0 /* CandleChartModel.swift in Sources */,
 				3F66DB262A32E3B60078ECA0 /* CompanyProfileView.swift in Sources */,
+				3F14DBD12A3C6BF60014444F /* StockDetailViewModel.swift in Sources */,
 				3FD370D62A3C26320042CA95 /* Candles.swift in Sources */,
 				3FD370D82A3C27240042CA95 /* SearchNetworkResult.swift in Sources */,
 				3FD370B92A3A19960042CA95 /* WatchlistPresenter.swift in Sources */,

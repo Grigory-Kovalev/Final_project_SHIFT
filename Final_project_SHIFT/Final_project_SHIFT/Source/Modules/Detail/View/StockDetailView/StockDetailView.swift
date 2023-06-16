@@ -18,9 +18,7 @@ struct StockDetailView: View {
     //Tag выбранного таймфрейма
     @State private var selectedResolution: Int
     @State private var showAlert = false
-    
-    let networkManager = NetworkService()
-    
+        
     var latestPrice: Double {
         stockDetailModel.candles.c.last ?? 0
     }
@@ -88,7 +86,6 @@ struct StockDetailView: View {
                 .padding(.horizontal, 16)
                 
                 Picker("Resolution", selection: $selectedResolution) {
-                    Text("\(TimeFrameResolution.fifteenMinutes.rawValue)M").tag(2)
                     Text("\(TimeFrameResolution.thirtyMinutes.rawValue)M").tag(3)
                     Text("1H").tag(4)
                     Text(TimeFrameResolution.day.rawValue).tag(5)
@@ -97,20 +94,11 @@ struct StockDetailView: View {
                 .pickerStyle(.segmented)
                 .padding(.horizontal)
                 .onChange(of: selectedResolution) { newValue in
-                    isLoading = true
-                    
-                    networkManager.fetchStockCandles(symbol: stockDetailModel.symbol, timeFrame: TimeFrameResolution.getTimeframeFromTag(tag: selectedResolution)) { result in
-                        switch result {
-                        case .success(let fetchedCandles):
-                            stockDetailModel.candles = fetchedCandles
-                            candles = Candles.getCandles(candles: fetchedCandles)
-                        case .failure(let error):
-                            showAlert = true
-                            print("Error fetching candles: \(error)")
-                        }
-                        isLoading = false
-                    }
-                }        .alert(isPresented: $showAlert) {
+                    let stockDetailViewModel = StockDetailViewModel(stockDetailModel: $stockDetailModel, candles: $candles, isLoading: $isLoading, showAlert: $showAlert)
+                    stockDetailViewModel.fetchStockCandles(selectedResolution: newValue)
+                }
+                
+                .alert(isPresented: $showAlert) {
                     Alert(title: Text(Resources.Strings.StockDetailScreen.alertErrorTitle), message: Text(Resources.Strings.StockDetailScreen.alertErrorMessage), dismissButton: .default(Text("OK")))
                 }
                 
