@@ -17,7 +17,7 @@ enum Resources {
         }
         
         enum Watchlist {
-            static let sunImageColor = UIColor.yellow
+            static let sunImageColor = UIColor(named: "Yellow")
             static let moonImageColor = UIColor.blue
             static let cellBackground = UIColor.systemGray.withAlphaComponent(0.3)
         }
