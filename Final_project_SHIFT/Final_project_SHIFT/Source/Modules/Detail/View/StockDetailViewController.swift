@@ -64,6 +64,10 @@ private extension StockDetailViewController {
         
         self.navigationController?.navigationBar.isHidden = false
         navigationItem.title = self.presenter?.getTicker()
+        let attributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: Resources.Colors.green
+        ]
+        navigationController?.navigationBar.titleTextAttributes = attributes
         
         createBackButton()
         
