@@ -13,13 +13,21 @@ enum Resources {
         enum TabBar {
             static let selectedItemColor = UIColor.label
             static let unselectedItemColor = UIColor.gray
+            static let backgroundColor = UIColor.secondarySystemFill
         }
         
         enum Watchlist {
-            static let sunImageColor = UIColor.yellow
+            static let sunImageColor = UIColor(named: "Yellow")
             static let moonImageColor = UIColor.blue
             static let cellBackground = UIColor.systemGray.withAlphaComponent(0.3)
         }
+        
+        enum Search {
+            static let cellBackground = UIColor.systemGray.withAlphaComponent(0.3)
+            static let borderCellWhite = UIColor.white.cgColor
+            static let borderCellBlack = UIColor.black.cgColor
+        }
+        
         static let labelColor = UIColor.label
         static let activityIndicatorColor = UIColor.gray
         static let backgroundColor = UIColor.systemBackground
@@ -46,14 +54,39 @@ enum Resources {
             static var search = "Search"
         }
         
-        enum Watchlist {
-            static let exchangeStatusViewOpenText = "Stock exchange is open"
+        enum WatchlistScreen {
+            static let exchangeStatusViewOpenText = " exchange is open"
             static let exchangeStatusViewOpenImage = "sun.max"
             static let exchangeStatusViewCloseText = "Stock exchange is closed"
             static let exchangeStatusViewCloseImage = "moon.zzz"
             static let titleLabel = "Watchlist"
             static let watchlistCellIdentifier = "CellIdentifier"
             static let favoriteStocksLabelText = "Favorite stocks"
+            static let alertMessageCandlesData = "Failed to get company candles data"
+            static let alertMessageProfileData = "Failed to get company profile data"
+        }
+        
+        enum SearchScreen {
+            static let watchlistCellIdentifier = "CellIdentifier"
+            static let searchBarPlaceholder = "Enter stock ticker"
+            static let cancelButtonTitle = "Cancel"
+            static let navigationTitle = "Search"
+            static let alertSubmitTitle = "OK"
+            static let stockType = "Common Stock"
+            static let alertErrorTitles = ("Error", "Failed to get data for the specified ticker")
+            static let alertErrorCandlesTitles = ("Error", "Failed to get company candles data")
+            static let alertErrorProfileTitles = ("Error", "Failed to get company profile data")
+            static let alertZeroStock = ("Notification", "There is no information on the specified ticker")
+        }
+        
+        enum StockDetailScreen {
+            static let alertErrorTitle = "Error"
+            static let alertErrorMessage = "Trouble loading stock chart"
+            enum CompanyProfile {
+                static let about = "About"
+                static let type = "Type"
+                static let marketStats = "Market Stats"
+            }
         }
     }
     
@@ -62,35 +95,16 @@ enum Resources {
             static var home = UIImage(systemName: "latch.2.case.fill")
             static var search = UIImage(systemName: "sparkle.magnifyingglass")
         }
+        
+        enum CompanyProfile {
+            static let location = "location"
+            static let ipo = "ipo"
+            static let exchange = "exchange"
+            static let marketCapitalization = "marketCapitalization"
+            static let shareOutstanding = "shareOutstanding"
+        }
+        
         static let lightModeImage = UIImage(named: "lightModeBackButton")?.withRenderingMode(.alwaysOriginal)
         static let darkModeImage = UIImage(named: "darkModeBackButton")?.withRenderingMode(.alwaysOriginal)
     }
-    
-    enum Condition {
-        static var exchangeStatus: Bool {
-            let now = Date()
-            var calendar = Calendar.current
-            let newYorkTimeZone = TimeZone(identifier: Resources.Strings.exchangeTimeZone)
-            calendar.timeZone = newYorkTimeZone!
-
-            let openHour = 9
-            let openMinute = 30
-            let closeHour = 16
-
-            let weekday = calendar.component(.weekday, from: now)
-
-            let isWorkDay = weekday >= 2 && weekday <= 6
-            let openTime = calendar.date(bySettingHour: openHour, minute: openMinute, second: 0, of: now)
-            let closeTime = calendar.date(bySettingHour: closeHour, minute: 0, second: 0, of: now)
-
-            if isWorkDay, let openTime = openTime, let closeTime = closeTime,
-                calendar.isDate(now, inSameDayAs: openTime) || calendar.isDate(now, inSameDayAs: closeTime),
-                now >= openTime && now <= closeTime {
-                return true
-            } else {
-                return false
-            }
-        }
-    }
-
 }

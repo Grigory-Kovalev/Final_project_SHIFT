@@ -6,9 +6,8 @@
 
 import UIKit
 
-protocol IWatchlistView: AnyObject {
-    //var tapButtonHandler: (() -> Void)? { get set }
-
+protocol WatchlistViewProtocol: AnyObject {
+    var collectionView: UICollectionView { get }
     func setupControllers(with tabBarController: UITabBarController, with navigationController: UINavigationController)
 }
 
@@ -29,7 +28,7 @@ final class WatchlistView: UIView {
         static let favoriteStocksLabelLeadingInset: CGFloat = 16.0
         static let exchangeStatusViewTopOffset: CGFloat = 16.0
         static let collectionViewWidthMultiplier: CGFloat = 0.9
-        static let collectionViewHeightMultiplier: CGFloat = 0.1
+        static let collectionViewHeight: CGFloat = 80
         static let favoriteStocksLabelTopOffset: CGFloat = 16.0
         static let collectionViewTopOffset: CGFloat = 8
     }
@@ -39,7 +38,7 @@ final class WatchlistView: UIView {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = Resources.Strings.Watchlist.titleLabel
+        label.text = Resources.Strings.WatchlistScreen.titleLabel
         label.textAlignment = .center
         label.font = Resources.Fonts.thickFont
         label.textColor = Resources.Colors.green
@@ -54,22 +53,21 @@ final class WatchlistView: UIView {
 
         let label = UILabel()
 
-        if Resources.Condition.exchangeStatus {
-            // Биржа открыта с понедельника по пятницу
-            label.text = Resources.Strings.Watchlist.exchangeStatusViewOpenText
+        if (FinhubExchangeManager.exchangeName != nil) {
+            let exchangeName = FinhubExchangeManager.exchangeName ?? "Unknown Exchange"
+            label.text = "\(exchangeName) \(Resources.Strings.WatchlistScreen.exchangeStatusViewOpenText)"
             label.textColor = Resources.Colors.gray
 
-            let sunImage = UIImageView(image: UIImage(systemName: Resources.Strings.Watchlist.exchangeStatusViewOpenImage))
+            let sunImage = UIImageView(image: UIImage(systemName: Resources.Strings.WatchlistScreen.exchangeStatusViewOpenImage))
             sunImage.tintColor = Resources.Colors.Watchlist.sunImageColor
 
             stackView.addArrangedSubview(label)
             stackView.addArrangedSubview(sunImage)
         } else {
-            // Биржа закрыта или не рабочий день
-            label.text = Resources.Strings.Watchlist.exchangeStatusViewCloseText
+            label.text = Resources.Strings.WatchlistScreen.exchangeStatusViewCloseText
             label.textColor = Resources.Colors.gray
 
-            let moonImage = UIImageView(image: UIImage(systemName: Resources.Strings.Watchlist.exchangeStatusViewCloseImage))
+            let moonImage = UIImageView(image: UIImage(systemName: Resources.Strings.WatchlistScreen.exchangeStatusViewCloseImage))
             moonImage.tintColor = Resources.Colors.Watchlist.moonImageColor
 
             stackView.addArrangedSubview(label)
@@ -78,10 +76,10 @@ final class WatchlistView: UIView {
 
         return stackView
     }()
-    
+
     private lazy var favoriteStocksLabel: UILabel = {
         let label = UILabel()
-        label.text = Resources.Strings.Watchlist.favoriteStocksLabelText
+        label.text = Resources.Strings.WatchlistScreen.favoriteStocksLabelText
         label.font = Resources.Fonts.thickFont
         return label
     }()
@@ -90,9 +88,9 @@ final class WatchlistView: UIView {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.minimumLineSpacing = Metrics.collectionViewMinimumLineSpacing
-        layout.itemSize = CGSize(width: UIScreen.main.bounds.width * Metrics.collectionViewWidthMultiplier, height: UIScreen.main.bounds.height * Metrics.collectionViewHeightMultiplier)
+        layout.itemSize = CGSize(width: UIScreen.main.bounds.width * Metrics.collectionViewWidthMultiplier, height: Metrics.collectionViewHeight)
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
-        collectionView.register(WatchlistViewCell.self, forCellWithReuseIdentifier: Resources.Strings.Watchlist.watchlistCellIdentifier)
+        collectionView.register(WatchlistViewCell.self, forCellWithReuseIdentifier: Resources.Strings.WatchlistScreen.watchlistCellIdentifier)
         collectionView.layer.cornerRadius = Metrics.collectionViewCornerRadius
         return collectionView
     }()
@@ -134,17 +132,14 @@ extension WatchlistView {
     }
 }
 
-//MARK: - IWatchlistView
-extension WatchlistView: IWatchlistView {
+//MARK: - WatchlistViewProtocol
+extension WatchlistView: WatchlistViewProtocol {
     func setupControllers(with tabBarController: UITabBarController, with navigationController: UINavigationController) {
         self.tabBarController = tabBarController
         self.navigationController = navigationController
         //tabBar
         tabBarController.tabBar.unselectedItemTintColor = Resources.Colors.TabBar.unselectedItemColor
         tabBarController.tabBar.tintColor = Resources.Colors.TabBar.selectedItemColor
-        
-        //Nav
-        //navigationController.navigationItem.title = Resources.Strings.Watchlist.titleLabel
     }
 }
 // MARK: - Layout

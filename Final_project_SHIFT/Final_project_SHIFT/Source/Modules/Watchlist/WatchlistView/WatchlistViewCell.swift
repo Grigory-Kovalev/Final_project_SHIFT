@@ -78,6 +78,7 @@ final class WatchlistViewCell: UICollectionViewCell {
         updateBorderColor()
     }
     
+    // MARK: - Private method
     private func currentThemeIsDark() -> Bool {
         if #available(iOS 13.0, *) {
             return traitCollection.userInterfaceStyle == .dark
@@ -139,7 +140,7 @@ private extension WatchlistViewCell {
         self.contentView.addSubview(tickerLabel)
         tickerLabel.snp.makeConstraints { make in
             make.leading.equalTo(logoImage.snp.trailing).offset(Metrics.tickerLabelLeadingOffset)
-            make.bottom.equalTo(logoImage.snp.centerY).inset(Metrics.tickerLabelBottomInset)
+            make.top.equalTo(logoImage.snp.top)
         }
 
         self.contentView.addSubview(priceLabel)

@@ -18,21 +18,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         window?.windowScene = windowScene
         
-        let tabBarController = UITabBarController()
+        let tabBar = CustomTabBarController()
         
-        tabBarController.tabBar.backgroundColor = .secondarySystemFill
-        
-        let WatchlistVC = WatchlistViewController()
-        WatchlistVC.tabBarItem = UITabBarItem(title: Resources.Strings.TabBar.home, image: Resources.Images.TabBar.home, selectedImage: nil)
-        let SearchVC = SearchViewController()
-        SearchVC.tabBarItem = UITabBarItem(title: Resources.Strings.TabBar.search, image: Resources.Images.TabBar.search, selectedImage: nil)
-        
-        let WatchlistNavigationController = UINavigationController(rootViewController: WatchlistVC)
-        let SearchNavigationController = UINavigationController(rootViewController: SearchVC)
-        
-        tabBarController.setViewControllers([WatchlistNavigationController, SearchNavigationController], animated: false)
-        
-        window?.rootViewController = tabBarController
+        window?.rootViewController = tabBar.createTabBarController()
         window?.makeKeyAndVisible()
     }
 

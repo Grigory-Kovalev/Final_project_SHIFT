@@ -5,19 +5,6 @@
 //  Created by Григорий Ковалев on 09.06.2023.
 //
 
-extension String {
-    func getCurrencySymbol() -> String {
-        let currencySymbols: [String: String] = [
-            "USD": "$", // Доллар США
-            "EUR": "€", // Евро
-            "GBP": "£", // Фунт стерлингов
-            "CNY": "¥"  // Йена
-        ]
-        let currencySymbol = currencySymbols[self] ?? ""
-        return currencySymbol
-    }
-}
-
 import SwiftUI
 import SDWebImageSwiftUI
 
@@ -25,11 +12,18 @@ struct CompanyProfileView: View {
     
     let stockProfileModel: StockProfileModel
     
-    var getCurrencySymbol: String {
+    private enum Metrics {
+        static let VStackSpacing: CGFloat = 16
+        static let imageLenght: CGFloat = 28
+        static let imageCornerRadius: CGFloat = 10
+        static let verticalPadding: CGFloat = 30
+    }
+    
+    private var getCurrencySymbol: String {
         stockProfileModel.currency.getCurrencySymbol()
     }
     
-    var dateIPO: Date {
+    private var dateIPO: Date {
         let dateString = stockProfileModel.ipo
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -41,18 +35,18 @@ struct CompanyProfileView: View {
         }
     }
     
-    var amount: String {
+    private var amount: String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currencyAccounting
         formatter.currencySymbol = getCurrencySymbol
-        guard let formattedString = formatter.string(from: NSNumber(value: stockProfileModel.marketCapitalization)) else { print("Ошибка форматирования"); return "" }
+        guard let formattedString = formatter.string(from: NSNumber(value: stockProfileModel.marketCapitalization)) else {  return "" }
         return formattedString
     }
     
     var body: some View {
         VStack(alignment: .leading) {
-            VStack(alignment: .leading, spacing: 16) {
-                Text("About")
+            VStack(alignment: .leading, spacing: Metrics.VStackSpacing) {
+                Text(Resources.Strings.StockDetailScreen.CompanyProfile.about)
                     .font(.headline)
                     .fontWeight(.black)
                 HStack {
@@ -63,8 +57,8 @@ struct CompanyProfileView: View {
                         }}
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 28, height: 28)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .frame(width: Metrics.imageLenght, height: Metrics.imageLenght)
+                        .clipShape(RoundedRectangle(cornerRadius: Metrics.imageCornerRadius))
                     
                     Text(stockProfileModel.name)
                         .font(.title3)
@@ -72,7 +66,7 @@ struct CompanyProfileView: View {
                 }
                 
                 HStack {
-                    Image("location")
+                    Image(Resources.Images.CompanyProfile.location)
                     
                     Text("Location: \(stockProfileModel.country)")
                         .font(.title3)
@@ -80,17 +74,17 @@ struct CompanyProfileView: View {
                 }
                 
                 HStack {
-                    Image("ipo")
+                    Image(Resources.Images.CompanyProfile.ipo)
                     
                     Text("IPO: \(dateIPO.formatted(date: .long, time: .omitted))")
                         .font(.title3)
                         .foregroundColor(Color(Resources.Colors.gray))
                 }
             }
-            .padding(.top, 30)
+            .padding(.top, Metrics.verticalPadding)
             
-            VStack(alignment: .leading, spacing: 16) {
-                Text("Type")
+            VStack(alignment: .leading, spacing: Metrics.VStackSpacing) {
+                Text(Resources.Strings.StockDetailScreen.CompanyProfile.type)
                     .font(.headline)
                     .fontWeight(.black)
                 
@@ -99,22 +93,22 @@ struct CompanyProfileView: View {
                     .foregroundColor(Color(Resources.Colors.gray))
                 
                 HStack(alignment: .top) {
-                    Image("exchange")
+                    Image(Resources.Images.CompanyProfile.exchange)
                     
                     Text("Exchange: \(stockProfileModel.exchange)")
                         .font(.title3)
                         .foregroundColor(Color(Resources.Colors.gray))
                 }
             }
-            .padding(.vertical, 30)
+            .padding(.vertical, Metrics.verticalPadding)
             
-            VStack(alignment: .leading, spacing: 16) {
-                Text("Market Stats")
+            VStack(alignment: .leading, spacing: Metrics.VStackSpacing) {
+                Text(Resources.Strings.StockDetailScreen.CompanyProfile.marketStats)
                     .font(.headline)
                     .fontWeight(.black)
                 
                 HStack(alignment: .top) {
-                    Image("marketCapitalization")
+                    Image(Resources.Images.CompanyProfile.marketCapitalization)
                     
                     Text("Market capitalization: " + amount)
                         .font(.title3)
@@ -122,7 +116,7 @@ struct CompanyProfileView: View {
                 }
                 
                 HStack(alignment: .top) {
-                    Image("shareOutstanding")
+                    Image(Resources.Images.CompanyProfile.shareOutstanding)
                     
                     Text("Share outstanding: " + String(format: "%.2f", stockProfileModel.shareOutstanding))
                         .font(.title3)
@@ -133,8 +127,8 @@ struct CompanyProfileView: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        CompanyProfileView(stockProfileModel: StockProfileModel(country: "US", currency: "USD", estimateCurrency: "USD", exchange: "NASDAQ NMS - GLOBAL MARKET", finnhubIndustry: "Technology", ipo: "1980-12-12", logo: "https://static2.finnhub.io/file/publicdatany/finnhubimage/stock_logo/AAPL.svg", marketCapitalization: 2840131.8639257923, name: "Apple Inc", phone: "14089961010.0", shareOutstanding: 15728.7, ticker: "AAPL", weburl: "https://www.apple.com/"))
-    }
-}
+//struct ContentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        CompanyProfileView(stockProfileModel: StockProfileModel(country: "US", currency: "USD", estimateCurrency: "USD", exchange: "NASDAQ NMS - GLOBAL MARKET", finnhubIndustry: "Technology", ipo: "1980-12-12", logo: "https://static2.finnhub.io/file/publicdatany/finnhubimage/stock_logo/AAPL.svg", marketCapitalization: 2840131.8639257923, name: "Apple Inc", phone: "14089961010.0", shareOutstanding: 15728.7, ticker: "AAPL", weburl: "https://www.apple.com/"))
+//    }
+//}

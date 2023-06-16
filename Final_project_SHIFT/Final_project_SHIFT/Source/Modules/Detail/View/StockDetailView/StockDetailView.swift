@@ -17,12 +17,12 @@ struct StockDetailView: View {
     @State private var isLoading: Bool = false
     //Tag выбранного таймфрейма
     @State private var selectedResolution: Int
-    
-    let networkManager = NetworkService()
-    
-    var latestPrice: Double {
-        stockDetailModel.candles.c.last ?? 0
-    }
+    @State private var showAlert = false
+    let latestPrice: Double
+        
+//    var latestPrice: Double {
+//        stockDetailModel.candles.c.last ?? 0
+//    }
     
     var isPriceRise: Bool {
         return Double(stockDetailModel.candles.o.first ?? 0) < Double(stockDetailModel.candles.c.last ?? 0)
@@ -53,10 +53,11 @@ struct StockDetailView: View {
         stockDetailModel.stockProfile.currency.getCurrencySymbol()
     }
     
-    init(selectedResolution: Int, data: [CandleChartModel], stock: StockDetailModel) {
+    init(selectedResolution: Int, data: [CandleChartModel], stock: StockDetailModel, latestPrice: Double) {
         self._candles = State(initialValue: data)
         self._selectedResolution = State(initialValue: selectedResolution)
         self.stockDetailModel = stock
+        self.latestPrice = latestPrice
     }
     
     var body: some View {
@@ -87,7 +88,6 @@ struct StockDetailView: View {
                 .padding(.horizontal, 16)
                 
                 Picker("Resolution", selection: $selectedResolution) {
-                    Text("\(TimeFrameResolution.fifteenMinutes.rawValue)M").tag(2)
                     Text("\(TimeFrameResolution.thirtyMinutes.rawValue)M").tag(3)
                     Text("1H").tag(4)
                     Text(TimeFrameResolution.day.rawValue).tag(5)
@@ -96,18 +96,12 @@ struct StockDetailView: View {
                 .pickerStyle(.segmented)
                 .padding(.horizontal)
                 .onChange(of: selectedResolution) { newValue in
-                    isLoading = true
-                    
-                    networkManager.fetchStockCandles(symbol: stockDetailModel.symbol, timeFrame: TimeFrameResolution.getTimeframeFromTag(tag: selectedResolution)) { result in
-                        switch result {
-                        case .success(let fetchedCandles):
-                            stockDetailModel.candles = fetchedCandles
-                            candles = Candles.getCandles(candles: fetchedCandles)
-                        case .failure(let error):
-                            print("Error fetching candles: \(error)")
-                        }
-                        isLoading = false
-                    }
+                    let stockDetailViewModel = StockDetailViewModel(stockDetailModel: $stockDetailModel, candles: $candles, isLoading: $isLoading, showAlert: $showAlert)
+                    stockDetailViewModel.fetchStockCandles(selectedResolution: newValue)
+                }
+                
+                .alert(isPresented: $showAlert) {
+                    Alert(title: Text(Resources.Strings.StockDetailScreen.alertErrorTitle), message: Text(Resources.Strings.StockDetailScreen.alertErrorMessage), dismissButton: .default(Text("OK")))
                 }
                 
                 ScrollView(showsIndicators: false) {
@@ -129,7 +123,6 @@ struct StockDetailView: View {
                         .padding(.top, 20)
                         
                         CompanyProfileView(stockProfileModel: stockDetailModel.stockProfile)
-                            .padding(.horizontal, -16)
                     }
                     .padding(.horizontal, 16)
                 }
