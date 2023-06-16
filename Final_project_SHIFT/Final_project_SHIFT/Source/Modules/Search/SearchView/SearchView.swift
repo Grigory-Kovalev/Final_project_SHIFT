@@ -24,7 +24,7 @@ final class SearchView: UIView {
     private enum Metrics {
         static let collectionViewCornerRadius: CGFloat = 15.0
         static let collectionViewWidthMultiplier: CGFloat = 0.9
-        static let collectionViewHeightMultiplier: CGFloat = 0.12
+        static let collectionViewHeight: CGFloat = 80
     }
     
     // MARK: - Subviews
@@ -48,7 +48,7 @@ final class SearchView: UIView {
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.itemSize = CGSize(width: UIScreen.main.bounds.width * Metrics.collectionViewWidthMultiplier, height: UIScreen.main.bounds.height * Metrics.collectionViewHeightMultiplier)
+        layout.itemSize = CGSize(width: UIScreen.main.bounds.width * Metrics.collectionViewWidthMultiplier, height: Metrics.collectionViewHeight)
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         collectionView.register(SearchViewCell.self, forCellWithReuseIdentifier: Resources.Strings.SearchScreen.watchlistCellIdentifier)
         collectionView.layer.cornerRadius = Metrics.collectionViewCornerRadius

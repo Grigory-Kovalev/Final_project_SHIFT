@@ -28,7 +28,7 @@ final class WatchlistView: UIView {
         static let favoriteStocksLabelLeadingInset: CGFloat = 16.0
         static let exchangeStatusViewTopOffset: CGFloat = 16.0
         static let collectionViewWidthMultiplier: CGFloat = 0.9
-        static let collectionViewHeightMultiplier: CGFloat = 0.1
+        static let collectionViewHeight: CGFloat = 80
         static let favoriteStocksLabelTopOffset: CGFloat = 16.0
         static let collectionViewTopOffset: CGFloat = 8
     }
@@ -88,7 +88,7 @@ final class WatchlistView: UIView {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.minimumLineSpacing = Metrics.collectionViewMinimumLineSpacing
-        layout.itemSize = CGSize(width: UIScreen.main.bounds.width * Metrics.collectionViewWidthMultiplier, height: UIScreen.main.bounds.height * Metrics.collectionViewHeightMultiplier)
+        layout.itemSize = CGSize(width: UIScreen.main.bounds.width * Metrics.collectionViewWidthMultiplier, height: Metrics.collectionViewHeight)
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         collectionView.register(WatchlistViewCell.self, forCellWithReuseIdentifier: Resources.Strings.WatchlistScreen.watchlistCellIdentifier)
         collectionView.layer.cornerRadius = Metrics.collectionViewCornerRadius
