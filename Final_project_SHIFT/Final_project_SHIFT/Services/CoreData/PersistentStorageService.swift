@@ -8,11 +8,6 @@
 import CoreData
 import UIKit
 
-//protocol ImageSaverServiceDelegate: AnyObject {
-//    func saveImageToCoreData(image: UIImage, url: URL)
-//    func loadImageFromCoreData() -> [ImageModel]?
-//}
-
 struct PersistentStorageServiceModel {
     let ticker: String
     let name: String
