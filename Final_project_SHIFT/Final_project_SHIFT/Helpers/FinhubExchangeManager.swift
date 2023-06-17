@@ -7,7 +7,7 @@
 
 import Foundation
 
-class FinhubExchangeManager {
+final class FinhubExchangeManager {
     static var exchangeName: String? {
         let supportedExchanges = ["NYSE", "NASDAQ", "LSE", "TSE", "HKEX"]
 
